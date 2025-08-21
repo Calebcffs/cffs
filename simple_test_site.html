@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Simple Test Website</title>
+  <meta name="description" content="A simple, single file test website with basic layout, components, and a light or dark theme toggle." />
+  <style>
+    /* ===== CSS Reset (lightweight) ===== */
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; }
+    html, body { height: 100%; }
+    body { line-height: 1.6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
+    img, svg, video, canvas, audio, iframe, embed, object { display: block; max-width: 100%; }
+    button, input, select, textarea { font: inherit; }
+    a { color: inherit; text-decoration: none; }
+    ul[role='list'], ol[role='list'] { list-style: none; padding: 0; }
+
+    /* ===== Theme Variables ===== */
+    :root {
+      --bg: #ffffff;
+      --bg-soft: #f6f7f9;
+      --text: #0f172a;
+      --muted: #475569;
+      --primary: #2563eb;
+      --primary-ink: #ffffff;
+      --ring: 0 0 0 3px rgba(37, 99, 235, 0.25);
+      --card: #ffffff;
+      --border: #e5e7eb;
+      --shadow: 0 10px 25px rgba(2, 6, 23, 0.08);
+      --radius: 14px;
+      --container: 1100px;
+    }
+    .dark {
+      --bg: #0b1220;
+      --bg-soft: #0f172a;
+      --text: #e5e7eb;
+      --muted: #94a3b8;
+      --primary: #60a5fa;
+      --primary-ink: #0b1220;
+      --card: #0f172a;
+      --border: #1f2937;
+      --shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    /* ===== Base ===== */
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+    }
+    .container {
+      width: min(100% - 2rem, var(--container));
+      margin-inline: auto;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.2rem;
+      border-radius: 9999px;
+      background: var(--primary);
+      color: var(--primary-ink);
+      border: 1px solid transparent;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      transition: transform 0.12s ease, opacity 0.2s ease, box-shadow 0.2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn:focus-visible { outline: none; box-shadow: var(--shadow), var(--ring); }
+    .btn.secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--border);
+      box-shadow: none;
+    }
+    .badge {
+      display: inline-block;
+      font-size: 0.875rem;
+      padding: 0.25rem 0.6rem;
+      border-radius: 9999px;
+      background: var(--bg-soft);
+      color: var(--muted);
+      border: 1px solid var(--border);
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+
+    /* ===== Header and Nav ===== */
+    header.site-header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: saturate(1.2) blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.2px;
+    }
+    .brand-logo {
+      width: 28px;
+      height: 28px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 60%, black));
+      display: grid;
+      place-items: center;
+      color: var(--primary-ink);
+      font-size: 0.95rem;
+      box-shadow: var(--shadow);
+    }
+    nav ul {
+      display: flex;
+      gap: 1rem;
+    }
+    nav a {
+      padding: 0.5rem 0.75rem;
+      border-radius: 8px;
+      color: var(--muted);
+      transition: color 0.2s ease, background 0.2s ease;
+    }
+    nav a:hover, nav a:focus-visible {
+      color: var(--text);
+      background: var(--bg-soft);
+      outline: none;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      padding: clamp(3rem, 6vw, 6rem) 0;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: clamp(1.5rem, 4vw, 3rem);
+      align-items: center;
+    }
+    .hero h1 {
+      font-size: clamp(2rem, 5vw, 3rem);
+      line-height: 1.15;
+      letter-spacing: -0.3px;
+      margin-bottom: 1rem;
+    }
+    .hero p {
+      color: var(--muted);
+      font-size: clamp(1rem, 2.2vw, 1.125rem);
+      margin-bottom: 1.25rem;
+    }
+    .hero-cta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      align-items: center;
+    }
+    .hero-visual {
+      aspect-ratio: 4 / 3;
+    }
+    .hero-visual .card {
+      height: 100%;
+      padding: 1rem;
+      display: grid;
+      place-items: center;
+    }
+
+    /* ===== Features ===== */
+    section#features {
+      padding: clamp(2.5rem, 5vw, 4rem) 0;
+    }
+    .section-head {
+      display: grid;
+      gap: 0.5rem;
+      margin-bottom: 1.25rem;
+    }
+    .section-head h2 {
+      font-size: clamp(1.5rem, 3.2vw, 2rem);
+    }
+    .section-head p { color: var(--muted); }
+    .grid {
+      display: grid;
+      gap: 1rem;
+    }
+    .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
+    .feature {
+      padding: 1rem;
+      display: grid;
+      gap: 0.6rem;
+    }
+    .feature .icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: var(--bg-soft);
+      border: 1px solid var(--border);
+      color: var(--primary);
+      font-weight: 700;
+    }
+    .feature p { color: var(--muted); }
+
+    /* ===== Gallery ===== */
+    section#gallery {
+      padding: clamp(2.5rem, 5vw, 4rem) 0;
+    }
+    .gallery-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: repeat(12, 1fr);
+    }
+    .gallery-grid .tile {
+      grid-column: span 4;
+      aspect-ratio: 4 / 3;
+      overflow: hidden;
+    }
+    .tile svg { width: 100%; height: 100%; }
+
+    /* ===== Contact ===== */
+    section#contact {
+      padding: clamp(2.5rem, 5vw, 4rem) 0;
+    }
+    form.contact {
+      display: grid;
+      gap: 0.8rem;
+      padding: 1rem;
+    }
+    .field {
+      display: grid;
+      gap: 0.35rem;
+    }
+    .field label { font-weight: 600; }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      padding: 0.75rem 0.9rem;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--bg);
+      color: var(--text);
+    }
+    .field input:focus-visible, .field textarea:focus-visible, .field select:focus-visible {
+      outline: none;
+      box-shadow: var(--ring);
+      border-color: color-mix(in srgb, var(--primary) 60%, var(--border));
+    }
+    .help { color: var(--muted); font-size: 0.925rem; }
+
+    /* ===== Footer ===== */
+    footer.site-footer {
+      padding: 2rem 0;
+      border-top: 1px solid var(--border);
+      color: var(--muted);
+    }
+
+    /* ===== Utilities ===== */
+    .stack-sm { display: grid; gap: 0.5rem; }
+    .stack { display: grid; gap: 1rem; }
+    .stack-lg { display: grid; gap: 1.5rem; }
+    .center { text-align: center; }
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ===== Media ===== */
+    @media (max-width: 900px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .grid.cols-3 { grid-template-columns: 1fr; }
+      .gallery-grid .tile { grid-column: span 6; }
+    }
+    @media (max-width: 600px) {
+      nav ul { display: none; }
+      .gallery-grid .tile { grid-column: span 12; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="site-header" id="top">
+    <div class="container nav" role="navigation" aria-label="Primary">
+      <a href="#top" class="brand" aria-label="Home">
+        <span class="brand-logo" aria-hidden="true">ST</span>
+        <span>Simple Test</span>
+      </a>
+      <nav>
+        <ul role="list">
+          <li><a href="#features">Features</a></li>
+          <li><a href="#gallery">Gallery</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li>
+            <button id="themeToggle" type="button" class="btn secondary" aria-pressed="false" aria-label="Toggle dark theme">
+              <span aria-hidden="true">🌓</span>
+              <span>Theme</span>
+            </button>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container hero-grid">
+      <div class="stack">
+        <span class="badge" aria-hidden="true">Single file demo</span>
+        <h1>Simple test website, ready to copy and use</h1>
+        <p>This page lives in one HTML file with embedded styles and a tiny script. It has a header, a hero, three feature cards, a small gallery, and a contact form. It is quick to customise and easy to share.</p>
+        <div class="hero-cta">
+          <a href="#features" class="btn">View features</a>
+          <a href="#contact" class="btn secondary">Contact us</a>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="card">
+          <!-- Inline SVG so no external assets are needed -->
+          <svg viewBox="0 0 800 600" role="img" aria-label="Decorative hero graphic">
+            <defs>
+              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#60a5fa"/>
+                <stop offset="1" stop-color="#2563eb"/>
+              </linearGradient>
+            </defs>
+            <rect x="0" y="0" width="800" height="600" fill="url(#g1)" opacity="0.15"></rect>
+            <g>
+              <rect x="80" y="90" width="640" height="380" rx="18" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="6"/>
+              <rect x="110" y="120" width="580" height="60" rx="10" fill="currentColor" opacity="0.08"/>
+              <rect x="110" y="200" width="180" height="140" rx="12" fill="currentColor" opacity="0.08"/>
+              <rect x="310" y="200" width="380" height="30" rx="8" fill="currentColor" opacity="0.08"/>
+              <rect x="310" y="240" width="320" height="20" rx="8" fill="currentColor" opacity="0.08"/>
+              <rect x="310" y="270" width="280" height="20" rx="8" fill="currentColor" opacity="0.08"/>
+              <rect x="310" y="310" width="340" height="20" rx="8" fill="currentColor" opacity="0.08"/>
+              <rect x="110" y="360" width="160" height="28" rx="8" fill="#2563eb" opacity="0.8"/>
+              <rect x="280" y="360" width="120" height="28" rx="8" fill="currentColor" opacity="0.12"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section id="features">
+    <div class="container stack">
+      <div class="section-head">
+        <h2>Features</h2>
+        <p>Clean structure, accessible controls, and no external dependencies.</p>
+      </div>
+      <div class="grid cols-3">
+        <article class="card feature">
+          <div class="icon" aria-hidden="true">1</div>
+          <h3>Single file</h3>
+          <p>All styling and behaviour are embedded right here, so you can drop this into any project and start quickly.</p>
+        </article>
+        <article class="card feature">
+          <div class="icon" aria-hidden="true">2</div>
+          <h3>Responsive layout</h3>
+          <p>The grid adapts to small screens and large screens without extra work. It feels natural on desktop and mobile.</p>
+        </article>
+        <article class="card feature">
+          <div class="icon" aria-hidden="true">3</div>
+          <h3>Light or dark theme</h3>
+          <p>Use the theme toggle in the header. The setting is saved, so your preference is kept between visits.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery -->
+  <section id="gallery">
+    <div class="container stack">
+      <div class="section-head">
+        <h2>Gallery</h2>
+        <p>Placeholder tiles drawn with SVG. Replace with your images when ready.</p>
+      </div>
+      <div class="gallery-grid">
+        <div class="tile card" aria-label="Sample image 1">
+          <svg viewBox="0 0 400 300" role="img" aria-label="Abstract hills">
+            <defs>
+              <linearGradient id="hills" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#93c5fd"/>
+                <stop offset="1" stop-color="#2563eb"/>
+              </linearGradient>
+            </defs>
+            <rect width="400" height="300" fill="var(--bg)"></rect>
+            <circle cx="320" cy="70" r="24" fill="#fbbf24" opacity="0.9"></circle>
+            <path d="M0,220 C80,180 120,240 200,210 C280,180 320,240 400,200 L400,300 L0,300 Z" fill="url(#hills)" opacity="0.45"></path>
+            <path d="M0,240 C80,210 120,260 200,230 C280,200 320,260 400,220 L400,300 L0,300 Z" fill="url(#hills)" opacity="0.6"></path>
+          </svg>
+        </div>
+        <div class="tile card" aria-label="Sample image 2">
+          <svg viewBox="0 0 400 300" role="img" aria-label="Geometric blocks">
+            <rect width="400" height="300" fill="var(--bg)"></rect>
+            <g opacity="0.8">
+              <rect x="30" y="30" width="120" height="120" rx="14" fill="#60a5fa"></rect>
+              <rect x="170" y="30" width="200" height="80" rx="14" fill="#93c5fd"></rect>
+              <rect x="30" y="170" width="160" height="100" rx="14" fill="#2563eb" opacity="0.8"></rect>
+              <rect x="210" y="150" width="160" height="120" rx="14" fill="#60a5fa"></rect>
+            </g>
+          </svg>
+        </div>
+        <div class="tile card" aria-label="Sample image 3">
+          <svg viewBox="0 0 400 300" role="img" aria-label="Waves">
+            <rect width="400" height="300" fill="var(--bg)"></rect>
+            <g fill="#2563eb" opacity="0.3">
+              <path d="M0,180 Q50,150 100,180 T200,180 T300,180 T400,180 L400,300 L0,300 Z"></path>
+            </g>
+            <g fill="#60a5fa" opacity="0.35">
+              <path d="M0,200 Q50,170 100,200 T200,200 T300,200 T400,200 L400,300 L0,300 Z"></path>
+            </g>
+            <g fill="#93c5fd" opacity="0.4">
+              <path d="M0,220 Q50,190 100,220 T200,220 T300,220 T400,220 L400,300 L0,300 Z"></path>
+            </g>
+          </svg>
+        </div>
+        <div class="tile card" aria-label="Sample image 4">
+          <svg viewBox="0 0 400 300" role="img" aria-label="Circles">
+            <rect width="400" height="300" fill="var(--bg)"></rect>
+            <g>
+              <circle cx="90" cy="150" r="60" fill="#2563eb" opacity="0.7"></circle>
+              <circle cx="180" cy="150" r="60" fill="#60a5fa" opacity="0.7"></circle>
+              <circle cx="270" cy="150" r="60" fill="#93c5fd" opacity="0.7"></circle>
+            </g>
+          </svg>
+        </div>
+        <div class="tile card" aria-label="Sample image 5">
+          <svg viewBox="0 0 400 300" role="img" aria-label="Diagonal stripes">
+            <rect width="400" height="300" fill="var(--bg)"></rect>
+            <g opacity="0.2">
+              <rect x="-50" y="0" width="100" height="400" transform="rotate(30)" fill="#2563eb"></rect>
+              <rect x="50" y="0" width="100" height="400" transform="rotate(30)" fill="#60a5fa"></rect>
+              <rect x="150" y="0" width="100" height="400" transform="rotate(30)" fill="#93c5fd"></rect>
+              <rect x="250" y="0" width="100" height="400" transform="rotate(30)" fill="#2563eb"></rect>
+            </g>
+          </svg>
+        </div>
+        <div class="tile card" aria-label="Sample image 6">
+          <svg viewBox="0 0 400 300" role="img" aria-label="Dots">
+            <rect width="400" height="300" fill="var(--bg)"></rect>
+            <g fill="#2563eb" opacity="0.4">
+              <!-- Dot grid -->
+              <script type="text/plain" id="dot-template">20,20</script>
+            </g>
+            <g id="dots"></g>
+            <script>
+              // Populate dots for this one tile only
+              (function populateDots() {
+                try {
+                  var svg = document.currentScript.parentElement;
+                  var dotLayer = svg.querySelector('#dots');
+                  for (var y = 20; y <= 280; y += 30) {
+                    for (var x = 20; x <= 380; x += 30) {
+                      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+                      c.setAttribute('cx', String(x));
+                      c.setAttribute('cy', String(y));
+                      c.setAttribute('r', '4');
+                      c.setAttribute('fill', '#60a5fa');
+                      c.setAttribute('opacity', '0.55');
+                      dotLayer.appendChild(c);
+                    }
+                  }
+                } catch (e) {
+                  /* no-op if scripting is blocked */
+                }
+              })();
+            </script>
+          </svg>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact">
+    <div class="container stack">
+      <div class="section-head">
+        <h2>Contact</h2>
+        <p>Send a short message. Fields marked with an asterisk are required.</p>
+      </div>
+      <div class="card">
+        <form class="contact" id="contactForm" novalidate>
+          <div class="field">
+            <label for="name">Name *</label>
+            <input id="name" name="name" type="text" placeholder="Jane Smith" autocomplete="name" required />
+            <p class="help">Your full name</p>
+          </div>
+          <div class="field">
+            <label for="email">Email *</label>
+            <input id="email" name="email" type="email" placeholder="jane@example.com" autocomplete="email" required />
+            <p class="help">We will reply to this address</p>
+          </div>
+          <div class="field">
+            <label for="topic">Topic</label>
+            <select id="topic" name="topic">
+              <option value="hello">Just saying hello</option>
+              <option value="support">Support request</option>
+              <option value="feedback">Feedback</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="message">Message *</label>
+            <textarea id="message" name="message" rows="5" placeholder="Write your message here" required></textarea>
+            <p class="help">Be as clear as possible</p>
+          </div>
+          <div class="stack-sm">
+            <button type="submit" class="btn"><span aria-hidden="true">✉️</span> Send message</button>
+            <p id="formStatus" class="help" role="status" aria-live="polite"></p>
+          </div>
+        </form>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container stack-sm center">
+      <div>&copy; <span id="year"></span> Simple Test. All rights reserved.</div>
+      <div><a href="#top" class="badge">Back to top</a></div>
+    </div>
+  </footer>
+
+  <!-- Script -->
+  <script>
+    // Theme initial load
+    (function initTheme() {
+      try {
+        var saved = localStorage.getItem('pref-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        if (saved === 'dark' || (!saved && prefersDark)) {
+          document.documentElement.classList.add('dark');
+        }
+      } catch (e) {
+        /* localStorage may be blocked */
+      }
+    })();
+
+    // Theme toggle
+    (function themeToggle() {
+      var btn = document.getElementById('themeToggle');
+      if (!btn) return;
+      var updatePressed = function () {
+        var isDark = document.documentElement.classList.contains('dark');
+        btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+      };
+      btn.addEventListener('click', function () {
+        document.documentElement.classList.toggle('dark');
+        updatePressed();
+        try {
+          var isDark = document.documentElement.classList.contains('dark');
+          localStorage.setItem('pref-theme', isDark ? 'dark' : 'light');
+        } catch (e) {
+          /* ignore */
+        }
+      });
+      updatePressed();
+    })();
+
+    // Smooth scroll for anchor links within the page
+    (function smoothScroll() {
+      var links = document.querySelectorAll('a[href^="#"]');
+      links.forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          var id = a.getAttribute('href').slice(1);
+          var target = document.getElementById(id);
+          if (target) {
+            e.preventDefault();
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            history.pushState(null, '', '#' + id);
+          }
+        });
+      });
+    })();
+
+    // Footer year
+    (function setYear() {
+      var y = document.getElementById('year');
+      if (y) y.textContent = String(new Date().getFullYear());
+    })();
+
+    // Contact form handling
+    (function formHandler() {
+      var form = document.getElementById('contactForm');
+      var status = document.getElementById('formStatus');
+      if (!form || !status) return;
+
+      function validateEmail(email) {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+      }
+
+      form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        status.textContent = '';
+        var data = new FormData(form);
+        var name = (data.get('name') || '').toString().trim();
+        var email = (data.get('email') || '').toString().trim();
+        var topic = (data.get('topic') || '').toString();
+        var message = (data.get('message') || '').toString().trim();
+
+        var errors = [];
+        if (!name) errors.push('Name is required');
+        if (!email) errors.push('Email is required');
+        if (email && !validateEmail(email)) errors.push('Email looks incorrect');
+        if (!message) errors.push('Message is required');
+
+        if (errors.length > 0) {
+          status.textContent = errors.join(' • ');
+          status.style.color = '#ef4444';
+          return;
+        }
+
+        // In a real site you would send to a server here.
+        // For this demo we just show the values so you can see the flow.
+        var summary = [
+          'Message sent. This is a demo summary:',
+          'Name: ' + name,
+          'Email: ' + email,
+          'Topic: ' + topic,
+          'Message: ' + message
+        ].join('\n');
+
+        alert(summary);
+        status.textContent = 'Thanks. Your message has been prepared in this demo.';
+        status.style.color = '';
+        form.reset();
+      });
+    })();
+  </script>
+</body>
+</html>
