@@ -1,648 +1,1417 @@
 <!DOCTYPE html>
-<html lang="en-GB">
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Simple Test Website</title>
-  <meta name="description" content="A simple, single file test website with basic layout, components, and a light or dark theme toggle." />
-  <style>
-    /* ===== CSS Reset (lightweight) ===== */
-    *, *::before, *::after { box-sizing: border-box; }
-    * { margin: 0; }
-    html, body { height: 100%; }
-    body { line-height: 1.6; -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility; }
-    img, svg, video, canvas, audio, iframe, embed, object { display: block; max-width: 100%; }
-    button, input, select, textarea { font: inherit; }
-    a { color: inherit; text-decoration: none; }
-    ul[role='list'], ol[role='list'] { list-style: none; padding: 0; }
-
-    /* ===== Theme Variables ===== */
-    :root {
-      --bg: #ffffff;
-      --bg-soft: #f6f7f9;
-      --text: #0f172a;
-      --muted: #475569;
-      --primary: #2563eb;
-      --primary-ink: #ffffff;
-      --ring: 0 0 0 3px rgba(37, 99, 235, 0.25);
-      --card: #ffffff;
-      --border: #e5e7eb;
-      --shadow: 0 10px 25px rgba(2, 6, 23, 0.08);
-      --radius: 14px;
-      --container: 1100px;
-    }
-    .dark {
-      --bg: #0b1220;
-      --bg-soft: #0f172a;
-      --text: #e5e7eb;
-      --muted: #94a3b8;
-      --primary: #60a5fa;
-      --primary-ink: #0b1220;
-      --card: #0f172a;
-      --border: #1f2937;
-      --shadow: 0 10px 25px rgba(0, 0, 0, 0.4);
-    }
-
-    /* ===== Base ===== */
-    body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Noto Sans, Ubuntu, Cantarell, Arial, "Apple Color Emoji", "Segoe UI Emoji";
-    }
-    .container {
-      width: min(100% - 2rem, var(--container));
-      margin-inline: auto;
-    }
-    .btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.5rem;
-      padding: 0.85rem 1.2rem;
-      border-radius: 9999px;
-      background: var(--primary);
-      color: var(--primary-ink);
-      border: 1px solid transparent;
-      box-shadow: var(--shadow);
-      cursor: pointer;
-      transition: transform 0.12s ease, opacity 0.2s ease, box-shadow 0.2s ease;
-    }
-    .btn:hover { transform: translateY(-1px); }
-    .btn:focus-visible { outline: none; box-shadow: var(--shadow), var(--ring); }
-    .btn.secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-      box-shadow: none;
-    }
-    .badge {
-      display: inline-block;
-      font-size: 0.875rem;
-      padding: 0.25rem 0.6rem;
-      border-radius: 9999px;
-      background: var(--bg-soft);
-      color: var(--muted);
-      border: 1px solid var(--border);
-    }
-    .card {
-      background: var(--card);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-
-    /* ===== Header and Nav ===== */
-    header.site-header {
-      position: sticky;
-      top: 0;
-      z-index: 50;
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: saturate(1.2) blur(10px);
-      border-bottom: 1px solid var(--border);
-    }
-    .nav {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0.8rem 0;
-      gap: 1rem;
-    }
-    .brand {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-weight: 700;
-      letter-spacing: 0.2px;
-    }
-    .brand-logo {
-      width: 28px;
-      height: 28px;
-      border-radius: 8px;
-      background: linear-gradient(135deg, var(--primary), color-mix(in srgb, var(--primary) 60%, black));
-      display: grid;
-      place-items: center;
-      color: var(--primary-ink);
-      font-size: 0.95rem;
-      box-shadow: var(--shadow);
-    }
-    nav ul {
-      display: flex;
-      gap: 1rem;
-    }
-    nav a {
-      padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-      color: var(--muted);
-      transition: color 0.2s ease, background 0.2s ease;
-    }
-    nav a:hover, nav a:focus-visible {
-      color: var(--text);
-      background: var(--bg-soft);
-      outline: none;
-    }
-
-    /* ===== Hero ===== */
-    .hero {
-      padding: clamp(3rem, 6vw, 6rem) 0;
-    }
-    .hero-grid {
-      display: grid;
-      grid-template-columns: 1.2fr 1fr;
-      gap: clamp(1.5rem, 4vw, 3rem);
-      align-items: center;
-    }
-    .hero h1 {
-      font-size: clamp(2rem, 5vw, 3rem);
-      line-height: 1.15;
-      letter-spacing: -0.3px;
-      margin-bottom: 1rem;
-    }
-    .hero p {
-      color: var(--muted);
-      font-size: clamp(1rem, 2.2vw, 1.125rem);
-      margin-bottom: 1.25rem;
-    }
-    .hero-cta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.8rem;
-      align-items: center;
-    }
-    .hero-visual {
-      aspect-ratio: 4 / 3;
-    }
-    .hero-visual .card {
-      height: 100%;
-      padding: 1rem;
-      display: grid;
-      place-items: center;
-    }
-
-    /* ===== Features ===== */
-    section#features {
-      padding: clamp(2.5rem, 5vw, 4rem) 0;
-    }
-    .section-head {
-      display: grid;
-      gap: 0.5rem;
-      margin-bottom: 1.25rem;
-    }
-    .section-head h2 {
-      font-size: clamp(1.5rem, 3.2vw, 2rem);
-    }
-    .section-head p { color: var(--muted); }
-    .grid {
-      display: grid;
-      gap: 1rem;
-    }
-    .grid.cols-3 { grid-template-columns: repeat(3, 1fr); }
-    .feature {
-      padding: 1rem;
-      display: grid;
-      gap: 0.6rem;
-    }
-    .feature .icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 10px;
-      display: grid;
-      place-items: center;
-      background: var(--bg-soft);
-      border: 1px solid var(--border);
-      color: var(--primary);
-      font-weight: 700;
-    }
-    .feature p { color: var(--muted); }
-
-    /* ===== Gallery ===== */
-    section#gallery {
-      padding: clamp(2.5rem, 5vw, 4rem) 0;
-    }
-    .gallery-grid {
-      display: grid;
-      gap: 1rem;
-      grid-template-columns: repeat(12, 1fr);
-    }
-    .gallery-grid .tile {
-      grid-column: span 4;
-      aspect-ratio: 4 / 3;
-      overflow: hidden;
-    }
-    .tile svg { width: 100%; height: 100%; }
-
-    /* ===== Contact ===== */
-    section#contact {
-      padding: clamp(2.5rem, 5vw, 4rem) 0;
-    }
-    form.contact {
-      display: grid;
-      gap: 0.8rem;
-      padding: 1rem;
-    }
-    .field {
-      display: grid;
-      gap: 0.35rem;
-    }
-    .field label { font-weight: 600; }
-    .field input, .field textarea, .field select {
-      width: 100%;
-      padding: 0.75rem 0.9rem;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--bg);
-      color: var(--text);
-    }
-    .field input:focus-visible, .field textarea:focus-visible, .field select:focus-visible {
-      outline: none;
-      box-shadow: var(--ring);
-      border-color: color-mix(in srgb, var(--primary) 60%, var(--border));
-    }
-    .help { color: var(--muted); font-size: 0.925rem; }
-
-    /* ===== Footer ===== */
-    footer.site-footer {
-      padding: 2rem 0;
-      border-top: 1px solid var(--border);
-      color: var(--muted);
-    }
-
-    /* ===== Utilities ===== */
-    .stack-sm { display: grid; gap: 0.5rem; }
-    .stack { display: grid; gap: 1rem; }
-    .stack-lg { display: grid; gap: 1.5rem; }
-    .center { text-align: center; }
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    /* ===== Media ===== */
-    @media (max-width: 900px) {
-      .hero-grid { grid-template-columns: 1fr; }
-      .grid.cols-3 { grid-template-columns: 1fr; }
-      .gallery-grid .tile { grid-column: span 6; }
-    }
-    @media (max-width: 600px) {
-      nav ul { display: none; }
-      .gallery-grid .tile { grid-column: span 12; }
-    }
-  </style>
+<meta charset="utf-8">
+<title>Pets Quest DX - Single File RPG</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+<style>
+  :root {
+    --bg:#101018;
+    --bezel:#1b1f2b;
+    --screen:#0a0e14;
+    --accent:#74ff74;
+    --accent2:#6cf;
+    --accent3:#ffdd55;
+    --txt:#e8f0ff;
+    --dim:#a8b0c0;
+    --btn:#22283a;
+    --btnhi:#2b3350;
+    --pad:#0d1220;
+    --padhi:#182038;
+    --danger:#ff6b6b;
+    --good:#58ff9a;
+  }
+  html,body { height:100%; background:linear-gradient(180deg,var(--bg),#0a0d16); margin:0; color:var(--txt); font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif; }
+  .wrap {
+    display:flex; align-items:center; justify-content:center; height:100%; padding:12px;
+  }
+  .shell {
+    background: radial-gradient(120% 90% at 50% 20%, #26304a, #161a26 60%, #0c0f18 100%);
+    border: 2px solid #2a3046;
+    box-shadow: 0 18px 40px rgba(0,0,0,0.6), inset 0 0 0 4px #0f1320, inset 0 0 40px rgba(0,0,0,0.5);
+    border-radius: 24px;
+    padding: 14px 14px 22px 14px;
+    width:min(96vw,720px);
+    max-width:720px;
+  }
+  .bezel {
+    background: linear-gradient(180deg, var(--bezel), #121725);
+    border-radius: 18px;
+    padding: 12px;
+    border:1px solid #384060;
+    box-shadow: inset 0 0 24px rgba(0,0,0,0.5);
+  }
+  .header {
+    display:flex; justify-content:space-between; align-items:center; margin:0 4px 8px 4px;
+    color:var(--dim);
+    font-size:12px;
+    letter-spacing:0.06em;
+  }
+  .power {
+    width:10px; height:10px; border-radius:50%; background:#2a2; box-shadow:0 0 8px #2a2;
+    display:inline-block; margin-right:6px;
+  }
+  canvas {
+    display:block;
+    width:100%;
+    height:auto;
+    background:var(--screen);
+    border-radius:8px;
+    image-rendering: pixelated;
+    image-rendering: crisp-edges;
+    border: 1px solid #0c0f1a;
+    box-shadow: inset 0 0 32px rgba(0,0,0,0.7);
+  }
+  .brand {
+    text-align:center; margin:8px 0 6px 0; font-weight:700; letter-spacing:0.08em; color:#9ad3ff;
+    text-shadow:0 0 8px rgba(110,200,255,0.35);
+    font-size:14px;
+  }
+  .controls {
+    display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:12px;
+    user-select:none; -webkit-user-select:none;
+  }
+  .dpad, .ab {
+    background: linear-gradient(180deg, var(--pad), #090d17);
+    border-radius:14px;
+    border:1px solid #2a3149;
+    box-shadow: inset 0 0 22px rgba(0,0,0,0.7), 0 6px 14px rgba(0,0,0,0.35);
+    padding:10px;
+  }
+  .dgrid {
+    display:grid; grid-template-columns: 56px 56px 56px; gap:10px; justify-content:center; align-items:center;
+  }
+  .btn {
+    width:56px; height:56px; background:linear-gradient(180deg, var(--btn), #0b0f1c); border-radius:12px;
+    border:1px solid #39415f; box-shadow: inset 0 0 18px rgba(0,0,0,0.6), 0 4px 10px rgba(0,0,0,0.35);
+    display:flex; align-items:center; justify-content:center; color:#9fb5ff; font-weight:700;
+    font-size:16px;
+  }
+  .btn:active { background:linear-gradient(180deg, var(--btnhi), #0f1526); transform: translateY(1px); }
+  .btn.small { width:64px; height:38px; border-radius:10px; font-size:12px; }
+  .abgrid {
+    display:grid; grid-template-columns: 1fr 1fr; gap:12px; justify-items:center; align-items:center;
+  }
+  .row { display:flex; gap:10px; justify-content:center; margin-top:10px; }
+  .mini { font-size:11px; color:var(--dim); text-align:center; margin-top:6px; }
+  .hint { font-size:12px; color:#b8c7ff; text-align:center; margin-top:4px; }
+  .bad { color:var(--danger); }
+  .good { color:var(--good); }
+  .kbd { background:#0d1222; border:1px solid #313a58; border-radius:6px; padding:2px 6px; font-weight:700; color:#bcd; }
+  /* Prevent iOS tap highlight and text callouts */
+  * { -webkit-tap-highlight-color: transparent; }
+</style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="site-header" id="top">
-    <div class="container nav" role="navigation" aria-label="Primary">
-      <a href="#top" class="brand" aria-label="Home">
-        <span class="brand-logo" aria-hidden="true">ST</span>
-        <span>Simple Test</span>
-      </a>
-      <nav>
-        <ul role="list">
-          <li><a href="#features">Features</a></li>
-          <li><a href="#gallery">Gallery</a></li>
-          <li><a href="#contact">Contact</a></li>
-          <li>
-            <button id="themeToggle" type="button" class="btn secondary" aria-pressed="false" aria-label="Toggle dark theme">
-              <span aria-hidden="true">🌓</span>
-              <span>Theme</span>
-            </button>
-          </li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero -->
-  <section class="hero">
-    <div class="container hero-grid">
-      <div class="stack">
-        <span class="badge" aria-hidden="true">Single file demo</span>
-        <h1>Simple test website, ready to copy and use</h1>
-        <p>This page lives in one HTML file with embedded styles and a tiny script. It has a header, a hero, three feature cards, a small gallery, and a contact form. It is quick to customise and easy to share.</p>
-        <div class="hero-cta">
-          <a href="#features" class="btn">View features</a>
-          <a href="#contact" class="btn secondary">Contact us</a>
-        </div>
+<div class="wrap">
+  <div class="shell">
+    <div class="bezel">
+      <div class="header">
+        <div><span class="power"></span>Pets Quest DX</div>
+        <div>Battery <span id="pct">100%</span></div>
       </div>
-      <div class="hero-visual">
-        <div class="card">
-          <!-- Inline SVG so no external assets are needed -->
-          <svg viewBox="0 0 800 600" role="img" aria-label="Decorative hero graphic">
-            <defs>
-              <linearGradient id="g1" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#60a5fa"/>
-                <stop offset="1" stop-color="#2563eb"/>
-              </linearGradient>
-            </defs>
-            <rect x="0" y="0" width="800" height="600" fill="url(#g1)" opacity="0.15"></rect>
-            <g>
-              <rect x="80" y="90" width="640" height="380" rx="18" fill="none" stroke="currentColor" stroke-opacity="0.35" stroke-width="6"/>
-              <rect x="110" y="120" width="580" height="60" rx="10" fill="currentColor" opacity="0.08"/>
-              <rect x="110" y="200" width="180" height="140" rx="12" fill="currentColor" opacity="0.08"/>
-              <rect x="310" y="200" width="380" height="30" rx="8" fill="currentColor" opacity="0.08"/>
-              <rect x="310" y="240" width="320" height="20" rx="8" fill="currentColor" opacity="0.08"/>
-              <rect x="310" y="270" width="280" height="20" rx="8" fill="currentColor" opacity="0.08"/>
-              <rect x="310" y="310" width="340" height="20" rx="8" fill="currentColor" opacity="0.08"/>
-              <rect x="110" y="360" width="160" height="28" rx="8" fill="#2563eb" opacity="0.8"/>
-              <rect x="280" y="360" width="120" height="28" rx="8" fill="currentColor" opacity="0.12"/>
-            </g>
-          </svg>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Features -->
-  <section id="features">
-    <div class="container stack">
-      <div class="section-head">
-        <h2>Features</h2>
-        <p>Clean structure, accessible controls, and no external dependencies.</p>
-      </div>
-      <div class="grid cols-3">
-        <article class="card feature">
-          <div class="icon" aria-hidden="true">1</div>
-          <h3>Single file</h3>
-          <p>All styling and behaviour are embedded right here, so you can drop this into any project and start quickly.</p>
-        </article>
-        <article class="card feature">
-          <div class="icon" aria-hidden="true">2</div>
-          <h3>Responsive layout</h3>
-          <p>The grid adapts to small screens and large screens without extra work. It feels natural on desktop and mobile.</p>
-        </article>
-        <article class="card feature">
-          <div class="icon" aria-hidden="true">3</div>
-          <h3>Light or dark theme</h3>
-          <p>Use the theme toggle in the header. The setting is saved, so your preference is kept between visits.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Gallery -->
-  <section id="gallery">
-    <div class="container stack">
-      <div class="section-head">
-        <h2>Gallery</h2>
-        <p>Placeholder tiles drawn with SVG. Replace with your images when ready.</p>
-      </div>
-      <div class="gallery-grid">
-        <div class="tile card" aria-label="Sample image 1">
-          <svg viewBox="0 0 400 300" role="img" aria-label="Abstract hills">
-            <defs>
-              <linearGradient id="hills" x1="0" y1="0" x2="1" y2="1">
-                <stop offset="0" stop-color="#93c5fd"/>
-                <stop offset="1" stop-color="#2563eb"/>
-              </linearGradient>
-            </defs>
-            <rect width="400" height="300" fill="var(--bg)"></rect>
-            <circle cx="320" cy="70" r="24" fill="#fbbf24" opacity="0.9"></circle>
-            <path d="M0,220 C80,180 120,240 200,210 C280,180 320,240 400,200 L400,300 L0,300 Z" fill="url(#hills)" opacity="0.45"></path>
-            <path d="M0,240 C80,210 120,260 200,230 C280,200 320,260 400,220 L400,300 L0,300 Z" fill="url(#hills)" opacity="0.6"></path>
-          </svg>
-        </div>
-        <div class="tile card" aria-label="Sample image 2">
-          <svg viewBox="0 0 400 300" role="img" aria-label="Geometric blocks">
-            <rect width="400" height="300" fill="var(--bg)"></rect>
-            <g opacity="0.8">
-              <rect x="30" y="30" width="120" height="120" rx="14" fill="#60a5fa"></rect>
-              <rect x="170" y="30" width="200" height="80" rx="14" fill="#93c5fd"></rect>
-              <rect x="30" y="170" width="160" height="100" rx="14" fill="#2563eb" opacity="0.8"></rect>
-              <rect x="210" y="150" width="160" height="120" rx="14" fill="#60a5fa"></rect>
-            </g>
-          </svg>
-        </div>
-        <div class="tile card" aria-label="Sample image 3">
-          <svg viewBox="0 0 400 300" role="img" aria-label="Waves">
-            <rect width="400" height="300" fill="var(--bg)"></rect>
-            <g fill="#2563eb" opacity="0.3">
-              <path d="M0,180 Q50,150 100,180 T200,180 T300,180 T400,180 L400,300 L0,300 Z"></path>
-            </g>
-            <g fill="#60a5fa" opacity="0.35">
-              <path d="M0,200 Q50,170 100,200 T200,200 T300,200 T400,200 L400,300 L0,300 Z"></path>
-            </g>
-            <g fill="#93c5fd" opacity="0.4">
-              <path d="M0,220 Q50,190 100,220 T200,220 T300,220 T400,220 L400,300 L0,300 Z"></path>
-            </g>
-          </svg>
-        </div>
-        <div class="tile card" aria-label="Sample image 4">
-          <svg viewBox="0 0 400 300" role="img" aria-label="Circles">
-            <rect width="400" height="300" fill="var(--bg)"></rect>
-            <g>
-              <circle cx="90" cy="150" r="60" fill="#2563eb" opacity="0.7"></circle>
-              <circle cx="180" cy="150" r="60" fill="#60a5fa" opacity="0.7"></circle>
-              <circle cx="270" cy="150" r="60" fill="#93c5fd" opacity="0.7"></circle>
-            </g>
-          </svg>
-        </div>
-        <div class="tile card" aria-label="Sample image 5">
-          <svg viewBox="0 0 400 300" role="img" aria-label="Diagonal stripes">
-            <rect width="400" height="300" fill="var(--bg)"></rect>
-            <g opacity="0.2">
-              <rect x="-50" y="0" width="100" height="400" transform="rotate(30)" fill="#2563eb"></rect>
-              <rect x="50" y="0" width="100" height="400" transform="rotate(30)" fill="#60a5fa"></rect>
-              <rect x="150" y="0" width="100" height="400" transform="rotate(30)" fill="#93c5fd"></rect>
-              <rect x="250" y="0" width="100" height="400" transform="rotate(30)" fill="#2563eb"></rect>
-            </g>
-          </svg>
-        </div>
-        <div class="tile card" aria-label="Sample image 6">
-          <svg viewBox="0 0 400 300" role="img" aria-label="Dots">
-            <rect width="400" height="300" fill="var(--bg)"></rect>
-            <g fill="#2563eb" opacity="0.4">
-              <!-- Dot grid -->
-              <script type="text/plain" id="dot-template">20,20</script>
-            </g>
-            <g id="dots"></g>
-            <script>
-              // Populate dots for this one tile only
-              (function populateDots() {
-                try {
-                  var svg = document.currentScript.parentElement;
-                  var dotLayer = svg.querySelector('#dots');
-                  for (var y = 20; y <= 280; y += 30) {
-                    for (var x = 20; x <= 380; x += 30) {
-                      var c = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-                      c.setAttribute('cx', String(x));
-                      c.setAttribute('cy', String(y));
-                      c.setAttribute('r', '4');
-                      c.setAttribute('fill', '#60a5fa');
-                      c.setAttribute('opacity', '0.55');
-                      dotLayer.appendChild(c);
-                    }
-                  }
-                } catch (e) {
-                  /* no-op if scripting is blocked */
-                }
-              })();
-            </script>
-          </svg>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Contact -->
-  <section id="contact">
-    <div class="container stack">
-      <div class="section-head">
-        <h2>Contact</h2>
-        <p>Send a short message. Fields marked with an asterisk are required.</p>
-      </div>
-      <div class="card">
-        <form class="contact" id="contactForm" novalidate>
-          <div class="field">
-            <label for="name">Name *</label>
-            <input id="name" name="name" type="text" placeholder="Jane Smith" autocomplete="name" required />
-            <p class="help">Your full name</p>
+      <canvas id="screen" width="320" height="180" aria-label="Game screen"></canvas>
+      <div class="brand">Handheld Colour - 320×180 - High Contrast</div>
+      <div class="controls" id="touchControls">
+        <div class="dpad">
+          <div class="dgrid">
+            <div></div>
+            <button class="btn" data-press="UP" aria-label="Up">▲</button>
+            <div></div>
+            <button class="btn" data-press="LEFT" aria-label="Left">◀</button>
+            <div></div>
+            <button class="btn" data-press="RIGHT" aria-label="Right">▶</button>
+            <div></div>
+            <button class="btn" data-press="DOWN" aria-label="Down">▼</button>
+            <div></div>
           </div>
-          <div class="field">
-            <label for="email">Email *</label>
-            <input id="email" name="email" type="email" placeholder="jane@example.com" autocomplete="email" required />
-            <p class="help">We will reply to this address</p>
+          <div class="mini">Move with Arrow Keys or D-pad</div>
+        </div>
+        <div class="ab">
+          <div class="abgrid">
+            <button class="btn" data-press="A" aria-label="A">A</button>
+            <button class="btn" data-press="B" aria-label="B">B</button>
+            <button class="btn small" data-press="START" aria-label="Start">Start</button>
+            <button class="btn small" data-press="SELECT" aria-label="Select">Select</button>
           </div>
-          <div class="field">
-            <label for="topic">Topic</label>
-            <select id="topic" name="topic">
-              <option value="hello">Just saying hello</option>
-              <option value="support">Support request</option>
-              <option value="feedback">Feedback</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="message">Message *</label>
-            <textarea id="message" name="message" rows="5" placeholder="Write your message here" required></textarea>
-            <p class="help">Be as clear as possible</p>
-          </div>
-          <div class="stack-sm">
-            <button type="submit" class="btn"><span aria-hidden="true">✉️</span> Send message</button>
-            <p id="formStatus" class="help" role="status" aria-live="polite"></p>
-          </div>
-        </form>
+          <div class="mini">Desktop: <span class="kbd">Z</span> is A, <span class="kbd">X</span> is B, <span class="kbd">Enter</span> is Start, <span class="kbd">Shift</span> is Select</div>
+        </div>
       </div>
+      <div class="hint">Menu with <span class="kbd">Enter</span>. Quick mute in Options. Codewords are 6 letters or digits, auto caps.</div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="container stack-sm center">
-      <div>&copy; <span id="year"></span> Simple Test. All rights reserved.</div>
-      <div><a href="#top" class="badge">Back to top</a></div>
-    </div>
-  </footer>
+<script>
+(() => {
+  // ------------------------------------------------------------
+  // Core configuration
+  // ------------------------------------------------------------
+  const CANVAS_W = 320;
+  const CANVAS_H = 180;
+  const SCALE_PIXELS = true;
 
-  <!-- Script -->
-  <script>
-    // Theme initial load
-    (function initTheme() {
-      try {
-        var saved = localStorage.getItem('pref-theme');
-        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
-        if (saved === 'dark' || (!saved && prefersDark)) {
-          document.documentElement.classList.add('dark');
-        }
-      } catch (e) {
-        /* localStorage may be blocked */
+  // High contrast colour palette
+  const PALETTE = {
+    bg: "#0a0e14",
+    ui: "#141a2a",
+    panel:"#0d1220",
+    text:"#e6f2ff",
+    sub:"#9cb6ff",
+    good:"#58ff9a",
+    bad:"#ff6b6b",
+    warn:"#ffd166",
+    accent:"#74ff74",
+    accent2:"#6cf",
+    accent3:"#ffdd55",
+    grid:"#1b2540",
+    white:"#ffffff",
+    black:"#000000",
+    shadow:"#00040a"
+  };
+
+  // Input mapping
+  const KEYS = {
+    LEFT:["ArrowLeft","a","A"],
+    RIGHT:["ArrowRight","d","D"],
+    UP:["ArrowUp","w","W"],
+    DOWN:["ArrowDown","s","S"],
+    A:["z","Z","k","K"," "],
+    B:["x","X","j","J","Backspace"],
+    START:["Enter"],
+    SELECT:["Shift","Tab"]
+  };
+
+  // Game states
+  const ST = {
+    TITLE: "TITLE",
+    NAME: "NAME",
+    SIDEKICK: "SIDEKICK",
+    WORLD: "WORLD",
+    BATTLE: "BATTLE",
+    MENU: "MENU",
+    SHOP: "SHOP",
+    MESSAGE: "MESSAGE",
+    CODEWORD: "CODEWORD",
+  };
+
+  // Checkpoint stages
+  const STAGE = {
+    STARTED:0,
+    MET_SIDEKICK:1,
+    BOSS1_DONE:2,
+    BOSS2_DONE:3,
+    BOSS3_DONE:4
+  };
+
+  // Base32 alphabet for codewords, avoiding confusing chars
+  const ALPH = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"; // 32 chars
+
+  function base32Encode(num, len) {
+    let s = "";
+    for (let i = 0; i < len; i++) {
+      s = ALPH[num & 31] + s;
+      num >>>= 5;
+    }
+    return s;
+  }
+  function base32Decode(str) {
+    let n = 0;
+    for (let i = 0; i < str.length; i++) {
+      const ch = str[i];
+      const idx = ALPH.indexOf(ch);
+      if (idx < 0) return null;
+      n = (n << 5) | idx;
+    }
+    return n >>> 0;
+  }
+
+  // Pack stage with checksum into 6 chars
+  function codeFromStage(stage) {
+    const s = stage & 0xff;
+    const chk = ((s * 131 + 97) ^ 0x2A5) & 0x3ff; // 10 bits checksum
+    const packed = (chk << 8) | s; // 18 bits payload
+    // place into 30 bits to fill 6 chars. Add simple salt for different episodes
+    const salted = (packed ^ 0x15555555) & 0x3fffffff;
+    return base32Encode(salted, 6);
+  }
+  function stageFromCode(code) {
+    if (!code || code.length !== 6) return null;
+    const n = base32Decode(code.toUpperCase());
+    if (n === null) return null;
+    const packed = (n ^ 0x15555555) & 0x3fffffff;
+    const s = packed & 0xff;
+    const chk = (packed >>> 8) & 0x3ff;
+    const chk2 = ((s * 131 + 97) ^ 0x2A5) & 0x3ff;
+    if (chk !== chk2) return null;
+    if (s < 0 || s > 32) return null;
+    return s;
+  }
+
+  // Save system
+  const SAVE_KEY = "pets_quest_dx_save_v1";
+
+  function saveGame() {
+    const data = {
+      version:1,
+      player,
+      flags,
+      stage,
+      inventory,
+      equipment,
+      coins,
+      location,
+      options,
+    };
+    try {
+      localStorage.setItem(SAVE_KEY, JSON.stringify(data));
+    } catch(e) {}
+  }
+  function loadGame() {
+    try {
+      const s = localStorage.getItem(SAVE_KEY);
+      if (!s) return false;
+      const data = JSON.parse(s);
+      if (!data || data.version !== 1) return false;
+      Object.assign(player, data.player || {});
+      Object.assign(flags, data.flags || {});
+      stage = data.stage ?? STAGE.STARTED;
+      inventory = data.inventory || [];
+      equipment = data.equipment || { head:null, body:null };
+      coins = data.coins ?? 0;
+      location = data.location || { zone:0, x:8, y:8 };
+      Object.assign(options, data.options || {});
+      return true;
+    } catch(e) { return false; }
+  }
+
+  // Web Audio - simple chiptune and effects
+  const AudioSys = (() => {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    let enabled = false;
+    function resume() {
+      if (ctx.state === "suspended") ctx.resume();
+      enabled = true;
+    }
+    const master = ctx.createGain(); master.gain.value = 0.35; master.connect(ctx.destination);
+
+    function beep(freq=440, dur=0.1, type="square", vol=0.2) {
+      if (!enabled || options.muted) return;
+      const o = ctx.createOscillator();
+      const g = ctx.createGain();
+      o.type = type;
+      o.frequency.value = freq;
+      g.gain.value = vol;
+      o.connect(g); g.connect(master);
+      const t = ctx.currentTime;
+      g.gain.setValueAtTime(0, t);
+      g.gain.linearRampToValueAtTime(vol, t+0.01);
+      g.gain.exponentialRampToValueAtTime(0.0001, t+dur);
+      o.start(t);
+      o.stop(t+dur+0.05);
+    }
+
+    // Simple two channel loop
+    let musicNodes = [];
+    let musicOn = false;
+    function musicStart(mode="title") {
+      if (!enabled || options.muted) return;
+      musicStop();
+      musicOn = true;
+      const tempo = 132;
+      const beat = 60 / tempo;
+      const t0 = ctx.currentTime + 0.05;
+      const len = 8; // bars
+      function note(o, when, n, dur=0.45, vol=0.15) {
+        if (!musicOn) return;
+        const g = ctx.createGain();
+        g.gain.value = vol;
+        o.connect(g); g.connect(master);
+        o.frequency.setValueAtTime(440 * Math.pow(2, (n-69)/12), when);
+        g.gain.setValueAtTime(0.0001, when);
+        g.gain.linearRampToValueAtTime(vol, when+0.01);
+        g.gain.exponentialRampToValueAtTime(0.0001, when+dur);
       }
-    })();
+      const lead = ctx.createOscillator(); lead.type = "square"; lead.start(t0);
+      const bass = ctx.createOscillator(); bass.type = "triangle"; bass.start(t0);
 
-    // Theme toggle
-    (function themeToggle() {
-      var btn = document.getElementById('themeToggle');
-      if (!btn) return;
-      var updatePressed = function () {
-        var isDark = document.documentElement.classList.contains('dark');
-        btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
-      };
-      btn.addEventListener('click', function () {
-        document.documentElement.classList.toggle('dark');
-        updatePressed();
-        try {
-          var isDark = document.documentElement.classList.contains('dark');
-          localStorage.setItem('pref-theme', isDark ? 'dark' : 'light');
-        } catch (e) {
-          /* ignore */
+      // Title or world themes
+      const seqLead = mode === "battle" ? [72, 79, 76, 74, 72, 67, 69, 71] : [72, 76, 79, 76, 72, 67, 71, 74];
+      const seqBass = mode === "battle" ? [36, 36, 41, 41, 38, 38, 43, 43] : [36, 36, 41, 41, 33, 33, 38, 38];
+
+      const patternLenBeats = 16;
+      for (let i = 0; i < len * patternLenBeats; i++) {
+        const when = t0 + i * beat * 0.5;
+        const idx = i % seqLead.length;
+        note(lead, when, seqLead[idx], 0.3, 0.12);
+        if (i % 2 === 0) note(bass, when, seqBass[(idx>>1)%seqBass.length]-12, 0.45, 0.08);
+      }
+      const tStop = t0 + len * patternLenBeats * beat * 0.5 + 0.2;
+      lead.stop(tStop); bass.stop(tStop);
+      musicNodes = [lead, bass];
+      // loop
+      setTimeout(() => { if (musicOn) musicStart(mode); }, (tStop - ctx.currentTime) * 1000);
+    }
+    function musicStop() {
+      musicOn = false;
+      try { musicNodes.forEach(n => n.disconnect()); } catch(e){}
+      musicNodes = [];
+    }
+
+    return { ctx, resume, beep, musicStart, musicStop };
+  })();
+
+  // Engine setup
+  const canvas = document.getElementById("screen");
+  const ctx2d = canvas.getContext("2d");
+  if (SCALE_PIXELS) {
+    ctx2d.imageSmoothingEnabled = false;
+  }
+
+  // Global state
+  const player = {
+    name:"", maxHP:28, hp:28, atk:6, def:2, skill:1, level:1, xp:0,
+    sidekick:"", // will be set later
+  };
+  let stage = STAGE.STARTED;
+  let coins = 20;
+  let flags = { sawIntro:false, metSidekick:false, boss1:false, boss2:false, boss3:false };
+  let location = { zone:0, x:8, y:8 };
+  let inventory = [
+    { id:"SNACK", name:"Dog Snack", qty:3, desc:"Heals 10 HP" },
+  ];
+  let equipment = { head:null, body:null }; // cosmetic and small buffs
+  const accessories = [
+    { id:"BANDANA", slot:"head", name:"Red Bandana", price:15, atk:+1, def:0, colour:"#ff5964" },
+    { id:"CAP", slot:"head", name:"Blue Cap", price:20, atk:0, def:+1, colour:"#3aa0ff" },
+    { id:"SHADES", slot:"head", name:"Shades", price:25, atk:+1, def:+1, colour:"#111" },
+    { id:"CAPE", slot:"body", name:"Cape", price:30, atk:+2, def:0, colour:"#ffd166" },
+    { id:"RAINCOAT", slot:"body", name:"Raincoat", price:30, atk:0, def:+2, colour:"#74ff74" },
+  ];
+  const options = { muted:false, runHold:false };
+
+  // Input state
+  const press = { LEFT:false, RIGHT:false, UP:false, DOWN:false, A:false, B:false, START:false, SELECT:false };
+  const tap = { LEFT:false, RIGHT:false, UP:false, DOWN:false, A:false, B:false, START:false, SELECT:false }; // rising edge
+  function clearTaps() { for (const k in tap) tap[k] = false; }
+
+  // Touch controls
+  const touchControls = document.getElementById("touchControls");
+  touchControls.addEventListener("touchstart", e => { e.preventDefault(); }, {passive:false});
+  touchControls.addEventListener("contextmenu", e => e.preventDefault());
+  touchControls.querySelectorAll("[data-press]").forEach(btn => {
+    const k = btn.getAttribute("data-press");
+    const set = v => { press[k] = v; if (v) tap[k] = true; };
+    btn.addEventListener("touchstart", () => set(true));
+    btn.addEventListener("touchend", () => set(false));
+    btn.addEventListener("mousedown", () => set(true));
+    btn.addEventListener("mouseup", () => set(false));
+    btn.addEventListener("mouseleave", () => set(false));
+  });
+
+  // Keyboard controls
+  const keyDown = e => {
+    const k = e.key;
+    let mapped = null;
+    for (const P in KEYS) if (KEYS[P].includes(k)) mapped = P;
+    if (mapped) {
+      if (!press[mapped]) tap[mapped] = true;
+      press[mapped] = true;
+      if (mapped === "START" || mapped === "A" || mapped === "B") {
+        AudioSys.resume();
+      }
+      e.preventDefault();
+    }
+  };
+  const keyUp = e => {
+    const k = e.key;
+    let mapped = null;
+    for (const P in KEYS) if (KEYS[P].includes(k)) mapped = P;
+    if (mapped) { press[mapped] = false; e.preventDefault(); }
+  };
+  window.addEventListener("keydown", keyDown, {passive:false});
+  window.addEventListener("keyup", keyUp, {passive:false});
+
+  // Battery toy value
+  const pctEl = document.getElementById("pct");
+  setInterval(() => { pctEl.textContent = (92 + Math.floor(Math.random()*9)) + "%"; }, 3000);
+
+  // Utility
+  function clamp(n, a, b) { return Math.max(a, Math.min(b, n)); }
+  function rand(n) { return Math.floor(Math.random()*n); }
+  function drawRect(x,y,w,h,c) { ctx2d.fillStyle=c; ctx2d.fillRect(x,y,w,h); }
+
+  // Text box
+  function drawText(x, y, text, col=PALETTE.text, size=8) {
+    ctx2d.fillStyle = col;
+    ctx2d.font = `${size}px monospace`;
+    ctx2d.textBaseline = "top";
+    ctx2d.fillText(text, x, y);
+  }
+
+  function panel(x,y,w,h) {
+    ctx2d.fillStyle = PALETTE.ui;
+    ctx2d.fillRect(x,y,w,h);
+    ctx2d.strokeStyle = PALETTE.grid;
+    ctx2d.strokeRect(x+0.5,y+0.5,w-1,h-1);
+  }
+
+  // Dialogue system
+  let messageQueue = [];
+  function say(lines, cb=null) {
+    messageQueue = Array.isArray(lines) ? [...lines] : [String(lines)];
+    onMessageDone = cb;
+    uiState.messageOpen = true;
+  }
+  let onMessageDone = null;
+
+  const uiState = { messageOpen:false, line:"", charIdx:0, hold:false };
+
+  function updateMessage() {
+    if (!uiState.messageOpen) return;
+    if (uiState.hold) return;
+    if (uiState.charIdx < messageQueue[0].length) {
+      uiState.charIdx += 2;
+    }
+  }
+  function drawMessage() {
+    if (!uiState.messageOpen) return;
+    const h = 54;
+    panel(6, CANVAS_H - h - 6, CANVAS_W - 12, h);
+    const text = messageQueue.length ? messageQueue[0].substring(0, uiState.charIdx) : "";
+    wrapText(12, CANVAS_H - h, text, 296, 10);
+    if (uiState.charIdx >= (messageQueue[0] || "").length) {
+      drawText(CANVAS_W-48, CANVAS_H-18, "A:Next", PALETTE.sub, 8);
+    }
+  }
+  function wrapText(x, y, text, maxWidth, size=10, col=PALETTE.text) {
+    ctx2d.fillStyle = col;
+    ctx2d.font = `${size}px monospace`;
+    const words = text.split(" ");
+    let line = "";
+    let yy = y+6;
+    for (let i=0;i<words.length;i++) {
+      const test = line + words[i] + " ";
+      if (ctx2d.measureText(test).width > maxWidth && i>0) {
+        ctx2d.fillText(line, x, yy);
+        line = words[i] + " ";
+        yy += size + 2;
+      } else {
+        line = test;
+      }
+    }
+    ctx2d.fillText(line, x, yy);
+  }
+
+  function advanceMessage() {
+    if (!uiState.messageOpen) return;
+    const full = messageQueue[0];
+    if (uiState.charIdx < full.length) { uiState.charIdx = full.length; return; }
+    messageQueue.shift();
+    if (messageQueue.length === 0) {
+      uiState.messageOpen = false;
+      uiState.charIdx = 0;
+      if (onMessageDone) { const f = onMessageDone; onMessageDone = null; f(); }
+    } else {
+      uiState.charIdx = 0;
+    }
+  }
+
+  // Zones and maps
+  // 0 - pavement, 1 - wall, 2 - grass, 3 - water, 4 - shop, 5 - boss gate
+  const ZONES = [
+    {
+      name:"Neighbourhood",
+      tilesW: 20, tilesH: 14, tileSize: 16,
+      data: genNeighbourhood(),
+      start: { x:8, y:10 },
+      npcs: [
+        { x:10, y:10, text:[
+          "Hi there. Type your name shortly. Press A to confirm when prompted."
+        ]},
+        { x:2, y:12, text:[
+          "Welcome to Pets Quest DX. Sausage dogs are unmatched for vibe and agility."
+        ]},
+      ],
+      shop: { x:4, y:4 },
+      boss: { x:18, y:2, name:"Alley Cat King", id:1 },
+      onEnter: () => {}
+    },
+    {
+      name:"City Park",
+      tilesW: 20, tilesH: 14, tileSize: 16,
+      data: genPark(),
+      start: { x:2, y:12 },
+      npcs: [
+        { x:6, y:3, text:["Please keep the park tidy. Dogs are welcome on leads."] }
+      ],
+      shop: { x:10, y:12 },
+      boss: { x:18, y:2, name:"Goose of Doom", id:2 },
+      onEnter: () => {}
+    },
+    {
+      name:"Dog Show Hall",
+      tilesW: 20, tilesH: 14, tileSize: 16,
+      data: genShow(),
+      start: { x:2, y:12 },
+      npcs: [],
+      shop: { x:6, y:12 },
+      boss: { x:18, y:2, name:"Snobby Show Judge", id:3 },
+      onEnter: () => {}
+    }
+  ];
+
+  function genNeighbourhood() {
+    const w=20,h=14;
+    const T = Array(h).fill(0).map(()=>Array(w).fill(2));
+    // pavements and buildings
+    for (let y=0;y<h;y++) for (let x=0;x<w;x++) {
+      if (y===0 || y===h-1 || x===0 || x===w-1) T[y][x]=1;
+    }
+    for (let x=2;x<18;x++) T[8][x]=0;
+    for (let y=3;y<7;y++) { T[y][4]=1; T[y][15]=1; }
+    T[4][4]=4; // shop at 4,4 visually
+    for (let x=2;x<19;x++) T[2][x]=0; // road top
+    T[2][18]=5; // boss gate
+    return T;
+  }
+
+  function genPark() {
+    const w=20,h=14;
+    const T = Array(h).fill(0).map(()=>Array(w).fill(2));
+    for (let y=0;y<h;y++) for (let x=0;x<w;x++) {
+      if (y===0 || y===h-1 || x===0 || x===w-1) T[y][x]=1;
+    }
+    // pond
+    for (let y=5;y<9;y++) for (let x=6;x<13;x++) T[y][x]=3;
+    // paths
+    for (let x=2;x<18;x++) T[12][x]=0;
+    T[12][10] = 4; // shop
+    T[2][18]=5; // boss
+    return T;
+  }
+
+  function genShow() {
+    const w=20,h=14;
+    const T = Array(h).fill(0).map(()=>Array(w).fill(0));
+    for (let y=0;y<h;y++) for (let x=0;x<w;x++) {
+      if (y===0 || y===h-1 || x===0 || x===w-1) T[y][x]=1;
+    }
+    for (let x=2;x<18;x++) T[12][x]=0;
+    T[12][6]=4; // shop
+    T[2][18]=5; // boss
+    // seating as walls
+    for (let x=3;x<17;x++) T[6][x]=1;
+    return T;
+  }
+
+  function tileAt(zone, x, y) {
+    const Z = ZONES[zone];
+    if (x<0||y<0||x>=Z.tilesW||y>=Z.tilesH) return 1;
+    return Z.data[y][x];
+  }
+
+  // Drawing tiles
+  function drawZone(zone) {
+    const Z = ZONES[zone];
+    const ts = Z.tileSize;
+    for (let y=0;y<Z.tilesH;y++) for (let x=0;x<Z.tilesW;x++) {
+      const t = Z.data[y][x];
+      const px = x*ts, py=y*ts;
+      if (t===0) { // pavement
+        ctx2d.fillStyle="#1a1f33"; ctx2d.fillRect(px,py,ts,ts);
+        ctx2d.fillStyle="#0f1424"; ctx2d.fillRect(px+ts-1,py,1,ts);
+        ctx2d.fillRect(px,py+ts-1,ts,1);
+      } else if (t===1) { // wall or boundary
+        ctx2d.fillStyle="#28324e"; ctx2d.fillRect(px,py,ts,ts);
+        ctx2d.fillStyle="#11162a"; ctx2d.fillRect(px+2,py+2,ts-4,ts-4);
+      } else if (t===2) { // grass
+        ctx2d.fillStyle="#10351c"; ctx2d.fillRect(px,py,ts,ts);
+        ctx2d.fillStyle="#0b2614";
+        ctx2d.fillRect(px+ts-1,py,1,ts);
+        // sparkles
+        if (((x*13+y*7)&3)===0) {
+          ctx2d.fillStyle="#1f7a37";
+          ctx2d.fillRect(px+rand(8),py+rand(8),1,1);
         }
-      });
-      updatePressed();
-    })();
+      } else if (t===3) { // water
+        ctx2d.fillStyle="#08324a"; ctx2d.fillRect(px,py,ts,ts);
+        ctx2d.fillStyle="#0a4d70"; ctx2d.fillRect(px+1,py+1,ts-2,ts-2);
+      } else if (t===4) { // shop tile
+        ctx2d.fillStyle="#2e1f49"; ctx2d.fillRect(px,py,ts,ts);
+        ctx2d.fillStyle="#7840ff"; ctx2d.fillRect(px+4,py+4,ts-8,ts-8);
+      } else if (t===5) { // boss gate
+        ctx2d.fillStyle="#3a1b1f"; ctx2d.fillRect(px,py,ts,ts);
+        ctx2d.fillStyle="#ff3b3b"; ctx2d.fillRect(px+4,py+4,ts-8,ts-8);
+      }
+    }
+    // draw special markers
+    const S = Z.shop;
+    if (S) {
+      drawIconShop(S.x*ts+4, S.y*ts+2);
+    }
+    const B = Z.boss;
+    if (B) {
+      drawIconBoss(B.x*ts+4, B.y*ts+2);
+    }
+  }
 
-    // Smooth scroll for anchor links within the page
-    (function smoothScroll() {
-      var links = document.querySelectorAll('a[href^="#"]');
-      links.forEach(function (a) {
-        a.addEventListener('click', function (e) {
-          var id = a.getAttribute('href').slice(1);
-          var target = document.getElementById(id);
-          if (target) {
-            e.preventDefault();
-            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-            history.pushState(null, '', '#' + id);
+  function drawIconShop(x,y) {
+    ctx2d.fillStyle=PALETTE.accent2;
+    ctx2d.fillRect(x,y,8,6);
+    ctx2d.fillStyle="#123c55"; ctx2d.fillRect(x,y+6,8,4);
+    ctx2d.fillStyle="#fff"; ctx2d.fillRect(x+2,y+2,4,2);
+  }
+  function drawIconBoss(x,y) {
+    ctx2d.fillStyle=PALETTE.bad;
+    ctx2d.fillRect(x,y,8,8);
+    ctx2d.fillStyle="#700"; ctx2d.fillRect(x+2,y+2,4,4);
+  }
+
+  // Player sprite
+  function drawHero(px,py) {
+    // base body
+    const cSkin = "#f2d6b4";
+    const cJacket = equipment.body?.colour || "#2a7fff";
+    const cHat = equipment.head?.colour || "#ff5964";
+    // shadow
+    ctx2d.fillStyle="rgba(0,0,0,0.35)";
+    ctx2d.beginPath(); ctx2d.ellipse(px+8,py+14,6,3,0,0,Math.PI*2); ctx2d.fill();
+    // legs
+    ctx2d.fillStyle="#20283d"; ctx2d.fillRect(px+5,py+10,3,5); ctx2d.fillRect(px+10,py+10,3,5);
+    // torso
+    ctx2d.fillStyle=cJacket; ctx2d.fillRect(px+4,py+6,10,6);
+    // arms
+    ctx2d.fillStyle=cJacket; ctx2d.fillRect(px+3,py+7,2,4); ctx2d.fillRect(px+13,py+7,2,4);
+    // head
+    ctx2d.fillStyle=cSkin; ctx2d.fillRect(px+6,py+2,8,5);
+    // eyes
+    ctx2d.fillStyle="#111"; ctx2d.fillRect(px+7,py+4,1,1); ctx2d.fillRect(px+11,py+4,1,1);
+    // hat or bandana
+    ctx2d.fillStyle=cHat; ctx2d.fillRect(px+5,py+1,10,2);
+    // accessory detail
+    if (equipment.head && equipment.head.id==="SHADES") { ctx2d.fillStyle="#0b0b0b"; ctx2d.fillRect(px+6,py+3,8,2); }
+    if (equipment.body && equipment.body.id==="CAPE") { ctx2d.fillStyle=equipment.body.colour; ctx2d.fillRect(px+2,py+6,2,6); }
+  }
+
+  // Sidekick mini sprite - sausage dog by default
+  function drawSidekick(px,py) {
+    // sausage dog silhouette
+    ctx2d.fillStyle="#6b3b16";
+    ctx2d.fillRect(px,py+8,12,4);
+    ctx2d.fillRect(px+10,py+6,3,3);
+    ctx2d.fillRect(px+1,py+12,3,2);
+    ctx2d.fillRect(px+8,py+12,3,2);
+    ctx2d.fillStyle="#000";
+    ctx2d.fillRect(px+11,py+7,1,1);
+    // optional collar if any accessory body is raincoat tint
+    if (equipment.body && equipment.body.id==="RAINCOAT") {
+      ctx2d.fillStyle="#74ff74"; ctx2d.fillRect(px+3,py+9,2,1);
+    }
+  }
+
+  // World object
+  let currentState = ST.TITLE;
+
+  // Name entry UI
+  const nameUI = {
+    buffer:"",
+    prompt:"Your name?",
+    max:8
+  };
+  const sidekickUI = { buffer:"", prompt:"Sidekick's name?", max:8 };
+
+  // Movement and collisions
+  let moveTimer = 0;
+  const moveDelay = 8; // frames per step
+  function canWalk(nx,ny) {
+    const t = tileAt(location.zone, nx, ny);
+    return t===0 || t===2 || t===4 || t===5 || t===3; // allow water but slows
+  }
+
+  // Battle system
+  const BTL = {
+    in:false, enemy:null, turn:"PLAYER", log:[], cursor:0, menu:0, canFlee:true
+  };
+  const ENEMIES = {
+    1: { name:"Alley Cat",  maxHP:20, atk:5, def:1, reward: { xp:8, coins:8 } },
+    2: { name:"Pigeon Mob",  maxHP:24, atk:6, def:2, reward: { xp:10, coins:10 } },
+    3: { name:"Alley Cat King", maxHP:38, atk:8, def:3, boss:true, reward:{ xp:20, coins:25 } },
+    4: { name:"Goose", maxHP:40, atk:9, def:3, reward:{ xp:24, coins:28 } },
+    5: { name:"Snobby Show Judge", maxHP:55, atk:10, def:4, boss:true, reward:{ xp:40, coins:60 } }
+  };
+
+  function startBattle(enemyId, forceBoss=false) {
+    const eData = ENEMIES[enemyId];
+    BTL.in = true;
+    BTL.enemy = {
+      id:enemyId, name:eData.name, hp:eData.maxHP, maxHP:eData.maxHP, atk:eData.atk, def:eData.def, boss: !!eData.boss,
+      reward:eData.reward
+    };
+    BTL.turn = "PLAYER";
+    BTL.log = ["A wild " + eData.name + " appears."];
+    BTL.cursor = 0; BTL.menu=0;
+    BTL.canFlee = !eData.boss && !forceBoss;
+    currentState = ST.BATTLE;
+    AudioSys.musicStart("battle");
+  }
+
+  function endBattle(win) {
+    BTL.in = false;
+    AudioSys.musicStart("world");
+    if (win) {
+      // rewards
+      const r = ENEMIES[BTL.enemy.id].reward;
+      player.xp += r.xp;
+      coins += r.coins;
+      if (player.xp >= player.level*25) {
+        player.level += 1;
+        player.maxHP += 4; player.atk += 1; player.def += 1;
+        player.hp = player.maxHP;
+        say([`Level up to ${player.level}.`, `Stats increased.`]);
+      }
+    }
+    // ensure save after boss
+    saveGame();
+  }
+
+  function calcDamage(att, def) {
+    const base = Math.max(1, att - Math.floor(def*0.6));
+    return clamp(base + rand(3), 1, 999);
+  }
+
+  function useSnack() {
+    const item = inventory.find(i => i.id==="SNACK" && i.qty>0);
+    if (!item) { BTL.log.push("No snacks left."); return false; }
+    item.qty -= 1;
+    const heal = 10;
+    player.hp = clamp(player.hp + heal, 0, player.maxHP);
+    BTL.log.push("You eat a snack and heal " + heal + ".");
+    AudioSys.beep(880,0.12,"square",0.2);
+    return true;
+  }
+
+  function playerAttack() {
+    const d = calcDamage(player.atk + (equipment.head?.atk||0) + (equipment.body?.atk||0), BTL.enemy.def);
+    BTL.enemy.hp = clamp(BTL.enemy.hp - d, 0, BTL.enemy.maxHP);
+    BTL.log.push(`You attack for ${d}.`);
+    AudioSys.beep(220,0.06,"square",0.25);
+    AudioSys.beep(330,0.06,"square",0.2);
+  }
+
+  function playerSkill() {
+    // Bark - boosted by sausage dog energy
+    const bonus = 2;
+    const d = calcDamage(player.atk + bonus, BTL.enemy.def);
+    BTL.enemy.hp = clamp(BTL.enemy.hp - d, 0, BTL.enemy.maxHP);
+    BTL.log.push(`${player.sidekick} barks bravely. ${d} damage.`);
+    AudioSys.beep(520,0.08,"square",0.25);
+    AudioSys.beep(650,0.08,"square",0.2);
+  }
+
+  function enemyTurn() {
+    const d = calcDamage(BTL.enemy.atk, player.def + (equipment.head?.def||0) + (equipment.body?.def||0));
+    player.hp = clamp(player.hp - d, 0, player.maxHP);
+    BTL.log.push(`${BTL.enemy.name} strikes for ${d}.`);
+    AudioSys.beep(140,0.1,"square",0.25);
+  }
+
+  // Shops
+  let shopCursor = 0;
+  function openShop() {
+    currentState = ST.SHOP;
+    shopCursor = 0;
+    say([
+      "Welcome to the Pet Boutique.",
+      "Accessories are stylish and useful."
+    ]);
+  }
+
+  function buyItem(idx) {
+    const item = accessories[idx];
+    if (!item) return;
+    if (coins < item.price) { say("Not enough coins."); return; }
+    coins -= item.price;
+    // add to inventory as equipment pool
+    inventory.push({ id:"ACC_"+item.id, name:item.name, qty:1, equipment:item });
+    AudioSys.beep(880,0.08,"triangle",0.25);
+    say("Purchased " + item.name + ".");
+    saveGame();
+  }
+
+  // Menu
+  let menuCursor = 0;
+  const MENU_ITEMS = ["Items","Equipment","Quests","Map","Options","Codeword","Save","Close"];
+  let equipCursor = 0;
+
+  // Title sequence
+  function resetGame() {
+    player.name = "";
+    player.sidekick = "";
+    player.maxHP = 28; player.hp = 28; player.atk = 6; player.def = 2; player.level = 1; player.xp = 0;
+    stage = STAGE.STARTED;
+    flags = { sawIntro:false, metSidekick:false, boss1:false, boss2:false, boss3:false };
+    coins = 20;
+    equipment = { head:null, body:null };
+    inventory = [{ id:"SNACK", name:"Dog Snack", qty:3, desc:"Heals 10 HP" }];
+    location = { zone:0, x:ZONES[0].start.x, y:ZONES[0].start.y };
+    saveGame();
+  }
+
+  // Initial music
+  AudioSys.musicStart("title");
+
+  // Title animation helpers
+  let titleTick = 0;
+
+  // Main loop
+  let frame = 0;
+  function update() {
+    frame++;
+    updateMessage();
+
+    if (currentState === ST.TITLE) {
+      if (tap.START || tap.A) {
+        AudioSys.resume();
+        currentState = ST.NAME;
+        nameUI.buffer = "";
+        say(["Welcome. This is a friendly adventure about pets.",
+             "Sausage dogs are the best. This is simply true.",
+             "Please enter your name."]);
+      }
+    }
+    else if (currentState === ST.NAME) {
+      // handle name input through a virtual prompt
+      if (tap.A && !uiState.messageOpen) {
+        if (nameUI.buffer.length >= 1) {
+          player.name = nameUI.buffer;
+          stage = STAGE.STARTED;
+          saveGame();
+          currentState = ST.SIDEKICK;
+          sidekickUI.buffer = "";
+          say(["You find a brave sausage dog in need of a friend.",
+               "Please enter the sidekick's name."]);
+        } else {
+          say("Name cannot be empty.");
+        }
+      }
+    }
+    else if (currentState === ST.SIDEKICK) {
+      if (tap.A && !uiState.messageOpen) {
+        if (sidekickUI.buffer.length >= 1) {
+          player.sidekick = sidekickUI.buffer;
+          flags.metSidekick = true;
+          stage = STAGE.MET_SIDEKICK;
+          saveGame();
+          currentState = ST.WORLD;
+          AudioSys.musicStart("world");
+          say([`${player.sidekick} joins you as your sidekick.`,
+               "Visit the shop for accessories. Main road is north.",
+               "Defeat the Alley Cat King to move on."]);
+        } else {
+          say("Name cannot be empty.");
+        }
+      }
+    }
+    else if (currentState === ST.WORLD) {
+      if (!uiState.messageOpen) {
+        // movement step-based
+        moveTimer--;
+        if (moveTimer <= 0) {
+          let dx = 0, dy = 0;
+          if (press.LEFT) dx=-1;
+          else if (press.RIGHT) dx=1;
+          if (press.UP) dy=-1;
+          else if (press.DOWN) dy=1;
+          if (dx!==0 || dy!==0) {
+            const nx = location.x + dx;
+            const ny = location.y + dy;
+            if (canWalk(nx,ny)) {
+              location.x = nx; location.y = ny;
+              moveTimer = moveDelay;
+              // triggers
+              const t = tileAt(location.zone, nx, ny);
+              if (t===4) { openShop(); }
+              if (t===5) {
+                // boss for zone
+                const Z = ZONES[location.zone];
+                triggerBoss(Z.boss);
+              }
+              // random small encounters in grass
+              if (t===2 && Math.random() < 0.05) {
+                startBattle(location.zone===0 ? 1 : 2, false);
+              }
+              // water slows
+              if (t===3) moveTimer += 4;
+            } else {
+              AudioSys.beep(120,0.04,"square",0.15);
+              moveTimer = 6;
+            }
           }
-        });
-      });
-    })();
-
-    // Footer year
-    (function setYear() {
-      var y = document.getElementById('year');
-      if (y) y.textContent = String(new Date().getFullYear());
-    })();
-
-    // Contact form handling
-    (function formHandler() {
-      var form = document.getElementById('contactForm');
-      var status = document.getElementById('formStatus');
-      if (!form || !status) return;
-
-      function validateEmail(email) {
-        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-      }
-
-      form.addEventListener('submit', function (e) {
-        e.preventDefault();
-        status.textContent = '';
-        var data = new FormData(form);
-        var name = (data.get('name') || '').toString().trim();
-        var email = (data.get('email') || '').toString().trim();
-        var topic = (data.get('topic') || '').toString();
-        var message = (data.get('message') || '').toString().trim();
-
-        var errors = [];
-        if (!name) errors.push('Name is required');
-        if (!email) errors.push('Email is required');
-        if (email && !validateEmail(email)) errors.push('Email looks incorrect');
-        if (!message) errors.push('Message is required');
-
-        if (errors.length > 0) {
-          status.textContent = errors.join(' • ');
-          status.style.color = '#ef4444';
-          return;
         }
+      }
+      // Menu
+      if (tap.START) {
+        currentState = ST.MENU;
+        menuCursor = 0;
+      }
+    }
+    else if (currentState === ST.BATTLE) {
+      if (!uiState.messageOpen) {
+        // player turn
+        if (BTL.turn === "PLAYER") {
+          // handle choices
+          if (tap.LEFT) { BTL.menu = 0; }
+          if (tap.RIGHT) { BTL.menu = 1; }
+          if (tap.UP) { BTL.cursor = (BTL.cursor+3)%4; }
+          if (tap.DOWN) { BTL.cursor = (BTL.cursor+1)%4; }
+          // options mapping: 0 Attack, 1 Skill, 2 Item, 3 Flee
+          if (tap.A) {
+            if (BTL.cursor===0) { playerAttack(); BTL.turn="ENEMY"; }
+            else if (BTL.cursor===1) { playerSkill(); BTL.turn="ENEMY"; }
+            else if (BTL.cursor===2) {
+              if (useSnack()) { BTL.turn="ENEMY"; }
+            } else if (BTL.cursor===3) {
+              if (BTL.canFlee && Math.random()<0.7) {
+                BTL.log.push("You flee successfully.");
+                AudioSys.beep(300,0.06,"triangle",0.25);
+                currentState = ST.WORLD;
+                AudioSys.musicStart("world");
+                return;
+              } else {
+                BTL.log.push(BTL.canFlee ? "Failed to flee." : "Cannot flee.");
+              }
+            }
+          }
+        } else {
+          // enemy turn resolves then back to player
+          if (frame % 24 === 0) {
+            enemyTurn();
+            BTL.turn = "PLAYER";
+          }
+        }
+      }
+      // death or win
+      if (BTL.enemy.hp <= 0) {
+        BTL.log.push("Enemy defeated.");
+        const bossId = BTL.enemy.id;
+        currentState = ST.WORLD;
+        endBattle(true);
+        if (bossId===3) { flags.boss1=true; stage=Math.max(stage, STAGE.BOSS1_DONE); location.zone = 1; location.x=ZONES[1].start.x; location.y=ZONES[1].start.y; say(["Alley clear. Head to the City Park.","Checkpoint code: " + codeFromStage(STAGE.BOSS1_DONE)]); }
+        if (bossId===4) { flags.boss2=true; stage=Math.max(stage, STAGE.BOSS2_DONE); location.zone = 2; location.x=ZONES[2].start.x; location.y=ZONES[2].start.y; say(["Great work. Off to the Dog Show Hall.","Checkpoint code: " + codeFromStage(STAGE.BOSS2_DONE)]); }
+        if (bossId===5) { flags.boss3=true; stage=Math.max(stage, STAGE.BOSS3_DONE); say(["You won the show with a sausage dog. Obviously.","You have finished the story.","Checkpoint code: " + codeFromStage(STAGE.BOSS3_DONE)]); }
+      }
+      if (player.hp <= 0) {
+        BTL.log.push("You fainted. Returning to last checkpoint.");
+        AudioSys.beep(100,0.3,"square",0.25);
+        // respawn with half HP and no coin loss for casual
+        player.hp = Math.ceil(player.maxHP*0.6);
+        if (flags.boss2) { location.zone=2; location.x=ZONES[2].start.x; location.y=ZONES[2].start.y; }
+        else if (flags.boss1) { location.zone=1; location.x=ZONES[1].start.x; location.y=ZONES[1].start.y; }
+        else { location.zone=0; location.x=ZONES[0].start.x; location.y=ZONES[0].start.y; }
+        currentState = ST.WORLD;
+        AudioSys.musicStart("world");
+      }
+      if (tap.B && !uiState.messageOpen) { BTL.menu=0; }
+    }
+    else if (currentState === ST.MENU) {
+      if (tap.DOWN) menuCursor = (menuCursor+1) % MENU_ITEMS.length;
+      if (tap.UP) menuCursor = (menuCursor+MENU_ITEMS.length-1) % MENU_ITEMS.length;
+      if (tap.B) currentState = ST.WORLD;
+      if (tap.A) {
+        const m = MENU_ITEMS[menuCursor];
+        if (m==="Items") {
+          say(inventory.length ? ("Inventory: " + inventory.map(i => `${i.name} x${i.qty}`).join(", ")) : "Inventory empty.");
+        } else if (m==="Equipment") {
+          currentState = "EQUIP";
+          equipCursor = 0;
+          say("Choose a slot to equip.");
+        } else if (m==="Quests") {
+          const q = [];
+          if (!flags.boss1) q.push("Beat Alley Cat King.");
+          else if (!flags.boss2) q.push("Beat Goose of Doom.");
+          else if (!flags.boss3) q.push("Win the Dog Show.");
+          else q.push("All done.");
+          say("Quests: " + q.join(" "));
+        } else if (m==="Map") {
+          say("Zones: Neighbourhood, City Park, Dog Show Hall.");
+        } else if (m==="Options") {
+          say(["Options: A to toggle sound. Select to toggle Run-hold.", "Sound: " + (options.muted?"Off":"On") + ". Run-hold: " + (options.runHold?"On":"Off") + "."]);
+        } else if (m==="Codeword") {
+          currentState = ST.CODEWORD;
+        } else if (m==="Save") {
+          saveGame();
+          say("Saved.");
+        } else if (m==="Close") {
+          currentState = ST.WORLD;
+        }
+      }
+      if (tap.A && MENU_ITEMS[menuCursor]==="Options") {
+        options.muted = !options.muted;
+        if (options.muted) AudioSys.musicStop(); else AudioSys.musicStart("world");
+        saveGame();
+      }
+      if (press.SELECT && frame % 12 === 0) {
+        options.runHold = !options.runHold;
+      }
+      // handle Equipment state
+      if (currentState === "EQUIP") {
+        if (!uiState.messageOpen) {
+          const choices = buildEquipChoices();
+          if (tap.DOWN) equipCursor=(equipCursor+1)%choices.length;
+          if (tap.UP) equipCursor=(equipCursor+choices.length-1)%choices.length;
+          if (tap.B) { currentState = ST.MENU; }
+          if (tap.A) {
+            const c = choices[equipCursor];
+            if (c.type==="slot") { /* skip */ }
+            else if (c.type==="equip") {
+              if (c.slot==="head") equipment.head = c.equipment;
+              if (c.slot==="body") equipment.body = c.equipment;
+              say("Equipped " + c.equipment.name + ".");
+              saveGame();
+            } else if (c.type==="unequip") {
+              if (c.slot==="head") equipment.head = null;
+              if (c.slot==="body") equipment.body = null;
+              say("Removed equipment.");
+              saveGame();
+            }
+          }
+        }
+      }
+    }
+    else if (currentState === ST.SHOP) {
+      if (!uiState.messageOpen) {
+        if (tap.DOWN) shopCursor=(shopCursor+1)%accessories.length;
+        if (tap.UP) shopCursor=(shopCursor+accessories.length-1)%accessories.length;
+        if (tap.A) buyItem(shopCursor);
+        if (tap.B) currentState = ST.WORLD;
+      }
+    }
+    else if (currentState === ST.CODEWORD) {
+      // handled in draw where we capture input string
+    }
+    // Global message advance
+    if (tap.A && uiState.messageOpen) {
+      advanceMessage();
+    }
 
-        // In a real site you would send to a server here.
-        // For this demo we just show the values so you can see the flow.
-        var summary = [
-          'Message sent. This is a demo summary:',
-          'Name: ' + name,
-          'Email: ' + email,
-          'Topic: ' + topic,
-          'Message: ' + message
-        ].join('\n');
+    clearTaps();
+  }
 
-        alert(summary);
-        status.textContent = 'Thanks. Your message has been prepared in this demo.';
-        status.style.color = '';
-        form.reset();
-      });
-    })();
-  </script>
+  function triggerBoss(boss) {
+    if (!boss) return;
+    if (location.zone===0 && !flags.boss1) {
+      say(["The Alley Cat King blocks the way."]);
+      startBattle(3, true);
+    } else if (location.zone===1 && !flags.boss2) {
+      say(["A goose hisses. It seems upset."]);
+      startBattle(4, true);
+    } else if (location.zone===2 && !flags.boss3) {
+      say(["The Snobby Show Judge looks unimpressed.",
+           "Prove that sausage dogs are simply the best."]);
+      startBattle(5, true);
+    } else {
+      say("You have already cleared this gate.");
+    }
+  }
+
+  function buildEquipChoices() {
+    const out = [
+      { type:"slot", name:"Head slot" },
+      equipment.head ? { type:"unequip", slot:"head", name:"Remove head item" } : null,
+      ...inventory.filter(i => i.equipment && i.equipment.slot==="head").map(i => ({ type:"equip", slot:"head", equipment:i.equipment, name:i.equipment.name })),
+      { type:"slot", name:"Body slot" },
+      equipment.body ? { type:"unequip", slot:"body", name:"Remove body item" } : null,
+      ...inventory.filter(i => i.equipment && i.equipment.slot==="body").map(i => ({ type:"equip", slot:"body", equipment:i.equipment, name:i.equipment.name })),
+    ].filter(Boolean);
+    return out;
+  }
+
+  // Render
+  function draw() {
+    // clear
+    drawRect(0,0,CANVAS_W,CANVAS_H,PALETTE.bg);
+
+    if (currentState === ST.TITLE) {
+      // background
+      drawRect(0,0,CANVAS_W,CANVAS_H, "#091020");
+      // title text
+      ctx2d.fillStyle = "#6cf";
+      ctx2d.font = "20px monospace";
+      ctx2d.fillText("Pets Quest DX", 88, 40);
+      ctx2d.font = "10px monospace";
+      ctx2d.fillStyle = PALETTE.text;
+      ctx2d.fillText("A lighthearted mini RPG about dogs", 64, 62);
+      // bouncing sausage dog
+      const y = 90 + Math.sin(titleTick*0.1)*6;
+      drawSidekick(140, y);
+      // prompt
+      ctx2d.fillStyle = PALETTE.accent;
+      ctx2d.fillText("Press A or Start", 108, 140);
+      titleTick++;
+    }
+    else if (currentState === ST.NAME) {
+      drawRect(0,0,CANVAS_W,CANVAS_H,"#081018");
+      drawRect(20,20,280,60,PALETTE.panel);
+      drawText(28, 26, "Enter your name", PALETTE.sub, 12);
+      drawRect(28,48,264,20,"#0c1426");
+      drawText(32, 51, nameUI.buffer + (frame%30<15?"_":""), PALETTE.text, 12);
+      drawText(28, 82, "A: Confirm   B: Backspace", PALETTE.sub, 10);
+      drawMessage();
+    }
+    else if (currentState === ST.SIDEKICK) {
+      drawRect(0,0,CANVAS_W,CANVAS_H,"#081018");
+      drawRect(20,20,280,60,PALETTE.panel);
+      drawText(28, 26, "Name your sidekick", PALETTE.sub, 12);
+      drawRect(28,48,264,20,"#0c1426");
+      drawText(32, 51, sidekickUI.buffer + (frame%30<15?"_":""), PALETTE.text, 12);
+      drawText(28, 82, "A: Confirm   B: Backspace", PALETTE.sub, 10);
+      drawSidekick(140, 110);
+      drawMessage();
+    }
+    else if (currentState === ST.WORLD) {
+      // draw world
+      drawZone(location.zone);
+      const ts = ZONES[location.zone].tileSize;
+      // entities
+      const px = location.x * ts;
+      const py = location.y * ts - 2;
+      drawHero(px, py);
+      if (flags.metSidekick) drawSidekick(px-14, py+4);
+
+      // HUD
+      panel(4,4,140,24);
+      drawText(8,6, `${player.name || "Hero"}  Lv ${player.level}`, PALETTE.text, 10);
+      drawText(8,16, `HP ${player.hp}/${player.maxHP}  Coins ${coins}`, PALETTE.accent3, 10);
+      panel(CANVAS_W-98,4,94,24);
+      drawText(CANVAS_W-94,6, `Zone: ${ZONES[location.zone].name}`, PALETTE.sub, 9);
+      drawText(CANVAS_W-94,15, `Goal: ${goalText()}`, PALETTE.accent, 9);
+      drawMessage();
+    }
+    else if (currentState === ST.BATTLE) {
+      // background and enemy
+      drawRect(0,0,CANVAS_W,CANVAS_H,"#1b0f1b");
+      drawRect(10,10,300,90,"#2b1a38");
+      drawText(16,12, `Vs ${BTL.enemy.name}`, PALETTE.accent2, 12);
+      // enemy visual
+      drawEnemy(200,30,BTL.enemy.id);
+      // player stats
+      panel(10,104,300,24);
+      drawText(14,108, `${player.name} HP ${player.hp}/${player.maxHP}`, PALETTE.text, 10);
+      drawText(200,108, `Coins ${coins}`, PALETTE.accent3, 10);
+      // menu
+      panel(10,132,300,40);
+      const opts = ["Attack","Bark","Snack","Flee"];
+      for (let i=0;i<4;i++) {
+        const x = 16 + i*70;
+        const sel = BTL.cursor===i;
+        drawText(x, 138, (sel?"> ":"  ") + opts[i], sel?PALETTE.accent:PALETTE.text, 12);
+      }
+      // log
+      const l1 = BTL.log[BTL.log.length-2] || "";
+      const l2 = BTL.log[BTL.log.length-1] || "";
+      drawText(16, 72, l1, PALETTE.sub, 10);
+      drawText(16, 84, l2, PALETTE.text, 10);
+    }
+    else if (currentState === ST.MENU) {
+      // dim world
+      drawZone(location.zone);
+      ctx2d.fillStyle="rgba(0,0,0,0.5)"; ctx2d.fillRect(0,0,CANVAS_W,CANVAS_H);
+      panel(50,26,220,128);
+      drawText(60, 30, "Menu", PALETTE.accent2, 12);
+      for (let i=0;i<MENU_ITEMS.length;i++) {
+        const sel = i===menuCursor;
+        drawText(64, 46 + i*12, (sel?"> ":"  ") + MENU_ITEMS[i], sel?PALETTE.accent:PALETTE.text, 10);
+      }
+      drawText(60, 152, "A: Select  B: Close", PALETTE.sub, 10);
+    }
+    else if (currentState === "EQUIP") {
+      drawZone(location.zone);
+      ctx2d.fillStyle="rgba(0,0,0,0.5)"; ctx2d.fillRect(0,0,CANVAS_W,CANVAS_H);
+      panel(30,20,260,140);
+      drawText(36,24,"Equipment", PALETTE.accent2, 12);
+      const choices = buildEquipChoices();
+      for (let i=0;i<choices.length;i++) {
+        const c = choices[i];
+        const label = c.type==="equip" ? "Equip " + c.name : c.name;
+        const sel = i===equipCursor;
+        drawText(40, 40+i*12, (sel?"> ":"  ") + label, sel?PALETTE.accent:PALETTE.text, 10);
+      }
+      drawText(36, 152, `Head: ${equipment.head?equipment.head.name:"None"}  Body: ${equipment.body?equipment.body.name:"None"}`, PALETTE.sub, 9);
+      drawMessage();
+    }
+    else if (currentState === ST.SHOP) {
+      drawZone(location.zone);
+      ctx2d.fillStyle="rgba(0,0,0,0.45)"; ctx2d.fillRect(0,0,CANVAS_W,CANVAS_H);
+      panel(26,18,268,144);
+      drawText(32,20,"Pet Boutique", PALETTE.accent2, 12);
+      drawText(200,20,`Coins ${coins}`, PALETTE.accent3, 10);
+      for (let i=0;i<accessories.length;i++) {
+        const a = accessories[i];
+        const sel = i===shopCursor;
+        const y = 36 + i*18;
+        drawText(36, y, (sel?"> ":"  ") + a.name, sel?PALETTE.accent:PALETTE.text, 10);
+        drawText(190, y, `${a.price}`, PALETTE.sub, 10);
+      }
+      drawText(32, 154, "A: Buy  B: Close  Start: Menu", PALETTE.sub, 10);
+      drawMessage();
+    }
+    else if (currentState === ST.CODEWORD) {
+      drawRect(0,0,CANVAS_W,CANVAS_H,"#081018");
+      panel(20,20,280,140);
+      drawText(28, 24, "Enter Codeword", PALETTE.accent2, 12);
+      drawRect(28, 44, 264, 24, "#0c1426");
+      drawText(32, 48, codeUI.value + (frame%30<15?"_":""), PALETTE.text, 14);
+      const info = [
+        "Codes skip to checkpoints.",
+        "You will be given a code at each boss clear.",
+        "Example codes are 6 chars.",
+        "Auto caps and digits only."
+      ];
+      for (let i=0;i<info.length;i++) drawText(28, 78 + i*12, info[i], PALETTE.sub, 10);
+      drawText(28, 132, "A: Confirm  B: Back  Select: Show current code", PALETTE.sub, 10);
+      if (codeUI.flash) drawText(220, 132, codeUI.flash, PALETTE.accent3, 10);
+    }
+
+    // Handle overlays that sit on top
+    if (currentState===ST.NAME || currentState===ST.SIDEKICK) {
+      // name entry via keyboard
+      // draw keyboard hint
+      drawText(20, 110, "Use letters and digits. Backspace removes. Max 8.", PALETTE.sub, 9);
+    }
+  }
+
+  function goalText() {
+    if (!flags.boss1) return "Beat Alley Cat King";
+    if (!flags.boss2) return "Beat Goose of Doom";
+    if (!flags.boss3) return "Win the Dog Show";
+    return "Enjoy the day";
+  }
+
+  function drawEnemy(x,y,id) {
+    if (id===1) { // Alley Cat
+      ctx2d.fillStyle="#444";
+      ctx2d.fillRect(x,y+10,30,8);
+      ctx2d.fillRect(x+26,y+6,6,6);
+      ctx2d.fillStyle="#fff"; ctx2d.fillRect(x+27,y+7,2,2);
+    } else if (id===2) { // Pigeon
+      ctx2d.fillStyle="#9aa";
+      ctx2d.fillRect(x+4,y+12,26,10);
+      ctx2d.fillStyle="#ccd"; ctx2d.fillRect(x+20,y+8,6,6);
+    } else if (id===3) { // Cat King
+      ctx2d.fillStyle="#555"; ctx2d.fillRect(x,y+8,34,12);
+      ctx2d.fillStyle="#ffdd55"; ctx2d.fillRect(x+12,y+4,10,4);
+    } else if (id===4) { // Goose
+      ctx2d.fillStyle="#ddd"; ctx2d.fillRect(x+6,y+10,28,10);
+      ctx2d.fillStyle="#ffa500"; ctx2d.fillRect(x+28,y+8,6,3);
+    } else if (id===5) { // Judge
+      ctx2d.fillStyle="#222"; ctx2d.fillRect(x+10,y+6,20,18);
+      ctx2d.fillStyle="#eee"; ctx2d.fillRect(x+14,y+10,12,8);
+    }
+  }
+
+  // Codeword UI
+  const codeUI = { value:"", flash:"" };
+
+  // Input handlers for name and code
+  window.addEventListener("keydown", e => {
+    const k = e.key;
+    if (currentState === ST.NAME && !uiState.messageOpen) {
+      if (/^[a-zA-Z0-9 ]$/.test(k) && nameUI.buffer.length < nameUI.max) {
+        nameUI.buffer += k;
+      } else if (k==="Backspace") {
+        nameUI.buffer = nameUI.buffer.slice(0,-1);
+      }
+    } else if (currentState === ST.SIDEKICK && !uiState.messageOpen) {
+      if (/^[a-zA-Z0-9 ]$/.test(k) && sidekickUI.buffer.length < sidekickUI.max) {
+        sidekickUI.buffer += k;
+      } else if (k==="Backspace") {
+        sidekickUI.buffer = sidekickUI.buffer.slice(0,-1);
+      }
+    } else if (currentState === ST.CODEWORD) {
+      if (/^[a-zA-Z0-9]$/.test(k) && codeUI.value.length < 6) {
+        codeUI.value += k.toUpperCase();
+      } else if (k==="Backspace") {
+        codeUI.value = codeUI.value.slice(0,-1);
+      } else if (k==="Enter") {
+        applyCodeword();
+      }
+    }
+  });
+
+  function applyCodeword() {
+    const s = codeUI.value.toUpperCase();
+    if (s.length !== 6) { codeUI.flash="Need 6 chars"; setTimeout(()=>codeUI.flash="",1200); return; }
+    const st = stageFromCode(s);
+    if (st===null) { codeUI.flash="Invalid"; setTimeout(()=>codeUI.flash="",1200); return; }
+    // map stage to flags
+    if (st >= STAGE.BOSS3_DONE) { flags.boss3=true; flags.boss2=true; flags.boss1=true; stage=STAGE.BOSS3_DONE; location.zone=2; }
+    else if (st >= STAGE.BOSS2_DONE) { flags.boss2=true; flags.boss1=true; stage=STAGE.BOSS2_DONE; location.zone=1; }
+    else if (st >= STAGE.BOSS1_DONE) { flags.boss1=true; stage=STAGE.BOSS1_DONE; location.zone=1; }
+    else if (st >= STAGE.MET_SIDEKICK) { flags.metSidekick=true; stage=STAGE.MET_SIDEKICK; location.zone=0; }
+    else { stage=STAGE.STARTED; location.zone=0; }
+    location.x = ZONES[location.zone].start.x; location.y = ZONES[location.zone].start.y;
+    player.hp = player.maxHP;
+    saveGame();
+    say(["Codeword accepted.", "Progress moved to stage " + st + "."]);
+    currentState = ST.WORLD;
+    AudioSys.musicStart("world");
+  }
+
+  // Expose Select behaviour in codeword menu
+  window.addEventListener("keydown", e => {
+    if (currentState===ST.CODEWORD && e.key==="Shift") {
+      const code = codeFromStage(stage);
+      codeUI.flash = "Current " + code;
+      setTimeout(()=>codeUI.flash="",2000);
+    }
+  });
+
+  // Bootstrap: try load save
+  const hadSave = loadGame();
+  if (!hadSave) {
+    resetGame();
+  }
+
+  // Let the player name if save is empty
+  if (!player.name) currentState = ST.TITLE;
+  else {
+    currentState = ST.WORLD;
+    AudioSys.musicStart("world");
+  }
+
+  // Main loop with fixed timestep for logic and draw
+  function loop() {
+    update();
+    draw();
+    requestAnimationFrame(loop);
+  }
+  loop();
+
+  // Public UI actions via touch Start and Select
+  document.querySelectorAll('[data-press="START"]').forEach(el => el.addEventListener("click", () => {
+    tap.START=true; press.START=false;
+  }));
+  document.querySelectorAll('[data-press="SELECT"]').forEach(el => el.addEventListener("click", () => {
+    if (currentState!==ST.CODEWORD) {
+      currentState = ST.CODEWORD; codeUI.value="";
+    } else {
+      currentState = ST.WORLD;
+    }
+  }));
+  // A and B taps
+  document.querySelectorAll('[data-press="A"]').forEach(el => el.addEventListener("click", () => { tap.A=true; }));
+  document.querySelectorAll('[data-press="B"]').forEach(el => el.addEventListener("click", () => { tap.B=true; }));
+
+  // Help short keys for quick testing
+  window._petsQuest = {
+    codeFromStage,
+    stageFromCode,
+    debugWinBoss: (id) => { startBattle(id,true); BTL.enemy.hp=0; },
+    saveGame, loadGame, resetGame
+  };
+
+})();
+</script>
 </body>
 </html>
