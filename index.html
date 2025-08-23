@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<title>Pets Quest DX — Mobile Fixes</title>
+<title>Pets Quest DX — Mobile First</title>
 <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
 <style>
   :root{
@@ -10,54 +10,41 @@
     --bezel:#161b2a;
     --screen:#0a0e14;
     --ui:#12182a;
+    --panel:#0f1426;
     --grid:#2a3350;
     --text:#eaf2ff;
     --sub:#a9baf5;
     --accent:#74ff74;
     --accent2:#6cf;
     --accent3:#ffdd55;
-    --btn:#1a2033;
-    --btnhi:#232b44;
     --pad:#0d1322;
-    --bad:#ff6b6b;
-    --good:#58ff9a;
+    --btn:#1a2136;
+    --btnhi:#232b44;
   }
-  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#0a0d16);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overscroll-behavior:none;}
-  .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:12px;}
+  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#0a0d16);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overscroll-behavior:none;touch-action:manipulation}
+  *{-webkit-tap-highlight-color:transparent}
+  .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:10px}
   .shell{background:radial-gradient(120% 90% at 50% 20%,#24304a,#151a28 60%,#0a0e18 100%);
     border:2px solid #2a3046;border-radius:24px;box-shadow:0 18px 40px rgba(0,0,0,.6),inset 0 0 0 4px #0f1320,inset 0 0 40px rgba(0,0,0,.5);
-    width:min(96vw,760px);max-width:760px;padding:14px 14px 22px;}
-  .bezel{background:linear-gradient(180deg,var(--bezel),#111626);border-radius:18px;padding:12px;border:1px solid #384060;box-shadow:inset 0 0 24px rgba(0,0,0,.5);}
-  .header{display:flex;justify-content:space-between;align-items:center;margin:0 4px 8px 4px;color:var(--sub);font-size:12px;letter-spacing:.06em}
+    width:min(98vw,780px);max-width:780px;padding:12px 12px 16px}
+  .bezel{background:linear-gradient(180deg,var(--bezel),#111626);border-radius:18px;padding:10px;border:1px solid #384060;box-shadow:inset 0 0 24px rgba(0,0,0,.5)}
+  .header{display:flex;justify-content:space-between;align-items:center;margin:0 4px 6px 4px;color:var(--sub);font-size:12px;letter-spacing:.06em}
   .power{width:10px;height:10px;border-radius:50%;background:#2a2;box-shadow:0 0 8px #2a2;display:inline-block;margin-right:6px}
-  canvas{display:block;width:100%;height:auto;background:var(--screen);border-radius:8px;image-rendering:pixelated;image-rendering:crisp-edges;border:1px solid #0c0f1a;box-shadow:inset 0 0 32px rgba(0,0,0,.7)}
+  canvas{display:block;width:100%;height:auto;background:var(--screen);border-radius:10px;image-rendering:pixelated;image-rendering:crisp-edges;border:1px solid #0c0f1a;box-shadow:inset 0 0 32px rgba(0,0,0,.7)}
   .brand{text-align:center;margin:8px 0 6px 0;font-weight:700;letter-spacing:.08em;color:#9ad3ff;text-shadow:0 0 8px rgba(110,200,255,.35);font-size:14px}
-  .controls{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px;user-select:none;-webkit-user-select:none;touch-action:manipulation}
-  .dpad,.ab{background:linear-gradient(180deg,var(--pad),#090d17);border-radius:14px;border:1px solid #2a3149;box-shadow:inset 0 0 22px rgba(0,0,0,.7),0 6px 14px rgba(0,0,0,.35);padding:12px}
-  .dgrid{display:grid;grid-template-columns:64px 64px 64px;gap:12px;justify-content:center;align-items:center}
-  .btn{width:64px;height:64px;background:linear-gradient(180deg,var(--btn),#0b0f1c);border-radius:14px;border:1px solid #39415f;box-shadow:inset 0 0 18px rgba(0,0,0,.6),0 4px 10px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;color:#bfd1ff;font-weight:700;font-size:18px}
+  .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;user-select:none;-webkit-user-select:none}
+  .pad,.ab{background:linear-gradient(180deg,var(--pad),#090d17);border-radius:14px;border:1px solid #2a3149;box-shadow:inset 0 0 22px rgba(0,0,0,.7),0 6px 14px rgba(0,0,0,.35);padding:10px}
+  .dgrid{display:grid;grid-template-columns:72px 72px 72px;gap:10px;justify-content:center;align-items:center}
+  .btn{width:72px;height:72px;background:linear-gradient(180deg,var(--btn),#0b0f1c);border-radius:14px;border:1px solid #39415f;box-shadow:inset 0 0 18px rgba(0,0,0,.6),0 4px 10px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;color:#bfd1ff;font-weight:700;font-size:18px}
   .btn:active{background:linear-gradient(180deg,var(--btnhi),#10162a);transform:translateY(1px)}
-  .btn.small{width:84px;height:44px;border-radius:10px;font-size:13px}
-  .abgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px;justify-items:center;align-items:center}
+  .btn.small{width:92px;height:46px;border-radius:10px;font-size:14px}
+  .abgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;justify-items:center;align-items:center}
   .mini{font-size:11px;color:var(--sub);text-align:center;margin-top:6px}
-  .hint{font-size:12px;color:#b8c7ff;text-align:center;margin-top:4px}
-  .kbd{background:#0d1222;border:1px solid #313a58;border-radius:6px;padding:2px 6px;font-weight:700;color:#bcd}
   @media (max-width:480px){
-    .dgrid{grid-template-columns:56px 56px 56px;gap:10px}
-    .btn{width:56px;height:56px;font-size:16px;border-radius:12px}
-    .btn.small{width:72px}
+    .dgrid{grid-template-columns:64px 64px 64px}
+    .btn{width:64px;height:64px;font-size:16px;border-radius:12px}
+    .btn.small{width:84px}
   }
-
-  /* Text-entry overlay for mobile keyboard */
-  .overlay{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;z-index:20;padding:16px}
-  .modal{width:min(92vw,480px);background:#0f1526;border:1px solid #3a4160;border-radius:12px;box-shadow:0 16px 36px rgba(0,0,0,.55);padding:16px}
-  .modal h3{margin:0 0 8px 0;font-size:16px;color:#a9c3ff}
-  .modal p{margin:6px 0 10px 0;color:#c9d6ff;font-size:13px}
-  .field{display:flex;gap:8px}
-  .field input{flex:1;padding:10px 12px;border-radius:8px;border:1px solid #3a4160;background:#0b1222;color:#eaf2ff;font-size:18px}
-  .actions{display:flex;gap:8px;margin-top:10px}
-  .actions button{flex:1;padding:10px;border-radius:8px;border:1px solid #3a4160;background:#18213a;color:#eaf2ff;font-weight:700}
-  .actions button.primary{background:#234a8f;border-color:#2e66cc}
 </style>
 </head>
 <body>
@@ -70,8 +57,8 @@
       </div>
       <canvas id="screen" width="320" height="180" aria-label="Game screen"></canvas>
       <div class="brand">Handheld Colour · 320×180 · High Contrast</div>
-      <div class="controls" id="touchControls">
-        <div class="dpad">
+      <div class="controls" id="controls">
+        <div class="pad">
           <div class="dgrid">
             <div></div>
             <button class="btn" data-press="UP" aria-label="Up">▲</button>
@@ -83,66 +70,42 @@
             <button class="btn" data-press="DOWN" aria-label="Down">▼</button>
             <div></div>
           </div>
-          <div class="mini">Move with Arrow Keys or D-pad</div>
+          <div class="mini">Move with arrows or D pad</div>
         </div>
         <div class="ab">
           <div class="abgrid">
             <button class="btn" data-press="A" aria-label="A">A</button>
             <button class="btn" data-press="B" aria-label="B">B</button>
-            <button class="btn small" data-press="START" aria-label="Start">Start</button>
-            <button class="btn small" data-press="SELECT" aria-label="Select">Select</button>
+            <button class="btn small" data-press="START" aria-label="Start">Menu</button>
+            <button class="btn small" data-press="SELECT" aria-label="Select">Quick</button>
           </div>
-          <div class="mini">Desktop: <span class="kbd">Z</span> A, <span class="kbd">X</span> B, <span class="kbd">Enter</span> Start, <span class="kbd">Shift</span> Select</div>
+          <div class="mini">Desktop keys: Z A, X B, Enter Menu, Shift Quick</div>
         </div>
       </div>
-      <div class="hint">Menu with <span class="kbd">Enter</span>. Toggle sound in Options. Codewords are 6 letters or digits, auto caps.</div>
-    </div>
-  </div>
-</div>
-
-<!-- Text-entry overlay -->
-<div class="overlay" id="textOverlay" role="dialog" aria-modal="true">
-  <div class="modal">
-    <h3 id="overlayTitle">Enter text</h3>
-    <p id="overlayHelp">Use letters and digits. Max 8.</p>
-    <div class="field">
-      <input id="overlayInput" inputmode="latin" autocomplete="off" autocapitalize="words" spellcheck="false" maxlength="12">
-    </div>
-    <div class="actions">
-      <button id="overlayCancel">Cancel</button>
-      <button id="overlayOK" class="primary">OK</button>
     </div>
   </div>
 </div>
 
 <script>
 (() => {
-  // ===== Core constants
+  // ===== mobile first boot: no typing, jump straight to world =====
   const CANVAS_W=320, CANVAS_H=180;
-  const PALETTE={bg:"#0a0e14",ui:"#12182a",panel:"#0f1426",grid:"#2a3350",text:"#eaf2ff",sub:"#a9baf5",accent:"#74ff74",accent2:"#6cf",accent3:"#ffdd55",bad:"#ff6b6b"};
-  const ST={TITLE:"TITLE",NAME:"NAME",SIDEKICK:"SIDEKICK",WORLD:"WORLD",BATTLE:"BATTLE",MENU:"MENU",SHOP:"SHOP",CODEWORD:"CODEWORD"};
-  const STAGE={STARTED:0,MET_SIDEKICK:1,BOSS1_DONE:2,BOSS2_DONE:3,BOSS3_DONE:4};
+  const PALETTE={bg:"#0a0e14",ui:"#12182a",panel:"#0f1426",grid:"#2a3350",text:"#eaf2ff",sub:"#a9baf5",accent:"#74ff74",accent2:"#6cf",accent3:"#ffdd55"};
+  const canvas=document.getElementById("screen"); const ctx=canvas.getContext("2d",{alpha:false}); ctx.imageSmoothingEnabled=false;
 
-  // ===== Canvas
-  const canvas=document.getElementById("screen");
-  const ctx=canvas.getContext("2d",{alpha:false});
-  ctx.imageSmoothingEnabled=false;
-
-  // ===== Input edges
+  // Input
   const press={LEFT:false,RIGHT:false,UP:false,DOWN:false,A:false,B:false,START:false,SELECT:false};
   const tap={LEFT:false,RIGHT:false,UP:false,DOWN:false,A:false,B:false,START:false,SELECT:false};
   function clearTaps(){for(const k in tap) tap[k]=false;}
-
-  // ===== Keyboard
   const KEYS={LEFT:["ArrowLeft","a","A"],RIGHT:["ArrowRight","d","D"],UP:["ArrowUp","w","W"],DOWN:["ArrowDown","s","S"],A:["z","Z","k","K"," "],B:["x","X","j","J","Backspace"],START:["Enter"],SELECT:["Shift","Tab"]};
   function mapKey(k){for(const P in KEYS) if(KEYS[P].includes(k)) return P; return null;}
   addEventListener("keydown",e=>{const m=mapKey(e.key);if(m){if(!press[m]) tap[m]=true;press[m]=true;resumeAudio();e.preventDefault();}});
   addEventListener("keyup",e=>{const m=mapKey(e.key);if(m){press[m]=false;e.preventDefault();}});
 
-  // ===== Touch controls and scroll guard
-  const tc=document.getElementById("touchControls");
-  tc.addEventListener("touchstart",e=>{e.preventDefault();resumeAudio();},{passive:false});
-  tc.querySelectorAll("[data-press]").forEach(btn=>{
+  const controls=document.getElementById("controls");
+  controls.addEventListener("touchstart",e=>{e.preventDefault();resumeAudio();},{passive:false});
+  document.body.addEventListener("touchmove",e=>{if(e.target.closest(".controls")) e.preventDefault();},{passive:false});
+  controls.querySelectorAll("[data-press]").forEach(btn=>{
     const k=btn.getAttribute("data-press");
     const set=v=>{press[k]=v;if(v) tap[k]=true;};
     btn.addEventListener("touchstart",()=>set(true));
@@ -153,61 +116,50 @@
     btn.addEventListener("mouseleave",()=>set(false));
     btn.addEventListener("click",e=>e.preventDefault());
   });
-  // Prevent iOS rubber band when dragging
-  document.body.addEventListener("touchmove",e=>{if(e.target.closest(".controls")) e.preventDefault();},{passive:false});
-  // First tap anywhere should enable audio
-  document.body.addEventListener("touchstart",()=>resumeAudio(),{passive:true});
-  document.body.addEventListener("mousedown",()=>resumeAudio(),{passive:true});
 
-  // ===== Battery toy value
-  const pctEl=document.getElementById("pct");
-  setInterval(()=>{pctEl.textContent=(92+Math.floor(Math.random()*9))+"%";},3000);
+  // Battery toy
+  const pctEl=document.getElementById("pct"); setInterval(()=>{pctEl.textContent=(92+Math.floor(Math.random()*9))+"%";},3000);
 
-  // ===== Simple text drawing
-  function fill(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x,y,w,h);}
-  function text(x,y,t,c="#eaf2ff",sz=10){ctx.fillStyle=c;ctx.font=`${sz}px monospace`;ctx.textBaseline="top";ctx.fillText(t,x,y);}
-
-  // ===== Save and codewords
-  const SAVE_KEY="pets_quest_dx_save_v2";
-  const ALPH="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
-  const encode32=n=>{let s="";for(let i=0;i<6;i++){s=ALPH[n&31]+s;n>>>=5;}return s;};
-  const decode32=str=>{let n=0;for(let i=0;i<str.length;i++){const idx=ALPH.indexOf(str[i]);if(idx<0) return null;n=(n<<5)|idx;}return n>>>0;};
-  function codeFromStage(st){const s=st&0xff;const chk=((s*131+97)^0x2A5)&0x3ff;const packed=(chk<<8)|s;const salted=(packed^0x15555555)&0x3fffffff;return encode32(salted);}
-  function stageFromCode(code){if(!code||code.length!==6) return null;const n=decode32(code.toUpperCase());if(n===null) return null;const packed=(n^0x15555555)&0x3fffffff;const s=packed&0xff;const chk=(packed>>>8)&0x3ff;const chk2=((s*131+97)^0x2A5)&0x3ff;return chk===chk2?s:null;}
-
-  // ===== Audio fixed for mobile
+  // Audio with one tap unlock
   const AudioSys=(()=>{
-    const C=window.AudioContext||window.webkitAudioContext; const ctx=new C();
-    const master=ctx.createGain(); master.gain.value=.35; master.connect(ctx.destination);
+    const C=window.AudioContext||window.webkitAudioContext; const ac=new C();
+    const master=ac.createGain(); master.gain.value=.35; master.connect(ac.destination);
     let enabled=false, musicOn=false, nodes=[];
-    function resume(){ if(ctx.state==="suspended") ctx.resume(); enabled=true; }
-    function beep(freq=440,dur=.1,type="square",vol=.2){ if(!enabled||options.muted) return; const o=ctx.createOscillator(), g=ctx.createGain(); o.type=type;o.frequency.value=freq; g.gain.value=vol; o.connect(g); g.connect(master); const t=ctx.currentTime; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+dur); o.start(t); o.stop(t+dur+.05); }
+    function resume(){ if(ac.state==="suspended") ac.resume(); enabled=true; }
+    function beep(freq=440,dur=.1,type="square",vol=.2){ if(!enabled||options.muted) return; const o=ac.createOscillator(), g=ac.createGain(); o.type=type;o.frequency.value=freq; g.gain.value=vol; o.connect(g); g.connect(master); const t=ac.currentTime; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+dur); o.start(t); o.stop(t+dur+.05); }
     function musicStart(mode="world"){ if(!enabled||options.muted) return; musicStop(); musicOn=true;
-      const tempo=128, beat=60/tempo, t0=ctx.currentTime+.05, bars=8;
-      const lead=ctx.createOscillator(); lead.type="square"; lead.start(t0);
-      const bass=ctx.createOscillator(); bass.type="triangle"; bass.start(t0);
-      function note(o,when,midi,d=.35,v=.12){const g=ctx.createGain();g.gain.value=v;o.connect(g);g.connect(master);o.frequency.setValueAtTime(440*Math.pow(2,(midi-69)/12),when);g.gain.setValueAtTime(.0001,when);g.gain.linearRampToValueAtTime(v,when+.01);g.gain.exponentialRampToValueAtTime(.0001,when+d);}
+      const tempo=128, beat=60/tempo, t0=ac.currentTime+.05, bars=8;
+      const lead=ac.createOscillator(); lead.type="square"; lead.start(t0);
+      const bass=ac.createOscillator(); bass.type="triangle"; bass.start(t0);
+      function note(o,when,midi,d=.3,v=.12){const g=ac.createGain();g.gain.value=v;o.connect(g);g.connect(master);o.frequency.setValueAtTime(440*Math.pow(2,(midi-69)/12),when);g.gain.setValueAtTime(.0001,when);g.gain.linearRampToValueAtTime(v,when+.01);g.gain.exponentialRampToValueAtTime(.0001,when+d);}
       const L=mode==="battle"?[72,79,76,74,72,67,69,71]:[72,76,79,76,72,67,71,74];
       const B=mode==="battle"?[36,36,41,41,38,38,43,43]:[36,36,41,41,33,33,38,38];
       const steps=16;
-      for(let i=0;i<bars*steps;i++){const t=t0+i*beat*.5, k=i%L.length; note(lead,t,L[k],.28,.11); if(i%2===0) note(bass,t,B[(k>>1)%B.length]-12,.45,.08);}
-      const stop=t0+bars*steps*beat*.5+.2; lead.stop(stop); bass.stop(stop); nodes=[lead,bass]; setTimeout(()=>{ if(musicOn) musicStart(mode); }, (stop-ctx.currentTime)*1000);
+      for(let i=0;i<bars*steps;i++){const t=t0+i*beat*.5, k=i%L.length; note(lead,t,L[k],.26,.1); if(i%2===0) note(bass,t,B[(k>>1)%B.length]-12,.42,.08);}
+      const stop=t0+bars*steps*beat*.5+.2; lead.stop(stop); bass.stop(stop); nodes=[lead,bass]; setTimeout(()=>{ if(musicOn) musicStart(mode); }, (stop-ac.currentTime)*1000);
     }
     function musicStop(){ musicOn=false; try{nodes.forEach(n=>n.disconnect());}catch{} nodes=[]; }
-    return {resume:resume,musicStart:musicStart,musicStop:musicStop,beep:beep};
+    return {resume:resume,beep:beep,musicStart:musicStart,musicStop:musicStop};
   })();
-  function resumeAudio(){ AudioSys.resume(); if(!options.muted && (state===ST.TITLE || state===ST.WORLD)) AudioSys.musicStart("world"); }
+  function resumeAudio(){ AudioSys.resume(); if(!options.muted && state==="WORLD") AudioSys.musicStart("world"); }
+  document.body.addEventListener("touchstart",()=>resumeAudio(),{once:true,passive:true});
+  document.body.addEventListener("mousedown",()=>resumeAudio(),{once:true,passive:true});
 
-  // ===== Game state
-  const player={name:"",maxHP:28,hp:28,atk:6,def:2,level:1,xp:0,sidekick:""};
-  let state=ST.TITLE, stage=STAGE.STARTED, coins=20;
-  let flags={metSidekick:false,boss1:false,boss2:false,boss3:false};
+  // Basic draw helpers
+  function fill(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x,y,w,h);}
+  function text(x,y,t,c=PALETTE.text,sz=10){ctx.fillStyle=c;ctx.font=`${sz}px monospace`;ctx.textBaseline="top";ctx.fillText(t,x,y);}
+
+  // Game state
+  const options={muted:false};
+  const player={name:"Hero",maxHP:28,hp:28,atk:6,def:2,level:1,xp:0,sidekick:"Sizzle"};
+  let state="WORLD";
+  let coins=20;
+  let flags={metSidekick:true,boss1:false,boss2:false,boss3:false};
   let location={zone:0,x:8,y:10};
-  let options={muted:false};
   let inventory=[{id:"SNACK",name:"Dog Snack",qty:3,desc:"Heals 10 HP"}];
   let equipment={head:null,body:null};
 
-  // ===== Zones and tiles
+  // Zones
   // 0 pavement, 1 wall, 2 grass, 3 water, 4 shop, 5 boss
   const ZONES=[
     {name:"Neighbourhood",tileSize:16,tilesW:20,tilesH:14,data:genNeighbourhood(),start:{x:8,y:10},shop:{x:4,y:4},boss:{x:18,y:2,id:3}},
@@ -219,20 +171,18 @@
   function genShow(){const w=20,h=14,T=Array(h).fill(0).map(()=>Array(w).fill(0));for(let y=0;y<h;y++)for(let x=0;x<w;x++){if(y===0||y===h-1||x===0||x===w-1)T[y][x]=1;}for(let x=2;x<18;x++)T[12][x]=0;T[12][6]=4;T[2][18]=5;for(let x=3;x<17;x++)T[6][x]=1;return T;}
   function tileAt(z,x,y){const Z=ZONES[z]; if(x<0||y<0||x>=Z.tilesW||y>=Z.tilesH) return 1; return Z.data[y][x];}
 
-  // ===== NPC and drawing helpers
+  // Draw world
   function drawZone(z){const Z=ZONES[z], ts=Z.tileSize; for(let y=0;y<Z.tilesH;y++)for(let x=0;x<Z.tilesW;x++){const t=Z.data[y][x],px=x*ts,py=y*ts;
     if(t===0){fill(px,py,ts,ts,"#1a2136");fill(px+ts-1,py,1,ts,"#0b1020");fill(px,py+ts-1,ts,1,"#0b1020");}
     else if(t===1){fill(px,py,ts,ts,"#273252");fill(px+2,py+2,ts-4,ts-4,"#12182b");}
-    else if(t===2){fill(px,py,ts,ts,"#10351c");fill(px+ts-1,py,1,ts,"#0b2614"); if(((x*13+y*7)&3)===0) fill(px+((x*5+y*3)%12),py+((x*7+y*11)%12),1,1,"#1f7a37");}
+    else if(t===2){fill(px,py,ts,ts,"#10351c");fill(px+ts-1,py,1,ts,"#0b2614");}
     else if(t===3){fill(px,py,ts,ts,"#08324a");fill(px+1,py+1,ts-2,ts-2,"#0a4d70");}
     else if(t===4){fill(px,py,ts,ts,"#2e1f49");fill(px+4,py+4,ts-8,ts-8,"#7840ff");}
     else if(t===5){fill(px,py,ts,ts,"#3a1b1f");fill(px+4,py+4,ts-8,ts-8,"#ff3b3b");}
   }
-    const S=Z.shop; if(S) { drawShopIcon(S.x*ts+4,S.y*ts+2); }
-    const B=Z.boss; if(B) { drawBossIcon(B.x*ts+4,B.y*ts+2); }
+    const S=Z.shop; if(S) { fill(S.x*ts+4,S.y*ts+2,8,6,"#6cf"); fill(S.x*ts+4,S.y*ts+8,8,4,"#123c55"); }
+    const B=Z.boss; if(B) { fill(B.x*ts+4,B.y*ts+2,8,8,"#ff6b6b"); }
   }
-  function drawShopIcon(x,y){fill(x,y,8,6,"#6cf");fill(x,y+6,8,4,"#123c55");fill(x+2,y+2,4,2,"#fff");}
-  function drawBossIcon(x,y){fill(x,y,8,8,"#ff6b6b");fill(x+2,y+2,4,4,"#700");}
   function drawHero(px,py){const cSkin="#f2d6b4", cJacket=equipment.body?.colour||"#2a7fff", cHat=equipment.head?.colour||"#ff5964";
     ctx.fillStyle="rgba(0,0,0,.35)"; ctx.beginPath(); ctx.ellipse(px+8,py+14,6,3,0,0,Math.PI*2); ctx.fill();
     fill(px+5,py+10,3,5,"#20283d"); fill(px+10,py+10,3,5,"#20283d"); fill(px+4,py+6,10,6,cJacket);
@@ -242,245 +192,241 @@
     if(equipment.body&&equipment.body.id==="CAPE") fill(px+2,py+6,2,6,equipment.body.colour);
   }
   function drawSidekick(px,py){fill(px,py+8,12,4,"#6b3b16"); fill(px+10,py+6,3,3,"#6b3b16"); fill(px+1,py+12,3,2,"#6b3b16"); fill(px+8,py+12,3,2,"#6b3b16"); fill(px+11,py+7,1,1,"#000");}
-  function drawEnemy(x,y,id){if(id===3){fill(x,y+8,34,12,"#555");fill(x+12,y+4,10,4,"#ffdd55");}
-    else if(id===4){fill(x+6,y+10,28,10,"#ddd");fill(x+28,y+8,6,3,"#ffa500");}
-    else if(id===5){fill(x+10,y+6,20,18,"#222");fill(x+14,y+10,12,8,"#eee");}
-    else if(id===1){fill(x,y+10,30,8,"#444");fill(x+26,y+6,6,6,"#444");fill(x+27,y+7,2,2,"#fff");}
-    else if(id===2){fill(x+4,y+12,26,10,"#9aa");fill(x+20,y+8,6,6,"#ccd");}
-  }
 
-  // ===== UI: dialogue
-  let msgQ=[], msgIdx=0, msgOpen=false;
+  // HUD and dialogues
+  let msgQ=[], msgIdx=0, msgOpen=false, onMsgDone=null;
   function say(lines,cb=null){msgQ=Array.isArray(lines)?[...lines]:[String(lines)]; msgIdx=0; msgOpen=true; onMsgDone=cb;}
-  let onMsgDone=null;
-  function drawMsg(){ if(!msgOpen) return; const h=54; fill(6,CANVAS_H-h-6,CANVAS_W-12,h,PALETTE.panel); wrap(12,CANVAS_H-h,msgQ[0].substring(0,msgIdx),296,10,PALETTE.text); if(msgIdx<(msgQ[0]||"").length) msgIdx+=2; else text(CANVAS_W-48,CANVAS_H-18,"A:Next",PALETTE.sub,8); }
-  function wrap(x,y,t,maxW,sz=10,col="#eaf2ff"){ctx.fillStyle=col;ctx.font=`${sz}px monospace`;const words=t.split(" ");let line="",yy=y+6;for(let i=0;i<words.length;i++){const test=line+words[i]+" "; if(ctx.measureText(test).width>maxW&&i>0){ctx.fillText(line,x,yy);line=words[i]+" ";yy+=sz+2;}else line=test;}ctx.fillText(line,x,yy);}
   function advance(){ if(!msgOpen) return; const full=msgQ[0]; if(msgIdx<full.length){msgIdx=full.length;return;} msgQ.shift(); if(msgQ.length===0){msgOpen=false;msgIdx=0; if(onMsgDone){const f=onMsgDone;onMsgDone=null;f();}} else msgIdx=0; }
+  function drawMsg(){ if(!msgOpen) return; fill(6,CANVAS_H-60,CANVAS_W-12,54,PALETTE.panel); ctx.fillStyle=PALETTE.text; ctx.font="10px monospace"; ctx.textBaseline="top"; const t=msgQ[0].substring(0,msgIdx); wrap(12,CANVAS_H-60+6,t,296); if(msgIdx<(msgQ[0]||"").length) msgIdx+=3; else text(CANVAS_W-48,CANVAS_H-18,"A:Next",PALETTE.sub,8); }
+  function wrap(x,y,t,maxW){const words=t.split(" "); let line="",yy=y; for(let i=0;i<words.length;i++){const test=line+words[i]+" "; if(ctx.measureText(test).width>maxW&&i>0){ctx.fillText(line,x,yy); line=words[i]+" "; yy+=12;} else line=test;} ctx.fillText(line,x,yy);}
 
-  // ===== Title and name entry
-  let frame=0, titleTick=0;
-  const nameUI={buffer:"",max:8}; const sidekickUI={buffer:"",max:8};
-  const codeUI={value:"",flash:""};
-
-  // ===== Mobile-friendly text overlay
-  const overlay=document.getElementById("textOverlay");
-  const overlayInput=document.getElementById("overlayInput");
-  const overlayTitle=document.getElementById("overlayTitle");
-  const overlayHelp=document.getElementById("overlayHelp");
-  const btnOK=document.getElementById("overlayOK");
-  const btnCancel=document.getElementById("overlayCancel");
-  let overlayMode=null; // "name" | "sidekick" | "code"
-  function openOverlay(mode, title, help, maxLen, value="", caps=false){
-    overlayMode=mode; overlayTitle.textContent=title; overlayHelp.textContent=help;
-    overlayInput.maxLength=maxLen; overlayInput.value=value; overlayInput.style.fontSize="20px";
-    overlayInput.autocapitalize=caps?"characters":"none";
-    overlay.style.display="flex";
-    setTimeout(()=>{overlayInput.focus(); overlayInput.selectionStart=overlayInput.value.length;},10);
-  }
-  function closeOverlay(){ overlay.style.display="none"; overlayMode=null; }
-
-  btnCancel.addEventListener("click",()=>{ closeOverlay(); });
-  btnOK.addEventListener("click",()=>{
-    const v=overlayInput.value.trim();
-    if(overlayMode==="name"){ if(v.length<1) return; nameUI.buffer=v; confirmName(); }
-    if(overlayMode==="sidekick"){ if(v.length<1) return; sidekickUI.buffer=v; confirmSidekick(); }
-    if(overlayMode==="code"){ if(v.length!==6) return; codeUI.value=v.toUpperCase(); applyCode(); }
-    closeOverlay();
-  });
-
-  // ===== Battle basics
-  const BTL={in:false,enemy:null,turn:"PLAYER",log:[],cursor:0,canFlee:true};
-  const ENEMIES={1:{name:"Alley Cat",maxHP:20,atk:5,def:1,reward:{xp:8,coins:8}},
-                 2:{name:"Pigeon Mob",maxHP:24,atk:6,def:2,reward:{xp:10,coins:10}},
-                 3:{name:"Alley Cat King",maxHP:38,atk:8,def:3,boss:true,reward:{xp:20,coins:25}},
-                 4:{name:"Goose of Doom",maxHP:40,atk:9,def:3,reward:{xp:24,coins:28}},
-                 5:{name:"Snobby Show Judge",maxHP:55,atk:10,def:4,boss:true,reward:{xp:40,coins:60}}};
-
-  function startBattle(id,force=false){const e=ENEMIES[id]; BTL.in=true; BTL.enemy={id,name:e.name,hp:e.maxHP,maxHP:e.maxHP,atk:e.atk,def:e.def,boss:!!e.boss,reward:e.reward}; BTL.turn="PLAYER"; BTL.log=["A wild "+e.name+" appears."]; BTL.cursor=0; BTL.canFlee=!e.boss && !force; state=ST.BATTLE; AudioSys.musicStart("battle");}
-  function endBattle(win){BTL.in=false; AudioSys.musicStart("world"); if(win){const r=ENEMIES[BTL.enemy.id].reward; player.xp+=r.xp; coins+=r.coins; if(player.xp>=player.level*25){player.level++; player.maxHP+=4; player.atk++; player.def++; player.hp=player.maxHP; say(["Level up to "+player.level+".","Stats increased."]);}} save();}
-  function dmg(att,def){const base=Math.max(1,att-Math.floor(def*0.6));return Math.max(1,base+Math.floor(Math.random()*3));}
-  function useSnack(){const it=inventory.find(i=>i.id==="SNACK"&&i.qty>0); if(!it){BTL.log.push("No snacks left.");return false;} it.qty--; player.hp=Math.min(player.maxHP,player.hp+10); BTL.log.push("Snack heals 10."); AudioSys.beep(880,.12,"square",.2); return true;}
-
-  // ===== Shop
+  // Shop and equipment
   const accessories=[{id:"BANDANA",slot:"head",name:"Red Bandana",price:15,atk:+1,def:0,colour:"#ff5964"},
                      {id:"CAP",slot:"head",name:"Blue Cap",price:20,atk:0,def:+1,colour:"#3aa0ff"},
                      {id:"SHADES",slot:"head",name:"Shades",price:25,atk:+1,def:+1,colour:"#111"},
                      {id:"CAPE",slot:"body",name:"Cape",price:30,atk:+2,def:0,colour:"#ffd166"},
                      {id:"RAINCOAT",slot:"body",name:"Raincoat",price:30,atk:0,def:+2,colour:"#74ff74"}];
   let shopCursor=0;
-  function openShop(){state=ST.SHOP; shopCursor=0; say(["Welcome to the Pet Boutique.","Accessories are stylish and useful."]);}
+  function openShop(){ mode="SHOP"; shopCursor=0; say(["Welcome to the Pet Boutique.","Accessories are stylish and useful."]); }
 
-  // ===== Menu
-  const MENU=["Items","Equipment","Quests","Map","Options","Codeword","Save","Close"]; let menuCursor=0,equipCursor=0;
+  // Simple battle
+  const ENEMIES={1:{name:"Alley Cat",maxHP:20,atk:5,def:1,reward:{xp:8,coins:8}},
+                 2:{name:"Pigeon Mob",maxHP:24,atk:6,def:2,reward:{xp:10,coins:10}},
+                 3:{name:"Alley Cat King",maxHP:38,atk:8,def:3,boss:true,reward:{xp:20,coins:25}},
+                 4:{name:"Goose of Doom",maxHP:40,atk:9,def:3,reward:{xp:24,coins:28}},
+                 5:{name:"Snobby Show Judge",maxHP:55,atk:10,def:4,boss:true,reward:{xp:40,coins:60}}};
+  let battle=null; // {enemy,turn,cursor,log,canFlee}
+  function startBattle(id,force=false){const e=ENEMIES[id]; battle={enemy:{id,name:e.name,hp:e.maxHP,maxHP:e.maxHP,atk:e.atk,def:e.def,boss:!!e.boss,reward:e.reward},turn:"PLAYER",cursor:0,log:["A wild "+e.name+" appears."],canFlee:!e.boss && !force}; mode="BATTLE"; AudioSys.musicStart("battle");}
+  function endBattle(win){AudioSys.musicStart("world"); battle=null; if(win){const r=ENEMIES[lastEnemy].reward; player.xp+=r.xp; coins+=r.coins; if(player.xp>=player.level*25){player.level++; player.maxHP+=4; player.atk++; player.def++; player.hp=player.maxHP; say(["Level up to "+player.level+".","Stats increased."]);}}}
+  function rnd(n){return Math.floor(Math.random()*n);}
+  function dmg(att,def){const base=Math.max(1,att-Math.floor(def*0.6));return Math.max(1,base+rnd(3));}
+  function useSnack(){const it=inventory.find(i=>i.id==="SNACK"&&i.qty>0); if(!it){battle.log.push("No snacks left.");return false;} it.qty--; player.hp=Math.min(player.maxHP,player.hp+10); battle.log.push("Snack heals 10."); AudioSys.beep(880,.12,"square",.2); return true;}
+  let lastEnemy=0;
 
-  // ===== Save and load
-  function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify({player,flags,stage,coins,location,options,inventory,equipment}));}catch{}}
-  function load(){try{const s=localStorage.getItem(SAVE_KEY);if(!s) return false; const d=JSON.parse(s); Object.assign(player,d.player||{}); flags=d.flags||flags; stage=d.stage??stage; coins=d.coins??coins; location=d.location||location; options=d.options||options; inventory=d.inventory||inventory; equipment=d.equipment||equipment; return true;}catch{return false;}}
-  function reset(){player.name="";player.sidekick="";player.maxHP=28;player.hp=28;player.atk=6;player.def=2;player.level=1;player.xp=0;stage=STAGE.STARTED;flags={metSidekick:false,boss1:false,boss2:false,boss3:false};coins=20;equipment={head:null,body:null};inventory=[{id:"SNACK",name:"Dog Snack",qty:3,desc:"Heals 10 HP"}];location={zone:0,x:ZONES[0].start.x,y:ZONES[0].start.y}; save();}
-
-  // ===== Name confirm helpers
-  function confirmName(){ if(nameUI.buffer.length<1) return; player.name=nameUI.buffer; save(); state=ST.SIDEKICK; sidekickUI.buffer=""; say(["You meet a brave sausage dog.","Please enter a name for your sidekick."]); }
-  function confirmSidekick(){ if(sidekickUI.buffer.length<1) return; player.sidekick=sidekickUI.buffer; flags.metSidekick=true; stage=STAGE.MET_SIDEKICK; save(); state=ST.WORLD; AudioSys.musicStart("world"); say([`${player.sidekick} joins you as your sidekick.`,`Visit the shop for accessories. Main road is north.`,`Defeat the Alley Cat King to move on.`]); }
-
-  // ===== Codeword apply
-  function applyCode(){const s=codeUI.value.toUpperCase(); if(s.length!==6){codeUI.flash="Need 6"; setTimeout(()=>codeUI.flash="",1200); return;} const st=stageFromCode(s); if(st===null){codeUI.flash="Invalid"; setTimeout(()=>codeUI.flash="",1200); return;} if(st>=STAGE.BOSS3_DONE){flags.boss3=true;flags.boss2=true;flags.boss1=true;stage=STAGE.BOSS3_DONE;location.zone=2;} else if(st>=STAGE.BOSS2_DONE){flags.boss2=true;flags.boss1=true;stage=STAGE.BOSS2_DONE;location.zone=1;} else if(st>=STAGE.BOSS1_DONE){flags.boss1=true;stage=STAGE.BOSS1_DONE;location.zone=1;} else if(st>=STAGE.MET_SIDEKICK){flags.metSidekick=true;stage=STAGE.MET_SIDEKICK;location.zone=0;} else {stage=STAGE.STARTED;location.zone=0;} location.x=ZONES[location.zone].start.x; location.y=ZONES[location.zone].start.y; player.hp=player.maxHP; save(); say(["Codeword accepted.","Progress moved to stage "+st+"."]); state=ST.WORLD; AudioSys.musicStart("world");}
-
-  // ===== Frame update
-  let moveTimer=0, moveDelay=8;
-  function canWalk(nx,ny){const t=tileAt(location.zone,nx,ny); return t===0||t===2||t===3||t===4||t===5;}
-  function goalText(){if(!flags.boss1) return "Beat Alley Cat King"; if(!flags.boss2) return "Beat Goose of Doom"; if(!flags.boss3) return "Win the Dog Show"; return "Enjoy the day";}
-
-  function update(){
-    if(state===ST.TITLE){ if(tap.START||tap.A){state=ST.NAME; nameUI.buffer=""; say(["Welcome. This is a friendly adventure about pets.","Sausage dogs are the best. This is simply true.","Tap the box to enter your name."]);}
-    }
-    else if(state===ST.NAME){ if(tap.A && !msgOpen){ if(nameUI.buffer.length>=1) confirmName(); else say("Name cannot be empty."); } }
-    else if(state===ST.SIDEKICK){ if(tap.A && !msgOpen){ if(sidekickUI.buffer.length>=1) confirmSidekick(); else say("Name cannot be empty."); } }
-    else if(state===ST.WORLD){
-      if(!msgOpen){ moveTimer--; if(moveTimer<=0){ let dx=0,dy=0; if(press.LEFT) dx=-1; else if(press.RIGHT) dx=1; if(press.UP) dy=-1; else if(press.DOWN) dy=1;
-        if(dx||dy){ const nx=location.x+dx, ny=location.y+dy; if(canWalk(nx,ny)){ location.x=nx; location.y=ny; moveTimer=moveDelay; const t=tileAt(location.zone,nx,ny);
-          if(t===4) openShop(); if(t===5) triggerBoss();
-          if(t===2 && Math.random()<0.05) startBattle(location.zone===0?1:2,false);
-          if(t===3) moveTimer+=4;
-        } else { AudioSys.beep(120,.04,"square",.15); moveTimer=6; } } }
-      }
-      if(tap.START) { state=ST.MENU; menuCursor=0; }
-    }
-    else if(state===ST.BATTLE){
-      if(!msgOpen){
-        if(BTL.turn==="PLAYER"){
-          if(tap.UP||tap.DOWN){ /* keep for future */ }
-          if(tap.LEFT){ BTL.cursor=(BTL.cursor+3)%4; }
-          if(tap.RIGHT){ BTL.cursor=(BTL.cursor+1)%4; }
-          if(tap.A){
-            if(BTL.cursor===0){ // attack
-              const d=dmg(player.atk+(equipment.head?.atk||0)+(equipment.body?.atk||0),BTL.enemy.def); BTL.enemy.hp=Math.max(0,BTL.enemy.hp-d); BTL.log.push("You attack for "+d+"."); AudioSys.beep(220,.06,"square",.25); AudioSys.beep(330,.06,"square",.2); BTL.turn="ENEMY";
-            } else if(BTL.cursor===1){ const d=dmg(player.atk+2,BTL.enemy.def); BTL.enemy.hp=Math.max(0,BTL.enemy.hp-d); BTL.log.push(`${player.sidekick||"Dog"} barks. ${d} damage.`); AudioSys.beep(520,.08,"square",.25); BTL.turn="ENEMY"; }
-            else if(BTL.cursor===2){ if(useSnack()) BTL.turn="ENEMY"; }
-            else if(BTL.cursor===3){ if(BTL.canFlee && Math.random()<0.7){ BTL.log.push("You flee."); state=ST.WORLD; AudioSys.musicStart("world"); return; } else BTL.log.push(BTL.canFlee?"Failed to flee.":"Cannot flee."); }
-          }
-        } else { if(frame%24===0){ const d=dmg(BTL.enemy.atk,player.def+(equipment.head?.def||0)+(equipment.body?.def||0)); player.hp=Math.max(0,player.hp-d); BTL.log.push(`${BTL.enemy.name} hits for ${d}.`); AudioSys.beep(140,.1,"square",.25); BTL.turn="PLAYER"; } }
-      }
-      if(BTL.enemy.hp<=0){ const id=BTL.enemy.id; state=ST.WORLD; endBattle(true);
-        if(id===3){ flags.boss1=true; stage=Math.max(stage,STAGE.BOSS1_DONE); location.zone=1; Object.assign(location,ZONES[1].start); say(["Alley clear. Head to the City Park.","Checkpoint code: "+codeFromStage(STAGE.BOSS1_DONE)]); }
-        if(id===4){ flags.boss2=true; stage=Math.max(stage,STAGE.BOSS2_DONE); location.zone=2; Object.assign(location,ZONES[2].start); say(["Great work. Off to the Dog Show Hall.","Checkpoint code: "+codeFromStage(STAGE.BOSS2_DONE)]); }
-        if(id===5){ flags.boss3=true; stage=Math.max(stage,STAGE.BOSS3_DONE); say(["You won the show with a sausage dog. Obviously.","Checkpoint code: "+codeFromStage(STAGE.BOSS3_DONE)]); }
-      }
-      if(player.hp<=0){ BTL.log.push("You fainted. Returning to last checkpoint."); AudioSys.beep(100,.3,"square",.25);
-        player.hp=Math.ceil(player.maxHP*0.6); if(flags.boss2){location.zone=2; Object.assign(location,ZONES[2].start);} else if(flags.boss1){location.zone=1; Object.assign(location,ZONES[1].start);} else {location.zone=0; Object.assign(location,ZONES[0].start);} state=ST.WORLD; AudioSys.musicStart("world");
-      }
-    }
-    else if(state===ST.SHOP){ if(!msgOpen){ if(tap.DOWN) shopCursor=(shopCursor+1)%accessories.length; if(tap.UP) shopCursor=(shopCursor+accessories.length-1)%accessories.length;
-      if(tap.A){ const it=accessories[shopCursor]; if(coins<it.price) say("Not enough coins."); else { coins-=it.price; inventory.push({id:"ACC_"+it.id,name:it.name,qty:1,equipment:it}); AudioSys.beep(880,.08,"triangle",.25); say("Purchased "+it.name+"."); save();}}
-      if(tap.B) state=ST.WORLD; }
-    }
-    if(tap.A && msgOpen) advance();
-
-    clearTaps();
-    frame++;
-  }
-
-  function triggerBoss(){
-    if(location.zone===0 && !flags.boss1){ say(["The Alley Cat King blocks the way."]); startBattle(3,true); }
-    else if(location.zone===1 && !flags.boss2){ say(["A goose hisses. It seems upset."]); startBattle(4,true); }
-    else if(location.zone===2 && !flags.boss3){ say(["The Snobby Show Judge looks unimpressed.","Prove that sausage dogs are simply the best."]); startBattle(5,true); }
-    else say("You have already cleared this gate.");
-  }
-
-  // ===== Draw
-  function draw(){
-    fill(0,0,CANVAS_W,CANVAS_H,PALETTE.bg);
-    if(state===ST.TITLE){
-      fill(0,0,CANVAS_W,CANVAS_H,"#091020");
-      ctx.fillStyle="#6cf"; ctx.font="20px monospace"; ctx.fillText("Pets Quest DX",88,40);
-      ctx.font="10px monospace"; ctx.fillStyle=PALETTE.text; ctx.fillText("A lighthearted mini RPG about dogs",56,62);
-      const y=90+Math.sin(titleTick*.1)*6; drawSidekick(140,y); ctx.fillStyle=PALETTE.accent; ctx.fillText("Press A or Start",110,140); titleTick++;
-    }
-    else if(state===ST.NAME){
-      drawZone(location.zone); // background motion feels nicer
-      fill(18,20,284,64,PALETTE.panel); text(26,26,"Enter your name",PALETTE.sub,12);
-      fill(26,50,268,22,"#0b1222"); text(30,53,(nameUI.buffer||"tap to type")+(frame%30<15?"_":""),PALETTE.text,12);
-      text(26,78,"A: Confirm   B: Backspace   Start: Keyboard",PALETTE.sub,10);
-      drawMsg();
-    }
-    else if(state===ST.SIDEKICK){
-      drawZone(location.zone);
-      fill(18,20,284,64,PALETTE.panel); text(26,26,"Name your sidekick",PALETTE.sub,12);
-      fill(26,50,268,22,"#0b1222"); text(30,53,(sidekickUI.buffer||"tap to type")+(frame%30<15?"_":""),PALETTE.text,12);
-      text(26,78,"A: Confirm   B: Backspace   Start: Keyboard",PALETTE.sub,10);
-      drawSidekick(140,110);
-      drawMsg();
-    }
-    else if(state===ST.WORLD){
-      drawZone(location.zone); const ts=ZONES[location.zone].tileSize; const px=location.x*ts, py=location.y*ts-2; drawHero(px,py); if(flags.metSidekick) drawSidekick(px-14,py+4);
-      // HUD
-      fill(4,4,150,24,PALETTE.ui); ctx.strokeStyle="#2a3350"; ctx.strokeRect(4.5,4.5,149,23);
-      text(8,6,`${player.name||"Hero"}  Lv ${player.level}`,PALETTE.text,10);
-      text(8,16,`HP ${player.hp}/${player.maxHP}  Coins ${coins}`,PALETTE.accent3,10);
-      fill(CANVAS_W-102,4,98,24,PALETTE.ui); ctx.strokeRect(CANVAS_W-101.5,4.5,97,23);
-      text(CANVAS_W-98,6,`Zone: ${ZONES[location.zone].name}`,PALETTE.sub,9);
-      text(CANVAS_W-98,15,`Goal: ${goalText()}`,PALETTE.accent,9);
-      drawMsg();
-    }
-    else if(state===ST.BATTLE){
-      fill(0,0,CANVAS_W,CANVAS_H,"#1b0f1b"); fill(10,10,300,90,"#2b1a38"); text(16,12,`Vs ${BTL.enemy.name}`,PALETTE.accent2,12);
-      drawEnemy(200,30,BTL.enemy.id);
-      fill(10,104,300,24,PALETTE.ui); text(14,108,`${player.name} HP ${player.hp}/${player.maxHP}`,PALETTE.text,10); text(200,108,`Coins ${coins}`,PALETTE.accent3,10);
-      fill(10,132,300,40,PALETTE.ui);
-      const opts=["Attack","Bark","Snack","Flee"]; for(let i=0;i<4;i++){const x=16+i*70; const sel=BTL.cursor===i; text(x,138,(sel?"> ":"  ")+opts[i],sel?PALETTE.accent:PALETTE.text,12);}
-      const l1=BTL.log[BTL.log.length-2]||"", l2=BTL.log[BTL.log.length-1]||""; text(16,72,l1,PALETTE.sub,10); text(16,84,l2,PALETTE.text,10);
-    }
-    else if(state===ST.MENU){
-      drawZone(location.zone); ctx.fillStyle="rgba(0,0,0,.5)"; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
-      fill(50,26,220,128,PALETTE.ui); text(60,30,"Menu",PALETTE.accent2,12);
-      for(let i=0;i<MENU.length;i++){const sel=i===menuCursor; text(64,46+i*12,(sel?"> ":"  ")+MENU[i],sel?PALETTE.accent:PALETTE.text,10);}
-      text(60,152,"A: Select  B: Close",PALETTE.sub,10);
-    }
-    else if(state===ST.SHOP){
-      drawZone(location.zone); ctx.fillStyle="rgba(0,0,0,.45)"; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
-      fill(26,18,268,144,PALETTE.ui); text(32,20,"Pet Boutique",PALETTE.accent2,12); text(200,20,`Coins ${coins}`,PALETTE.accent3,10);
-      for(let i=0;i<accessories.length;i++){const a=accessories[i];const sel=i===shopCursor; const y=36+i*18; text(36,y,(sel?"> ":"  ")+a.name,sel?PALETTE.accent:PALETTE.text,10); text(190,y,`${a.price}`,PALETTE.sub,10);}
-      text(32,154,"A: Buy  B: Close  Start: Menu",PALETTE.sub,10);
-      drawMsg();
-    }
-    else if(state===ST.CODEWORD){
-      fill(0,0,CANVAS_W,CANVAS_H,"#081018"); fill(20,20,280,140,PALETTE.panel);
-      text(28,24,"Enter Codeword",PALETTE.accent2,12); fill(28,44,264,24,"#0c1426");
-      text(32,48,(codeUI.value||"tap to type")+(frame%30<15?"_":""),PALETTE.text,14);
-      ["Codes skip to checkpoints.","You get a code after each boss.","Codes are 6 chars.","Auto caps and digits only."].forEach((s,i)=>text(28,78+i*12,s,PALETTE.sub,10));
-      text(28,132,"A: Confirm  B: Back  Select: Show current code",PALETTE.sub,10);
-      if(codeUI.flash) text(230,132,codeUI.flash,PALETTE.accent3,10);
-    }
-  }
-
-  // ===== Menu actions and equipment list
+  // Menu simplified with quick options and chapter skips
+  const MENU=["Items","Equipment","Quests","Map","Options","Quick Skip","Save","Close"]; let menuCursor=0,equipCursor=0; let mode="WORLD";
   function buildEquip(){const out=[{type:"slot",name:"Head slot"}]; if(equipment.head) out.push({type:"unequip",slot:"head",name:"Remove head item"});
     inventory.filter(i=>i.equipment&&i.equipment.slot==="head").forEach(i=>out.push({type:"equip",slot:"head",equipment:i.equipment,name:i.equipment.name}));
     out.push({type:"slot",name:"Body slot"}); if(equipment.body) out.push({type:"unequip",slot:"body",name:"Remove body item"});
     inventory.filter(i=>i.equipment&&i.equipment.slot==="body").forEach(i=>out.push({type:"equip",slot:"body",equipment:i.equipment,name:i.equipment.name})); return out;}
 
-  // ===== High level input short-cuts
-  addEventListener("keydown",e=>{
-    if(state===ST.NAME && !msgOpen && e.key==="Enter"){ openOverlay("name","Enter your name","Use letters and digits. Max 8.",8,nameUI.buffer,false); }
-    if(state===ST.SIDEKICK && !msgOpen && e.key==="Enter"){ openOverlay("sidekick","Enter your sidekick's name","Use letters and digits. Max 8.",8,sidekickUI.buffer,false); }
-    if(state===ST.CODEWORD && e.key==="Enter"){ openOverlay("code","Enter codeword","6 letters or digits. Auto caps.",6,codeUI.value,true); }
-  });
+  // Movement
+  let moveTimer=0, moveDelay=8;
+  function canWalk(nx,ny){const t=tileAt(location.zone,nx,ny); return t===0||t===2||t===3||t===4||t===5;}
+  function goalText(){if(!flags.boss1) return "Beat Alley Cat King"; if(!flags.boss2) return "Beat Goose of Doom"; if(!flags.boss3) return "Win the Dog Show"; return "Enjoy the day";}
 
-  // Tap boxes to open overlay on mobile
-  canvas.addEventListener("click",()=>{
-    if(state===ST.NAME && !msgOpen){ openOverlay("name","Enter your name","Use letters and digits. Max 8.",8,nameUI.buffer,false); }
-    else if(state===ST.SIDEKICK && !msgOpen){ openOverlay("sidekick","Enter your sidekick's name","Use letters and digits. Max 8.",8,sidekickUI.buffer,false); }
-    else if(state===ST.CODEWORD){ openOverlay("code","Enter codeword","6 letters or digits. Auto caps.",6,codeUI.value,true); }
-  });
+  // Save minimal
+  const SAVE_KEY="pets_quest_dx_mobile_v1";
+  function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify({player,flags,coins,location,inventory,equipment}));}catch{}}
+  function load(){try{const s=localStorage.getItem(SAVE_KEY); if(!s) return false; const d=JSON.parse(s); Object.assign(player,d.player||{}); flags=d.flags||flags; coins=d.coins??coins; location=d.location||location; inventory=d.inventory||inventory; equipment=d.equipment||equipment; return true;}catch{return false;}}
+  load();
 
-  // ===== Main loop
+  // Intro tip once
+  if(!localStorage.getItem("pets_tip_shown")){ say(["Welcome. Move with D pad. Menu with Menu button.","Buy accessories at the boutique. Clear bosses to advance."]); localStorage.setItem("pets_tip_shown","1"); }
+
+  // Main loop
+  let frame=0;
+  function update(){
+    if(mode==="WORLD"){
+      if(!msgOpen){
+        moveTimer--; if(moveTimer<=0){
+          let dx=0,dy=0; if(press.LEFT) dx=-1; else if(press.RIGHT) dx=1; if(press.UP) dy=-1; else if(press.DOWN) dy=1;
+          if(dx||dy){
+            const nx=location.x+dx, ny=location.y+dy;
+            if(canWalk(nx,ny)){
+              location.x=nx; location.y=ny; moveTimer=moveDelay;
+              const t=tileAt(location.zone,nx,ny);
+              if(t===4) openShop();
+              if(t===5){
+                if(location.zone===0 && !flags.boss1){ lastEnemy=3; startBattle(3,true); }
+                else if(location.zone===1 && !flags.boss2){ lastEnemy=4; startBattle(4,true); }
+                else if(location.zone===2 && !flags.boss3){ lastEnemy=5; startBattle(5,true); }
+                else say("Gate already cleared.");
+              }
+              if(t===2 && Math.random()<0.05){ lastEnemy=location.zone===0?1:2; startBattle(lastEnemy,false); }
+              if(t===3) moveTimer+=4;
+            } else { AudioSys.beep(120,.04,"square",.15); moveTimer=6; }
+          }
+        }
+      }
+      if(tap.START){ mode="MENU"; menuCursor=0; }
+    }
+    else if(mode==="MENU"){
+      if(tap.DOWN) menuCursor=(menuCursor+1)%MENU.length;
+      if(tap.UP) menuCursor=(menuCursor+MENU.length-1)%MENU.length;
+      if(tap.B) mode="WORLD";
+      if(tap.A){
+        const m=MENU[menuCursor];
+        if(m==="Items"){ say(inventory.length?("Inventory: "+inventory.map(i=>`${i.name} x${i.qty}`).join(", ")):"Inventory empty."); }
+        else if(m==="Equipment"){ mode="EQUIP"; equipCursor=0; say("Choose a slot to equip."); }
+        else if(m==="Quests"){ const q=[]; if(!flags.boss1) q.push("Beat Alley Cat King."); else if(!flags.boss2) q.push("Beat Goose of Doom."); else if(!flags.boss3) q.push("Win the Dog Show."); else q.push("All done."); say("Quests: "+q.join(" ")); }
+        else if(m==="Map"){ say("Zones: Neighbourhood, City Park, Dog Show Hall."); }
+        else if(m==="Options"){ options.muted=!options.muted; if(options.muted) AudioSys.musicStop(); else AudioSys.musicStart("world"); save(); say("Sound "+(options.muted?"off":"on")+"."); }
+        else if(m==="Quick Skip"){ mode="SKIP"; skipCursor=0; }
+        else if(m==="Save"){ save(); say("Saved."); }
+        else if(m==="Close"){ mode="WORLD"; }
+      }
+    }
+    else if(mode==="EQUIP"){
+      if(!msgOpen){
+        const choices=buildEquip();
+        if(tap.DOWN) equipCursor=(equipCursor+1)%choices.length;
+        if(tap.UP) equipCursor=(equipCursor+choices.length-1)%choices.length;
+        if(tap.B) mode="MENU";
+        if(tap.A){
+          const c=choices[equipCursor];
+          if(c.type==="equip"){ if(c.slot==="head") equipment.head=c.equipment; if(c.slot==="body") equipment.body=c.equipment; say("Equipped "+c.equipment.name+"."); save(); }
+          if(c.type==="unequip"){ if(c.slot==="head") equipment.head=null; if(c.slot==="body") equipment.body=null; say("Removed equipment."); save(); }
+        }
+      }
+    }
+    else if(mode==="SKIP"){
+      if(tap.DOWN) skipCursor=(skipCursor+1)%skipOptions.length;
+      if(tap.UP) skipCursor=(skipCursor+skipOptions.length-1)%skipOptions.length;
+      if(tap.B) mode="MENU";
+      if(tap.A){ const act=skipOptions[skipCursor].act; act(); }
+    }
+    else if(mode==="SHOP"){
+      if(!msgOpen){
+        if(tap.DOWN) shopCursor=(shopCursor+1)%accessories.length;
+        if(tap.UP) shopCursor=(shopCursor+accessories.length-1)%accessories.length;
+        if(tap.A){ const it=accessories[shopCursor]; if(coins<it.price) say("Not enough coins."); else { coins-=it.price; inventory.push({id:"ACC_"+it.id,name:it.name,qty:1,equipment:it}); AudioSys.beep(880,.08,"triangle",.25); say("Purchased "+it.name+"."); save();}}
+        if(tap.B) mode="WORLD";
+      }
+    }
+    else if(mode==="BATTLE"){
+      if(!msgOpen){
+        if(battle.turn==="PLAYER"){
+          if(tap.LEFT){ battle.cursor=(battle.cursor+3)%4; }
+          if(tap.RIGHT){ battle.cursor=(battle.cursor+1)%4; }
+          if(tap.A){
+            if(battle.cursor===0){ const d=dmg(player.atk+(equipment.head?.atk||0)+(equipment.body?.atk||0),battle.enemy.def); battle.enemy.hp=Math.max(0,battle.enemy.hp-d); battle.log.push("You attack for "+d+"."); AudioSys.beep(220,.06,"square",.25); battle.turn="ENEMY"; }
+            else if(battle.cursor===1){ const d=dmg(player.atk+2,battle.enemy.def); battle.enemy.hp=Math.max(0,battle.enemy.hp-d); battle.log.push(`${player.sidekick} barks. ${d} damage.`); AudioSys.beep(520,.08,"square",.25); battle.turn="ENEMY"; }
+            else if(battle.cursor===2){ if(useSnack()) battle.turn="ENEMY"; }
+            else if(battle.cursor===3){ if(battle.canFlee && Math.random()<0.7){ battle.log.push("You flee."); mode="WORLD"; AudioSys.musicStart("world"); return; } else battle.log.push(battle.canFlee?"Failed to flee.":"Cannot flee."); }
+          }
+        } else {
+          if(frame%24===0){ const d=dmg(battle.enemy.atk,player.def+(equipment.head?.def||0)+(equipment.body?.def||0)); player.hp=Math.max(0,player.hp-d); battle.log.push(`${battle.enemy.name} hits for ${d}.`); AudioSys.beep(140,.1,"square",.25); battle.turn="PLAYER"; }
+        }
+      }
+      if(battle.enemy.hp<=0){
+        const id=battle.enemy.id; mode="WORLD"; endBattle(true);
+        if(id===3){ flags.boss1=true; location.zone=1; Object.assign(location,ZONES[1].start); say(["Alley clear. Head to the City Park."]); }
+        if(id===4){ flags.boss2=true; location.zone=2; Object.assign(location,ZONES[2].start); say(["Great work. Off to the Dog Show Hall."]); }
+        if(id===5){ flags.boss3=true; say(["You won the show with a sausage dog. Obviously."]); }
+        save();
+      }
+      if(player.hp<=0){
+        battle.log.push("You fainted. Back to last area."); AudioSys.beep(100,.3,"square",.25);
+        player.hp=Math.ceil(player.maxHP*0.6);
+        if(flags.boss2){location.zone=2; Object.assign(location,ZONES[2].start);} else if(flags.boss1){location.zone=1; Object.assign(location,ZONES[1].start);} else {location.zone=0; Object.assign(location,ZONES[0].start);}
+        mode="WORLD"; AudioSys.musicStart("world");
+      }
+    }
+
+    if(tap.A && msgOpen) advance();
+    clearTaps();
+    frame++;
+  }
+
+  function draw(){
+    fill(0,0,CANVAS_W,CANVAS_H,PALETTE.bg);
+    if(mode==="WORLD"||mode==="MENU"||mode==="EQUIP"||mode==="SKIP"||mode==="SHOP"){
+      drawZone(location.zone); const ts=ZONES[location.zone].tileSize; const px=location.x*ts, py=location.y*ts-2; drawHero(px,py); drawSidekick(px-14,py+4);
+      fill(4,4,150,24,PALETTE.ui); ctx.strokeStyle="#2a3350"; ctx.strokeRect(4.5,4.5,149,23);
+      text(8,6,`${player.name}  Lv ${player.level}`,PALETTE.text,10);
+      text(8,16,`HP ${player.hp}/${player.maxHP}  Coins ${coins}`,PALETTE.accent3,10);
+      fill(CANVAS_W-102,4,98,24,PALETTE.ui); ctx.strokeRect(CANVAS_W-101.5,4.5,97,23);
+      text(CANVAS_W-98,6,`Zone: ${ZONES[location.zone].name}`,PALETTE.sub,9);
+      text(CANVAS_W-98,15,`Goal: ${goalText()}`,PALETTE.accent,9);
+    }
+    if(mode==="MENU"){
+      ctx.fillStyle="rgba(0,0,0,.5)"; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+      fill(50,26,220,128,PALETTE.ui); text(60,30,"Menu",PALETTE.accent2,12);
+      for(let i=0;i<MENU.length;i++){const sel=i===menuCursor; text(64,46+i*12,(sel?"> ":"  ")+MENU[i],sel?PALETTE.accent:PALETTE.text,10);}
+      text(60,152,"A Select  B Close",PALETTE.sub,10);
+    }
+    if(mode==="EQUIP"){
+      ctx.fillStyle="rgba(0,0,0,.5)"; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+      fill(30,20,260,140,PALETTE.ui); text(36,24,"Equipment",PALETTE.accent2,12);
+      const choices=buildEquip();
+      for(let i=0;i<choices.length;i++){const c=choices[i]; const label=c.type==="equip"?"Equip "+c.name:c.name; const sel=i===equipCursor; text(40,40+i*12,(sel?"> ":"  ")+label,sel?PALETTE.accent:PALETTE.text,10);}
+      text(36,152,`Head: ${equipment.head?equipment.head.name:"None"}  Body: ${equipment.body?equipment.body.name:"None"}`,PALETTE.sub,9);
+    }
+    if(mode==="SKIP"){
+      ctx.fillStyle="rgba(0,0,0,.5)"; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+      fill(40,22,240,140,PALETTE.ui); text(48,26,"Quick Skip",PALETTE.accent2,12);
+      for(let i=0;i<skipOptions.length;i++){const sel=i===skipCursor; text(52,44+i*14,(sel?"> ":"  ")+skipOptions[i].label,sel?PALETTE.accent:PALETTE.text,10);}
+      text(48,152,"A Apply  B Back",PALETTE.sub,10);
+    }
+    if(mode==="SHOP"){
+      ctx.fillStyle="rgba(0,0,0,.45)"; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
+      fill(26,18,268,144,PALETTE.ui); text(32,20,"Pet Boutique",PALETTE.accent2,12); text(200,20,`Coins ${coins}`,PALETTE.accent3,10);
+      for(let i=0;i<accessories.length;i++){const a=accessories[i];const sel=i===shopCursor; const y=36+i*18; text(36,y,(sel?"> ":"  ")+a.name,sel?PALETTE.accent:PALETTE.text,10); text(190,y,`${a.price}`,PALETTE.sub,10);}
+      text(32,154,"A Buy  B Close  Menu Menu",PALETTE.sub,10);
+    }
+    if(mode==="BATTLE"){
+      fill(0,0,CANVAS_W,CANVAS_H,"#1b0f1b"); fill(10,10,300,90,"#2b1a38"); text(16,12,`Vs ${battle.enemy.name}`,PALETTE.accent2,12);
+      drawEnemy(200,30,battle.enemy.id);
+      fill(10,104,300,24,PALETTE.ui); text(14,108,`${player.name} HP ${player.hp}/${player.maxHP}`,PALETTE.text,10); text(200,108,`Coins ${coins}`,PALETTE.accent3,10);
+      fill(10,132,300,40,PALETTE.ui);
+      const opts=["Attack","Bark","Snack","Flee"]; for(let i=0;i<4;i++){const x=16+i*70; const sel=battle.cursor===i; text(x,138,(sel?"> ":"  ")+opts[i],sel?PALETTE.accent:PALETTE.text,12);}
+      const l1=battle.log[battle.log.length-2]||"", l2=battle.log[battle.log.length-1]||""; text(16,72,l1,PALETTE.sub,10); text(16,84,l2,PALETTE.text,10);
+    }
+    drawMsg();
+  }
+
+  // Skip options
+  let skipCursor=0;
+  const skipOptions=[
+    {label:"Go to City Park", act:()=>{flags.boss1=true; location.zone=1; Object.assign(location,ZONES[1].start); mode="WORLD"; say("Skipped to City Park."); save();}},
+    {label:"Go to Dog Show Hall", act:()=>{flags.boss1=true; flags.boss2=true; location.zone=2; Object.assign(location,ZONES[2].start); mode="WORLD"; say("Skipped to Dog Show Hall."); save();}},
+    {label:"Win final boss", act:()=>{flags.boss1=true; flags.boss2=true; flags.boss3=true; mode="WORLD"; say("You won the show. Sausage dogs forever."); save();}},
+    {label:"Give 50 coins", act:()=>{coins+=50; mode="WORLD"; say("Added 50 coins."); save();}}
+  ];
+
+  // Enemy drawings
+  function drawEnemy(x,y,id){
+    if(id===3){fill(x,y+8,34,12,"#555"); fill(x+12,y+4,10,4,"#ffdd55");}
+    else if(id===4){fill(x+6,y+10,28,10,"#ddd"); fill(x+28,y+8,6,3,"#ffa500");}
+    else if(id===5){fill(x+10,y+6,20,18,"#222"); fill(x+14,y+10,12,8,"#eee");}
+    else if(id===1){fill(x,y+10,30,8,"#444"); fill(x+26,y+6,6,6,"#444");}
+    else if(id===2){fill(x+4,y+12,26,10,"#9aa"); fill(x+20,y+8,6,6,"#ccd");}
+  }
+
+  // Frame loop
   function loop(){ update(); draw(); requestAnimationFrame(loop); }
-  // Load or reset, then start
-  if(!load()) reset();
-  if(!player.name) state=ST.TITLE; else { state=ST.WORLD; AudioSys.musicStart("world"); }
   requestAnimationFrame(loop);
 
-  // ===== Globals for quick testing
-  window.petsQuest={codeFromStage,stageFromCode,reset,save,load};
+  // Hook buttons labelled Menu and Quick
+  document.querySelectorAll('[data-press="START"]').forEach(el=>el.addEventListener("click",()=>{tap.START=true;}));
+  document.querySelectorAll('[data-press="SELECT"]').forEach(el=>el.addEventListener("click",()=>{
+    // Quick: toggle mute or open skip depending on context
+    if(mode==="WORLD"){ options.muted=!options.muted; if(options.muted) AudioSys.musicStop(); else AudioSys.musicStart("world"); } else if(mode==="MENU"){ mode="SKIP"; skipCursor=0; }
+  }));
+
+  // Helper for enemies start
+  function drawSidekick(px,py){fill(px,py+8,12,4,"#6b3b16"); fill(px+10,py+6,3,3,"#6b3b16"); fill(px+1,py+12,3,2,"#6b3b16"); fill(px+8,py+12,3,2,"#6b3b16"); fill(px+11,py+7,1,1,"#000");}
 
 })();
 </script>
