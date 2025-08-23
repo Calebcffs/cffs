@@ -1,434 +1,1001 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
-<meta charset="utf-8">
-<title>Pets Quest DX — Mobile First</title>
-<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-<style>
-  :root{
-    --bg:#0b0f19;
-    --bezel:#161b2a;
-    --screen:#0a0e14;
-    --ui:#12182a;
-    --panel:#0f1426;
-    --grid:#2a3350;
-    --text:#eaf2ff;
-    --sub:#a9baf5;
-    --accent:#74ff74;
-    --accent2:#6cf;
-    --accent3:#ffdd55;
-    --pad:#0d1322;
-    --btn:#1a2136;
-    --btnhi:#232b44;
-  }
-  html,body{height:100%;margin:0;background:linear-gradient(180deg,var(--bg),#0a0d16);color:var(--text);font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;overscroll-behavior:none;touch-action:manipulation}
-  *{-webkit-tap-highlight-color:transparent}
-  .wrap{min-height:100%;display:flex;align-items:center;justify-content:center;padding:10px}
-  .shell{background:radial-gradient(120% 90% at 50% 20%,#24304a,#151a28 60%,#0a0e18 100%);
-    border:2px solid #2a3046;border-radius:24px;box-shadow:0 18px 40px rgba(0,0,0,.6),inset 0 0 0 4px #0f1320,inset 0 0 40px rgba(0,0,0,.5);
-    width:min(98vw,780px);max-width:780px;padding:12px 12px 16px}
-  .bezel{background:linear-gradient(180deg,var(--bezel),#111626);border-radius:18px;padding:10px;border:1px solid #384060;box-shadow:inset 0 0 24px rgba(0,0,0,.5)}
-  .header{display:flex;justify-content:space-between;align-items:center;margin:0 4px 6px 4px;color:var(--sub);font-size:12px;letter-spacing:.06em}
-  .power{width:10px;height:10px;border-radius:50%;background:#2a2;box-shadow:0 0 8px #2a2;display:inline-block;margin-right:6px}
-  canvas{display:block;width:100%;height:auto;background:var(--screen);border-radius:10px;image-rendering:pixelated;image-rendering:crisp-edges;border:1px solid #0c0f1a;box-shadow:inset 0 0 32px rgba(0,0,0,.7)}
-  .brand{text-align:center;margin:8px 0 6px 0;font-weight:700;letter-spacing:.08em;color:#9ad3ff;text-shadow:0 0 8px rgba(110,200,255,.35);font-size:14px}
-  .controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px;user-select:none;-webkit-user-select:none}
-  .pad,.ab{background:linear-gradient(180deg,var(--pad),#090d17);border-radius:14px;border:1px solid #2a3149;box-shadow:inset 0 0 22px rgba(0,0,0,.7),0 6px 14px rgba(0,0,0,.35);padding:10px}
-  .dgrid{display:grid;grid-template-columns:72px 72px 72px;gap:10px;justify-content:center;align-items:center}
-  .btn{width:72px;height:72px;background:linear-gradient(180deg,var(--btn),#0b0f1c);border-radius:14px;border:1px solid #39415f;box-shadow:inset 0 0 18px rgba(0,0,0,.6),0 4px 10px rgba(0,0,0,.35);display:flex;align-items:center;justify-content:center;color:#bfd1ff;font-weight:700;font-size:18px}
-  .btn:active{background:linear-gradient(180deg,var(--btnhi),#10162a);transform:translateY(1px)}
-  .btn.small{width:92px;height:46px;border-radius:10px;font-size:14px}
-  .abgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px;justify-items:center;align-items:center}
-  .mini{font-size:11px;color:var(--sub);text-align:center;margin-top:6px}
-  @media (max-width:480px){
-    .dgrid{grid-template-columns:64px 64px 64px}
-    .btn{width:64px;height:64px;font-size:16px;border-radius:12px}
-    .btn.small{width:84px}
-  }
-</style>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Edwin Hart - Author of Non-fiction</title>
+  <meta name="description" content="The official site of Edwin Hart - author of narrative non-fiction, essays, and reportage. Read the biography, browse works, and find upcoming events.">
+  <meta name="keywords" content="author, non-fiction, essays, biography, books, reportage, science writing, history writing">
+  <meta name="theme-color" content="#0f172a">
+  <meta property="og:title" content="Edwin Hart - Author of Non-fiction">
+  <meta property="og:description" content="Biography, works, extracts, and events">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://example.com">
+  <meta property="og:image" content="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' width='1200' height='630'><rect width='100%' height='100%' fill='%2322563b'/><text x='50%' y='50%' dominant-baseline='middle' text-anchor='middle' fill='white' font-size='64' font-family='Arial,Helvetica,sans-serif'>Edwin Hart</text></svg>">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml;utf8,<?xml version='1.0' encoding='UTF-8'?><svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' rx='12' ry='12' fill='%230f172a'/><text x='50%' y='54%' font-size='34' text-anchor='middle' fill='white' font-family='Arial,Helvetica,sans-serif'>EH</text></svg>">
+  <style>
+    :root {
+      --bg: #0b1020;
+      --panel: #0f172a;
+      --muted: #94a3b8;
+      --text: #e2e8f0;
+      --accent: #22c55e;
+      --accent-2: #38bdf8;
+      --border: #1f2a44;
+      --link: #a5b4fc;
+      --shadow: 0 10px 30px rgba(2, 6, 23, 0.45);
+      --radius: 14px;
+      --radius-sm: 10px;
+      --radius-xs: 8px;
+      --maxw: 1120px;
+      --focus: 0 0 0 3px rgba(56, 189, 248, 0.55);
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg: #f8fafc;
+        --panel: #ffffff;
+        --muted: #475569;
+        --text: #0f172a;
+        --accent: #16a34a;
+        --accent-2: #0284c7;
+        --border: #e2e8f0;
+        --link: #3730a3;
+        --shadow: 0 8px 22px rgba(15, 23, 42, 0.08);
+      }
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body {
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      background: radial-gradient(1200px 600px at 10% -10%, rgba(34, 197, 94, 0.08), transparent 60%), radial-gradient(1000px 600px at 120% 10%, rgba(56, 189, 248, 0.08), transparent 60%), var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      scroll-behavior: smooth;
+    }
+
+    a { color: var(--link); text-decoration: none; }
+    a:hover { text-decoration: underline; }
+
+    .container { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 20px; }
+
+    .skip-link {
+      position: absolute;
+      left: -9999px;
+      top: auto;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+    }
+    .skip-link:focus {
+      position: fixed;
+      left: 16px;
+      top: 16px;
+      width: auto;
+      height: auto;
+      padding: 10px 14px;
+      background: var(--panel);
+      color: var(--text);
+      border-radius: var(--radius-xs);
+      border: 1px solid var(--border);
+      box-shadow: var(--focus);
+      z-index: 1000;
+    }
+
+    header.site-header {
+      position: sticky;
+      top: 0;
+      z-index: 999;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: saturate(140%) blur(10px);
+      border-bottom: 1px solid var(--border);
+    }
+    @media (prefers-color-scheme: light) {
+      header.site-header { background: rgba(255, 255, 255, 0.7); }
+    }
+    .nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 14px 0;
+    }
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: 0.2px;
+      color: var(--text);
+    }
+    .brand-badge {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      box-shadow: 0 6px 20px rgba(34, 197, 94, 0.35);
+      font-weight: 900;
+    }
+    nav ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 18px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+    nav a {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      border: 1px solid transparent;
+    }
+    nav a:focus-visible { outline: none; box-shadow: var(--focus); }
+    nav a:hover { background: rgba(148, 163, 184, 0.14); text-decoration: none; }
+
+    .theme-toggle, .menu-toggle {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .menu-toggle { display: none; }
+    @media (max-width: 760px) {
+      .menu-toggle { display: inline-block; }
+      nav ul {
+        display: none;
+        width: 100%;
+        padding: 10px 0 0 0;
+      }
+      nav ul.open { display: grid; grid-template-columns: 1fr; gap: 8px; }
+      nav a { padding: 10px 12px; }
+    }
+
+    .hero {
+      padding: 56px 0 24px 0;
+    }
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 32px;
+      align-items: center;
+    }
+    @media (max-width: 960px) {
+      .hero-grid { grid-template-columns: 1fr; }
+    }
+    .panel {
+      background: linear-gradient(180deg, rgba(255,255,255,0.03), transparent 30%), var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .hero .panel { padding: 28px; }
+    .hero h1 {
+      margin: 0 0 10px 0;
+      font-size: clamp(28px, 3.2vw, 44px);
+      line-height: 1.15;
+      letter-spacing: 0.2px;
+    }
+    .hero p.lead {
+      margin: 0 0 14px 0;
+      font-size: clamp(16px, 1.6vw, 18px);
+      color: var(--muted);
+    }
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin: 12px 0 18px 0;
+    }
+    .badge {
+      font-size: 13px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(56, 189, 248, 0.08);
+      color: var(--text);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-top: 8px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      font-weight: 700;
+      letter-spacing: 0.2px;
+      text-decoration: none;
+      transition: transform 0.05s ease;
+      background: var(--panel);
+      color: var(--text);
+    }
+    .btn:hover { transform: translateY(-1px); text-decoration: none; }
+    .btn-primary { background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: white; border-color: transparent; }
+    .btn-ghost { background: transparent; }
+
+    .avatar-wrap {
+      display: grid;
+      place-items: center;
+      padding: 24px;
+    }
+    .avatar {
+      width: min(320px, 100%);
+      aspect-ratio: 1/1;
+      border-radius: 50%;
+      border: 8px solid rgba(56, 189, 248, 0.2);
+      overflow: hidden;
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.25), rgba(56, 189, 248, 0.25));
+      position: relative;
+      box-shadow: var(--shadow);
+    }
+    .avatar svg { width: 100%; height: 100%; display: block; }
+    .avatar .ring {
+      position: absolute;
+      inset: -8px;
+      border-radius: 50%;
+      border: 2px dashed rgba(148, 163, 184, 0.3);
+      pointer-events: none;
+    }
+
+    section { padding: 28px 0; }
+    section h2 {
+      margin: 0 0 16px 0;
+      font-size: clamp(22px, 2.4vw, 28px);
+    }
+    .split {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    @media (max-width: 900px) { .split { grid-template-columns: 1fr; } }
+    .prose {
+      font-size: 16px;
+      color: var(--text);
+    }
+    .prose p { margin: 0 0 12px 0; }
+    .key-facts {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    @media (max-width: 560px) { .key-facts { grid-template-columns: 1fr; } }
+    .fact {
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--panel);
+    }
+    .fact small { display: block; color: var(--muted); }
+    .fact strong { display: block; font-size: 18px; margin-top: 6px; }
+
+    .toolbar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+    .toolbar .search {
+      flex: 1 1 260px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel);
+    }
+    .toolbar input[type="search"] {
+      width: 100%;
+      border: none;
+      background: transparent;
+      color: var(--text);
+      outline: none;
+      font-size: 15px;
+    }
+    .chips { display: flex; gap: 8px; flex-wrap: wrap; }
+    .chip {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      padding: 8px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .chip[aria-pressed="true"] {
+      background: rgba(34, 197, 94, 0.18);
+      border-color: rgba(34, 197, 94, 0.4);
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+    }
+    @media (max-width: 980px) { .grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+    @media (max-width: 620px) { .grid { grid-template-columns: 1fr; } }
+
+    .card {
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      background: var(--panel);
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      transition: transform 0.06s ease;
+    }
+    .card:hover { transform: translateY(-2px); }
+    .cover {
+      width: 100%;
+      aspect-ratio: 3/4;
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.2), rgba(34, 197, 94, 0.2));
+      display: grid;
+      place-items: center;
+      border-bottom: 1px solid var(--border);
+    }
+    .cover svg { width: 60%; height: auto; opacity: 0.85; }
+    .card-body { padding: 12px; }
+    .card h3 { margin: 0 0 6px 0; font-size: 18px; }
+    .meta { display: flex; gap: 8px; flex-wrap: wrap; color: var(--muted); font-size: 13px; }
+    .summary { margin: 8px 0 12px 0; color: var(--text); }
+    .card-actions {
+      display: flex;
+      gap: 8px;
+      padding: 12px;
+      border-top: 1px solid var(--border);
+    }
+    .card-actions .btn { flex: 1; padding: 10px 12px; border-radius: 10px; font-weight: 700; }
+
+    .notice {
+      padding: 14px;
+      border: 1px dashed var(--border);
+      border-radius: var(--radius-sm);
+      color: var(--muted);
+      background: linear-gradient(0deg, rgba(148, 163, 184, 0.08), transparent 60%);
+    }
+
+    .timeline {
+      display: grid;
+      gap: 12px;
+    }
+    .event {
+      display: grid;
+      grid-template-columns: 140px 1fr;
+      gap: 12px;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--panel);
+    }
+    @media (max-width: 600px) { .event { grid-template-columns: 1fr; } }
+    .event strong { font-size: 15px; }
+    .event time { color: var(--muted); font-weight: 600; }
+
+    .newsletter {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr auto;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--panel);
+    }
+    @media (max-width: 560px) { .newsletter { grid-template-columns: 1fr; } }
+    .newsletter input[type="email"] {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px;
+      background: transparent;
+      color: var(--text);
+      outline: none;
+    }
+    .newsletter button { padding: 12px 16px; }
+
+    footer {
+      padding: 28px 0 36px 0;
+      border-top: 1px solid var(--border);
+      margin-top: 24px;
+    }
+    .footgrid {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 12px;
+      align-items: center;
+    }
+    @media (max-width: 720px) { .footgrid { grid-template-columns: 1fr; } }
+    .social { display: flex; gap: 10px; flex-wrap: wrap; }
+    .social a {
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: var(--panel);
+      text-decoration: none;
+    }
+
+    dialog.modal {
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0;
+      width: min(720px, 96vw);
+      background: var(--panel);
+      color: var(--text);
+      box-shadow: var(--shadow);
+    }
+    .modal header {
+      padding: 14px 16px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    .modal .content { padding: 16px; }
+    .modal .content p { margin: 0 0 12px 0; }
+    .modal .actions {
+      border-top: 1px solid var(--border);
+      padding: 12px 16px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+    .close-btn {
+      appearance: none;
+      border: 1px solid var(--border);
+      background: transparent;
+      color: var(--text);
+      border-radius: 10px;
+      padding: 8px 12px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .to-top {
+      position: fixed;
+      right: 16px;
+      bottom: 16px;
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 999px;
+      box-shadow: var(--shadow);
+      cursor: pointer;
+      display: none;
+      z-index: 998;
+    }
+    .to-top.show { display: inline-flex; }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+  </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="shell">
-    <div class="bezel">
-      <div class="header">
-        <div><span class="power"></span>Pets Quest DX</div>
-        <div>Battery <span id="pct">100%</span></div>
+  <a href="#main" class="skip-link">Skip to content</a>
+
+  <header class="site-header" role="banner">
+    <div class="container nav">
+      <a href="#top" class="brand" aria-label="Home">
+        <span class="brand-badge" aria-hidden="true">EH</span>
+        <span>Edwin Hart</span>
+      </a>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="primaryNav">Menu</button>
+      <nav aria-label="Primary">
+        <ul id="primaryNav">
+          <li><a href="#about">About</a></li>
+          <li><a href="#works">Works</a></li>
+          <li><a href="#events">Events</a></li>
+          <li><a href="#contact">Contact</a></li>
+          <li><button class="theme-toggle" id="themeToggle" type="button" aria-pressed="false">Toggle theme</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" tabindex="-1">
+    <section class="hero" id="top">
+      <div class="container hero-grid">
+        <div class="panel">
+          <h1>Edwin Hart</h1>
+          <p class="lead">Narrative non-fiction, long form reportage, and essays on science, society, and the sea.</p>
+          <div class="badge-row" aria-label="Highlights">
+            <span class="badge" title="Award shortlists">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l2.39 4.84L20 7.27l-3.9 3.8.92 5.36L12 14.77l-5.02 2.66.92-5.36L4 7.27l5.61-.43L12 2z"/></svg>
+              Shortlisted three times
+            </span>
+            <span class="badge" title="Languages">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M3 5h18v2H3V5zm0 6h10v2H3v-2zm0 6h18v2H3v-2z"/></svg>
+              Translated into 6 languages
+            </span>
+            <span class="badge" title="Bestseller">
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17 3H7a2 2 0 00-2 2v16l7-3 7 3V5a2 2 0 00-2-2z"/></svg>
+              Sunday Times bestseller
+            </span>
+          </div>
+          <div class="cta-row">
+            <a class="btn btn-primary" href="#works">
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 00-2 2v13a2 2 0 002 2h14v-2H5V5h14v4h2V5a2 2 0 00-2-2z"/><path d="M21 15l-5-5v3h-6v4h6v3l5-5z"/></svg>
+              Browse works
+            </a>
+            <a class="btn btn-ghost" href="#about">
+              <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 12a4 4 0 114-4 4 4 0 01-4 4zm0 2c-3.33 0-10 1.67-10 5v3h20v-3c0-3.33-6.67-5-10-5z"/></svg>
+              Read biography
+            </a>
+          </div>
+        </div>
+        <div class="avatar-wrap">
+          <div class="avatar" aria-label="Portrait of the author">
+            <svg role="img" aria-label="Placeholder portrait" viewBox="0 0 400 400" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+                  <stop offset="0" stop-color="#38bdf8" stop-opacity="0.7"/>
+                  <stop offset="1" stop-color="#22c55e" stop-opacity="0.7"/>
+                </linearGradient>
+              </defs>
+              <rect width="400" height="400" fill="url(#g)"/>
+              <circle cx="200" cy="160" r="80" fill="rgba(255,255,255,0.85)"/>
+              <rect x="80" y="230" width="240" height="130" rx="60" fill="rgba(255,255,255,0.85)"/>
+            </svg>
+            <span class="ring" aria-hidden="true"></span>
+          </div>
+        </div>
       </div>
-      <canvas id="screen" width="320" height="180" aria-label="Game screen"></canvas>
-      <div class="brand">Handheld Colour · 320×180 · High Contrast</div>
-      <div class="controls" id="controls">
-        <div class="pad">
-          <div class="dgrid">
-            <div></div>
-            <button class="btn" data-press="UP" aria-label="Up">▲</button>
-            <div></div>
-            <button class="btn" data-press="LEFT" aria-label="Left">◀</button>
-            <div></div>
-            <button class="btn" data-press="RIGHT" aria-label="Right">▶</button>
-            <div></div>
-            <button class="btn" data-press="DOWN" aria-label="Down">▼</button>
-            <div></div>
-          </div>
-          <div class="mini">Move with arrows or D pad</div>
+    </section>
+
+    <section id="about">
+      <div class="container split">
+        <div class="panel prose">
+          <h2>Biography</h2>
+          <p>Edwin Hart is a British writer of non-fiction whose work blends meticulous research with clear, humane storytelling. He trained as a marine biologist before turning to journalism and now writes about the edges where science, history, and everyday lives meet.</p>
+          <p>His essays have appeared in major magazines and his books have been adopted on courses in history of science and environmental policy. He has reported from coastal communities around the world and is currently developing a series on freshwater restoration in European cities.</p>
+          <p>This page uses placeholder text and images. Replace with your own material as needed.</p>
         </div>
-        <div class="ab">
-          <div class="abgrid">
-            <button class="btn" data-press="A" aria-label="A">A</button>
-            <button class="btn" data-press="B" aria-label="B">B</button>
-            <button class="btn small" data-press="START" aria-label="Start">Menu</button>
-            <button class="btn small" data-press="SELECT" aria-label="Select">Quick</button>
+        <div class="key-facts">
+          <div class="fact">
+            <small>Based in</small>
+            <strong>London, United Kingdom</strong>
           </div>
-          <div class="mini">Desktop keys: Z A, X B, Enter Menu, Shift Quick</div>
+          <div class="fact">
+            <small>Specialisms</small>
+            <strong>Science writing, history, environment</strong>
+          </div>
+          <div class="fact">
+            <small>Awards</small>
+            <strong>Orwell Prize longlist, Royal Society shortlist</strong>
+          </div>
+          <div class="fact">
+            <small>Representation</small>
+            <strong>Green &amp; Teal Literary</strong>
+          </div>
         </div>
+      </div>
+    </section>
+
+    <section id="works">
+      <div class="container">
+        <h2>Non-fiction works</h2>
+        <div class="toolbar">
+          <div class="search" role="search">
+            <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M10 2a8 8 0 105.29 14.29l4.7 4.7 1.42-1.42-4.7-4.7A8 8 0 0010 2zm0 2a6 6 0 110 12A6 6 0 0110 4z"/></svg>
+            <input id="searchInput" type="search" placeholder="Search title or topic" aria-label="Search works by title or topic">
+          </div>
+          <div class="chips" role="toolbar" aria-label="Filter by category">
+            <button class="chip" data-filter="All" aria-pressed="true">All</button>
+            <button class="chip" data-filter="Science" aria-pressed="false">Science</button>
+            <button class="chip" data-filter="History" aria-pressed="false">History</button>
+            <button class="chip" data-filter="Society" aria-pressed="false">Society</button>
+            <button class="chip" data-filter="Essays" aria-pressed="false">Essays</button>
+          </div>
+        </div>
+        <div id="worksGrid" class="grid" aria-live="polite"></div>
+        <p id="emptyState" class="notice" hidden>No results. Try a different filter or search term.</p>
+        <p class="notice">Covers, blurbs, and links are placeholders. Replace with final assets and vendor links.</p>
+      </div>
+    </section>
+
+    <section id="events">
+      <div class="container">
+        <h2>Events and news</h2>
+        <div class="timeline">
+          <div class="event">
+            <time datetime="2025-10-14">14 Oct 2025</time>
+            <div>
+              <strong>Keynote - The hidden rivers beneath cities</strong>
+              <p class="summary">A public talk on urban streams and daylighting projects. Venue to be announced. Placeholder details - update with confirmed information.</p>
+            </div>
+          </div>
+          <div class="event">
+            <time datetime="2025-11-02">2 Nov 2025</time>
+            <div>
+              <strong>Festival panel - Writing clear science for all readers</strong>
+              <p class="summary">Discussion with journalists and researchers on making complex research readable without losing rigour.</p>
+            </div>
+          </div>
+          <div class="event">
+            <time datetime="2026-02-12">12 Feb 2026</time>
+            <div>
+              <strong>Workshop - Building a book from field notes</strong>
+              <p class="summary">Hands-on session for early career writers. Seats limited. Placeholder text - add booking link when ready.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="contact">
+      <div class="container split">
+        <div class="panel prose">
+          <h2>Contact</h2>
+          <p>For rights and speaking invitations, contact Green &amp; Teal Literary. For school or university visits, send a brief outline of your event and preferred dates.</p>
+          <ul>
+            <li>Agent: <a href="mailto:rights@example.com">rights@example.com</a></li>
+            <li>General: <a href="mailto:hello@example.com">hello@example.com</a></li>
+            <li>Press kit: <a href="#" rel="noopener">Download PDF</a> (placeholder link)</li>
+          </ul>
+        </div>
+        <form class="newsletter" id="newsletterForm" aria-labelledby="nlLabel">
+          <label id="nlLabel" for="nlEmail">Join the newsletter for new essays and event dates</label>
+          <input id="nlEmail" name="email" type="email" placeholder="you@example.com" autocomplete="email" required>
+          <button type="submit" class="btn btn-primary">Subscribe</button>
+          <p id="nlMsg" class="notice" style="grid-column: 1 / -1; margin: 0;" hidden>Thank you - check your inbox to confirm.</p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer role="contentinfo">
+    <div class="container footgrid">
+      <small>&copy; <span id="year"></span> Edwin Hart. All rights reserved.</small>
+      <div class="social" aria-label="Social links">
+        <a href="#" aria-label="Follow on Bluesky">Bluesky</a>
+        <a href="#" aria-label="Follow on Mastodon">Mastodon</a>
+        <a href="#" aria-label="View on GitHub">GitHub</a>
+        <a href="#" aria-label="Subscribe via RSS">RSS</a>
       </div>
     </div>
-  </div>
-</div>
+  </footer>
 
-<script>
-(() => {
-  // ===== mobile first boot: no typing, jump straight to world =====
-  const CANVAS_W=320, CANVAS_H=180;
-  const PALETTE={bg:"#0a0e14",ui:"#12182a",panel:"#0f1426",grid:"#2a3350",text:"#eaf2ff",sub:"#a9baf5",accent:"#74ff74",accent2:"#6cf",accent3:"#ffdd55"};
-  const canvas=document.getElementById("screen"); const ctx=canvas.getContext("2d",{alpha:false}); ctx.imageSmoothingEnabled=false;
+  <button id="toTop" class="to-top" aria-label="Back to top">
+    <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 4l-7 7h4v9h6v-9h4l-7-7z"/></svg>
+    <span class="sr-only">Top</span>
+  </button>
 
-  // Input
-  const press={LEFT:false,RIGHT:false,UP:false,DOWN:false,A:false,B:false,START:false,SELECT:false};
-  const tap={LEFT:false,RIGHT:false,UP:false,DOWN:false,A:false,B:false,START:false,SELECT:false};
-  function clearTaps(){for(const k in tap) tap[k]=false;}
-  const KEYS={LEFT:["ArrowLeft","a","A"],RIGHT:["ArrowRight","d","D"],UP:["ArrowUp","w","W"],DOWN:["ArrowDown","s","S"],A:["z","Z","k","K"," "],B:["x","X","j","J","Backspace"],START:["Enter"],SELECT:["Shift","Tab"]};
-  function mapKey(k){for(const P in KEYS) if(KEYS[P].includes(k)) return P; return null;}
-  addEventListener("keydown",e=>{const m=mapKey(e.key);if(m){if(!press[m]) tap[m]=true;press[m]=true;resumeAudio();e.preventDefault();}});
-  addEventListener("keyup",e=>{const m=mapKey(e.key);if(m){press[m]=false;e.preventDefault();}});
+  <dialog class="modal" id="extractModal" aria-labelledby="extractTitle">
+    <header>
+      <h3 id="extractTitle" style="margin:0;font-size:18px;">Title</h3>
+      <button class="close-btn" id="closeModal" type="button">Close</button>
+    </header>
+    <div class="content" id="extractContent">
+      <p>Loading extract...</p>
+    </div>
+    <div class="actions">
+      <button class="close-btn" id="closeModal2" type="button">Close</button>
+    </div>
+  </dialog>
 
-  const controls=document.getElementById("controls");
-  controls.addEventListener("touchstart",e=>{e.preventDefault();resumeAudio();},{passive:false});
-  document.body.addEventListener("touchmove",e=>{if(e.target.closest(".controls")) e.preventDefault();},{passive:false});
-  controls.querySelectorAll("[data-press]").forEach(btn=>{
-    const k=btn.getAttribute("data-press");
-    const set=v=>{press[k]=v;if(v) tap[k]=true;};
-    btn.addEventListener("touchstart",()=>set(true));
-    btn.addEventListener("touchend",()=>set(false));
-    btn.addEventListener("touchcancel",()=>set(false));
-    btn.addEventListener("mousedown",()=>{set(true);resumeAudio();});
-    btn.addEventListener("mouseup",()=>set(false));
-    btn.addEventListener("mouseleave",()=>set(false));
-    btn.addEventListener("click",e=>e.preventDefault());
-  });
+  <script>
+    (function () {
+      const state = {
+        filter: 'All',
+        q: '',
+        prefersDark: window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+      };
 
-  // Battery toy
-  const pctEl=document.getElementById("pct"); setInterval(()=>{pctEl.textContent=(92+Math.floor(Math.random()*9))+"%";},3000);
-
-  // Audio with one tap unlock
-  const AudioSys=(()=>{
-    const C=window.AudioContext||window.webkitAudioContext; const ac=new C();
-    const master=ac.createGain(); master.gain.value=.35; master.connect(ac.destination);
-    let enabled=false, musicOn=false, nodes=[];
-    function resume(){ if(ac.state==="suspended") ac.resume(); enabled=true; }
-    function beep(freq=440,dur=.1,type="square",vol=.2){ if(!enabled||options.muted) return; const o=ac.createOscillator(), g=ac.createGain(); o.type=type;o.frequency.value=freq; g.gain.value=vol; o.connect(g); g.connect(master); const t=ac.currentTime; g.gain.setValueAtTime(0,t); g.gain.linearRampToValueAtTime(vol,t+.01); g.gain.exponentialRampToValueAtTime(.0001,t+dur); o.start(t); o.stop(t+dur+.05); }
-    function musicStart(mode="world"){ if(!enabled||options.muted) return; musicStop(); musicOn=true;
-      const tempo=128, beat=60/tempo, t0=ac.currentTime+.05, bars=8;
-      const lead=ac.createOscillator(); lead.type="square"; lead.start(t0);
-      const bass=ac.createOscillator(); bass.type="triangle"; bass.start(t0);
-      function note(o,when,midi,d=.3,v=.12){const g=ac.createGain();g.gain.value=v;o.connect(g);g.connect(master);o.frequency.setValueAtTime(440*Math.pow(2,(midi-69)/12),when);g.gain.setValueAtTime(.0001,when);g.gain.linearRampToValueAtTime(v,when+.01);g.gain.exponentialRampToValueAtTime(.0001,when+d);}
-      const L=mode==="battle"?[72,79,76,74,72,67,69,71]:[72,76,79,76,72,67,71,74];
-      const B=mode==="battle"?[36,36,41,41,38,38,43,43]:[36,36,41,41,33,33,38,38];
-      const steps=16;
-      for(let i=0;i<bars*steps;i++){const t=t0+i*beat*.5, k=i%L.length; note(lead,t,L[k],.26,.1); if(i%2===0) note(bass,t,B[(k>>1)%B.length]-12,.42,.08);}
-      const stop=t0+bars*steps*beat*.5+.2; lead.stop(stop); bass.stop(stop); nodes=[lead,bass]; setTimeout(()=>{ if(musicOn) musicStart(mode); }, (stop-ac.currentTime)*1000);
-    }
-    function musicStop(){ musicOn=false; try{nodes.forEach(n=>n.disconnect());}catch{} nodes=[]; }
-    return {resume:resume,beep:beep,musicStart:musicStart,musicStop:musicStop};
-  })();
-  function resumeAudio(){ AudioSys.resume(); if(!options.muted && state==="WORLD") AudioSys.musicStart("world"); }
-  document.body.addEventListener("touchstart",()=>resumeAudio(),{once:true,passive:true});
-  document.body.addEventListener("mousedown",()=>resumeAudio(),{once:true,passive:true});
-
-  // Basic draw helpers
-  function fill(x,y,w,h,c){ctx.fillStyle=c;ctx.fillRect(x,y,w,h);}
-  function text(x,y,t,c=PALETTE.text,sz=10){ctx.fillStyle=c;ctx.font=`${sz}px monospace`;ctx.textBaseline="top";ctx.fillText(t,x,y);}
-
-  // Game state
-  const options={muted:false};
-  const player={name:"Hero",maxHP:28,hp:28,atk:6,def:2,level:1,xp:0,sidekick:"Sizzle"};
-  let state="WORLD";
-  let coins=20;
-  let flags={metSidekick:true,boss1:false,boss2:false,boss3:false};
-  let location={zone:0,x:8,y:10};
-  let inventory=[{id:"SNACK",name:"Dog Snack",qty:3,desc:"Heals 10 HP"}];
-  let equipment={head:null,body:null};
-
-  // Zones
-  // 0 pavement, 1 wall, 2 grass, 3 water, 4 shop, 5 boss
-  const ZONES=[
-    {name:"Neighbourhood",tileSize:16,tilesW:20,tilesH:14,data:genNeighbourhood(),start:{x:8,y:10},shop:{x:4,y:4},boss:{x:18,y:2,id:3}},
-    {name:"City Park",tileSize:16,tilesW:20,tilesH:14,data:genPark(),start:{x:2,y:12},shop:{x:10,y:12},boss:{x:18,y:2,id:4}},
-    {name:"Dog Show Hall",tileSize:16,tilesW:20,tilesH:14,data:genShow(),start:{x:2,y:12},shop:{x:6,y:12},boss:{x:18,y:2,id:5}}
-  ];
-  function genNeighbourhood(){const w=20,h=14,T=Array(h).fill(0).map(()=>Array(w).fill(2));for(let y=0;y<h;y++)for(let x=0;x<w;x++){if(y===0||y===h-1||x===0||x===w-1)T[y][x]=1;}for(let x=2;x<18;x++)T[8][x]=0;for(let y=3;y<7;y++){T[y][4]=1;T[y][15]=1;}T[4][4]=4;for(let x=2;x<19;x++)T[2][x]=0;T[2][18]=5;return T;}
-  function genPark(){const w=20,h=14,T=Array(h).fill(0).map(()=>Array(w).fill(2));for(let y=0;y<h;y++)for(let x=0;x<w;x++){if(y===0||y===h-1||x===0||x===w-1)T[y][x]=1;}for(let y=5;y<9;y++)for(let x=6;x<13;x++)T[y][x]=3;for(let x=2;x<18;x++)T[12][x]=0;T[12][10]=4;T[2][18]=5;return T;}
-  function genShow(){const w=20,h=14,T=Array(h).fill(0).map(()=>Array(w).fill(0));for(let y=0;y<h;y++)for(let x=0;x<w;x++){if(y===0||y===h-1||x===0||x===w-1)T[y][x]=1;}for(let x=2;x<18;x++)T[12][x]=0;T[12][6]=4;T[2][18]=5;for(let x=3;x<17;x++)T[6][x]=1;return T;}
-  function tileAt(z,x,y){const Z=ZONES[z]; if(x<0||y<0||x>=Z.tilesW||y>=Z.tilesH) return 1; return Z.data[y][x];}
-
-  // Draw world
-  function drawZone(z){const Z=ZONES[z], ts=Z.tileSize; for(let y=0;y<Z.tilesH;y++)for(let x=0;x<Z.tilesW;x++){const t=Z.data[y][x],px=x*ts,py=y*ts;
-    if(t===0){fill(px,py,ts,ts,"#1a2136");fill(px+ts-1,py,1,ts,"#0b1020");fill(px,py+ts-1,ts,1,"#0b1020");}
-    else if(t===1){fill(px,py,ts,ts,"#273252");fill(px+2,py+2,ts-4,ts-4,"#12182b");}
-    else if(t===2){fill(px,py,ts,ts,"#10351c");fill(px+ts-1,py,1,ts,"#0b2614");}
-    else if(t===3){fill(px,py,ts,ts,"#08324a");fill(px+1,py+1,ts-2,ts-2,"#0a4d70");}
-    else if(t===4){fill(px,py,ts,ts,"#2e1f49");fill(px+4,py+4,ts-8,ts-8,"#7840ff");}
-    else if(t===5){fill(px,py,ts,ts,"#3a1b1f");fill(px+4,py+4,ts-8,ts-8,"#ff3b3b");}
-  }
-    const S=Z.shop; if(S) { fill(S.x*ts+4,S.y*ts+2,8,6,"#6cf"); fill(S.x*ts+4,S.y*ts+8,8,4,"#123c55"); }
-    const B=Z.boss; if(B) { fill(B.x*ts+4,B.y*ts+2,8,8,"#ff6b6b"); }
-  }
-  function drawHero(px,py){const cSkin="#f2d6b4", cJacket=equipment.body?.colour||"#2a7fff", cHat=equipment.head?.colour||"#ff5964";
-    ctx.fillStyle="rgba(0,0,0,.35)"; ctx.beginPath(); ctx.ellipse(px+8,py+14,6,3,0,0,Math.PI*2); ctx.fill();
-    fill(px+5,py+10,3,5,"#20283d"); fill(px+10,py+10,3,5,"#20283d"); fill(px+4,py+6,10,6,cJacket);
-    fill(px+3,py+7,2,4,cJacket); fill(px+13,py+7,2,4,cJacket); fill(px+6,py+2,8,5,cSkin);
-    fill(px+7,py+4,1,1,"#111"); fill(px+11,py+4,1,1,"#111"); fill(px+5,py+1,10,2,cHat);
-    if(equipment.head&&equipment.head.id==="SHADES") fill(px+6,py+3,8,2,"#0b0b0b");
-    if(equipment.body&&equipment.body.id==="CAPE") fill(px+2,py+6,2,6,equipment.body.colour);
-  }
-  function drawSidekick(px,py){fill(px,py+8,12,4,"#6b3b16"); fill(px+10,py+6,3,3,"#6b3b16"); fill(px+1,py+12,3,2,"#6b3b16"); fill(px+8,py+12,3,2,"#6b3b16"); fill(px+11,py+7,1,1,"#000");}
-
-  // HUD and dialogues
-  let msgQ=[], msgIdx=0, msgOpen=false, onMsgDone=null;
-  function say(lines,cb=null){msgQ=Array.isArray(lines)?[...lines]:[String(lines)]; msgIdx=0; msgOpen=true; onMsgDone=cb;}
-  function advance(){ if(!msgOpen) return; const full=msgQ[0]; if(msgIdx<full.length){msgIdx=full.length;return;} msgQ.shift(); if(msgQ.length===0){msgOpen=false;msgIdx=0; if(onMsgDone){const f=onMsgDone;onMsgDone=null;f();}} else msgIdx=0; }
-  function drawMsg(){ if(!msgOpen) return; fill(6,CANVAS_H-60,CANVAS_W-12,54,PALETTE.panel); ctx.fillStyle=PALETTE.text; ctx.font="10px monospace"; ctx.textBaseline="top"; const t=msgQ[0].substring(0,msgIdx); wrap(12,CANVAS_H-60+6,t,296); if(msgIdx<(msgQ[0]||"").length) msgIdx+=3; else text(CANVAS_W-48,CANVAS_H-18,"A:Next",PALETTE.sub,8); }
-  function wrap(x,y,t,maxW){const words=t.split(" "); let line="",yy=y; for(let i=0;i<words.length;i++){const test=line+words[i]+" "; if(ctx.measureText(test).width>maxW&&i>0){ctx.fillText(line,x,yy); line=words[i]+" "; yy+=12;} else line=test;} ctx.fillText(line,x,yy);}
-
-  // Shop and equipment
-  const accessories=[{id:"BANDANA",slot:"head",name:"Red Bandana",price:15,atk:+1,def:0,colour:"#ff5964"},
-                     {id:"CAP",slot:"head",name:"Blue Cap",price:20,atk:0,def:+1,colour:"#3aa0ff"},
-                     {id:"SHADES",slot:"head",name:"Shades",price:25,atk:+1,def:+1,colour:"#111"},
-                     {id:"CAPE",slot:"body",name:"Cape",price:30,atk:+2,def:0,colour:"#ffd166"},
-                     {id:"RAINCOAT",slot:"body",name:"Raincoat",price:30,atk:0,def:+2,colour:"#74ff74"}];
-  let shopCursor=0;
-  function openShop(){ mode="SHOP"; shopCursor=0; say(["Welcome to the Pet Boutique.","Accessories are stylish and useful."]); }
-
-  // Simple battle
-  const ENEMIES={1:{name:"Alley Cat",maxHP:20,atk:5,def:1,reward:{xp:8,coins:8}},
-                 2:{name:"Pigeon Mob",maxHP:24,atk:6,def:2,reward:{xp:10,coins:10}},
-                 3:{name:"Alley Cat King",maxHP:38,atk:8,def:3,boss:true,reward:{xp:20,coins:25}},
-                 4:{name:"Goose of Doom",maxHP:40,atk:9,def:3,reward:{xp:24,coins:28}},
-                 5:{name:"Snobby Show Judge",maxHP:55,atk:10,def:4,boss:true,reward:{xp:40,coins:60}}};
-  let battle=null; // {enemy,turn,cursor,log,canFlee}
-  function startBattle(id,force=false){const e=ENEMIES[id]; battle={enemy:{id,name:e.name,hp:e.maxHP,maxHP:e.maxHP,atk:e.atk,def:e.def,boss:!!e.boss,reward:e.reward},turn:"PLAYER",cursor:0,log:["A wild "+e.name+" appears."],canFlee:!e.boss && !force}; mode="BATTLE"; AudioSys.musicStart("battle");}
-  function endBattle(win){AudioSys.musicStart("world"); battle=null; if(win){const r=ENEMIES[lastEnemy].reward; player.xp+=r.xp; coins+=r.coins; if(player.xp>=player.level*25){player.level++; player.maxHP+=4; player.atk++; player.def++; player.hp=player.maxHP; say(["Level up to "+player.level+".","Stats increased."]);}}}
-  function rnd(n){return Math.floor(Math.random()*n);}
-  function dmg(att,def){const base=Math.max(1,att-Math.floor(def*0.6));return Math.max(1,base+rnd(3));}
-  function useSnack(){const it=inventory.find(i=>i.id==="SNACK"&&i.qty>0); if(!it){battle.log.push("No snacks left.");return false;} it.qty--; player.hp=Math.min(player.maxHP,player.hp+10); battle.log.push("Snack heals 10."); AudioSys.beep(880,.12,"square",.2); return true;}
-  let lastEnemy=0;
-
-  // Menu simplified with quick options and chapter skips
-  const MENU=["Items","Equipment","Quests","Map","Options","Quick Skip","Save","Close"]; let menuCursor=0,equipCursor=0; let mode="WORLD";
-  function buildEquip(){const out=[{type:"slot",name:"Head slot"}]; if(equipment.head) out.push({type:"unequip",slot:"head",name:"Remove head item"});
-    inventory.filter(i=>i.equipment&&i.equipment.slot==="head").forEach(i=>out.push({type:"equip",slot:"head",equipment:i.equipment,name:i.equipment.name}));
-    out.push({type:"slot",name:"Body slot"}); if(equipment.body) out.push({type:"unequip",slot:"body",name:"Remove body item"});
-    inventory.filter(i=>i.equipment&&i.equipment.slot==="body").forEach(i=>out.push({type:"equip",slot:"body",equipment:i.equipment,name:i.equipment.name})); return out;}
-
-  // Movement
-  let moveTimer=0, moveDelay=8;
-  function canWalk(nx,ny){const t=tileAt(location.zone,nx,ny); return t===0||t===2||t===3||t===4||t===5;}
-  function goalText(){if(!flags.boss1) return "Beat Alley Cat King"; if(!flags.boss2) return "Beat Goose of Doom"; if(!flags.boss3) return "Win the Dog Show"; return "Enjoy the day";}
-
-  // Save minimal
-  const SAVE_KEY="pets_quest_dx_mobile_v1";
-  function save(){try{localStorage.setItem(SAVE_KEY,JSON.stringify({player,flags,coins,location,inventory,equipment}));}catch{}}
-  function load(){try{const s=localStorage.getItem(SAVE_KEY); if(!s) return false; const d=JSON.parse(s); Object.assign(player,d.player||{}); flags=d.flags||flags; coins=d.coins??coins; location=d.location||location; inventory=d.inventory||inventory; equipment=d.equipment||equipment; return true;}catch{return false;}}
-  load();
-
-  // Intro tip once
-  if(!localStorage.getItem("pets_tip_shown")){ say(["Welcome. Move with D pad. Menu with Menu button.","Buy accessories at the boutique. Clear bosses to advance."]); localStorage.setItem("pets_tip_shown","1"); }
-
-  // Main loop
-  let frame=0;
-  function update(){
-    if(mode==="WORLD"){
-      if(!msgOpen){
-        moveTimer--; if(moveTimer<=0){
-          let dx=0,dy=0; if(press.LEFT) dx=-1; else if(press.RIGHT) dx=1; if(press.UP) dy=-1; else if(press.DOWN) dy=1;
-          if(dx||dy){
-            const nx=location.x+dx, ny=location.y+dy;
-            if(canWalk(nx,ny)){
-              location.x=nx; location.y=ny; moveTimer=moveDelay;
-              const t=tileAt(location.zone,nx,ny);
-              if(t===4) openShop();
-              if(t===5){
-                if(location.zone===0 && !flags.boss1){ lastEnemy=3; startBattle(3,true); }
-                else if(location.zone===1 && !flags.boss2){ lastEnemy=4; startBattle(4,true); }
-                else if(location.zone===2 && !flags.boss3){ lastEnemy=5; startBattle(5,true); }
-                else say("Gate already cleared.");
-              }
-              if(t===2 && Math.random()<0.05){ lastEnemy=location.zone===0?1:2; startBattle(lastEnemy,false); }
-              if(t===3) moveTimer+=4;
-            } else { AudioSys.beep(120,.04,"square",.15); moveTimer=6; }
-          }
+      const works = [
+        {
+          id: 'book-tidal',
+          title: 'Tidal Rooms',
+          year: 2022,
+          category: 'Science',
+          topics: ['coasts', 'ecology', 'climate'],
+          summary: 'Life along the tideline and how communities adapt to a rising sea.',
+          extract: 'On the spring tide the estuary breathed in and the village held its own breath. The boats lifted, ropes drew tight, and the flat salt light turned everything silver.'
+        },
+        {
+          id: 'book-iron',
+          title: 'Iron and Rain',
+          year: 2020,
+          category: 'History',
+          topics: ['industry', 'labour', 'archives'],
+          summary: 'A people-centred history of steel, rust, and repair in northern shipyards.',
+          extract: 'The archive listed vessels by tonnage and triumph. The cafe next door remembered them by who fell, who married, who left for better wages upriver.'
+        },
+        {
+          id: 'book-quiet',
+          title: 'The Quiet Laboratory',
+          year: 2024,
+          category: 'Essays',
+          topics: ['science', 'methods', 'ethics'],
+          summary: 'Essays on how experiments shape the questions we dare to ask.',
+          extract: 'Every instrument is a story about what counts as a signal and what we are willing to file under noise.'
+        },
+        {
+          id: 'book-crossings',
+          title: 'Crossings',
+          year: 2019,
+          category: 'Society',
+          topics: ['borders', 'belonging', 'routes'],
+          summary: 'Journeys across islands and inlands where maps meet memories.',
+          extract: 'Paths cross not only in space but in weather and in hunger. A harbour is also a promise, and sometimes a warning.'
+        },
+        {
+          id: 'book-river',
+          title: 'Under the Streets, Rivers',
+          year: 2025,
+          category: 'Science',
+          topics: ['cities', 'water', 'restoration'],
+          summary: 'The return of buried streams and the new urban commons.',
+          extract: 'We walked where a river should be and found it instead in language - culvert, outfall, storm gate - a dictionary of forgetting.'
+        },
+        {
+          id: 'book-ledgers',
+          title: 'Ledgers of the Small',
+          year: 2021,
+          category: 'Essays',
+          topics: ['attention', 'craft', 'noticing'],
+          summary: 'On notebooks, field notes, and the practice of careful seeing.',
+          extract: 'A ledger is a promise to your future self. It says, I will not trust memory alone when there is so much to remember.'
         }
+      ];
+
+      const els = {
+        grid: document.getElementById('worksGrid'),
+        empty: document.getElementById('emptyState'),
+        chips: Array.from(document.querySelectorAll('.chip')),
+        search: document.getElementById('searchInput'),
+        menu: document.getElementById('menuToggle'),
+        navlist: document.getElementById('primaryNav'),
+        theme: document.getElementById('themeToggle'),
+        toTop: document.getElementById('toTop'),
+        year: document.getElementById('year'),
+        nlForm: document.getElementById('newsletterForm'),
+        nlEmail: document.getElementById('nlEmail'),
+        nlMsg: document.getElementById('nlMsg'),
+        modal: document.getElementById('extractModal'),
+        modalTitle: document.getElementById('extractTitle'),
+        modalBody: document.getElementById('extractContent'),
+        closeModal: document.getElementById('closeModal'),
+        closeModal2: document.getElementById('closeModal2')
+      };
+
+      function placeholderCoverSVG(title) {
+        const safe = title.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+        return `
+          <svg viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder book cover for ${safe}">
+            <defs>
+              <linearGradient id="bg${safe.slice(0,6)}" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="#38bdf8"/>
+                <stop offset="1" stop-color="#22c55e"/>
+              </linearGradient>
+            </defs>
+            <rect width="300" height="400" rx="8" ry="8" fill="url(#bg${safe.slice(0,6)})"/>
+            <rect x="14" y="14" width="272" height="372" rx="6" ry="6" fill="rgba(255,255,255,0.08)"/>
+            <text x="50%" y="54%" text-anchor="middle" fill="white" font-family="Arial, Helvetica, sans-serif" font-weight="700" font-size="28">${safe}</text>
+            <text x="50%" y="78%" text-anchor="middle" fill="rgba(255,255,255,0.9)" font-family="Arial, Helvetica, sans-serif" font-size="14">Edwin Hart</text>
+          </svg>
+        `;
       }
-      if(tap.START){ mode="MENU"; menuCursor=0; }
-    }
-    else if(mode==="MENU"){
-      if(tap.DOWN) menuCursor=(menuCursor+1)%MENU.length;
-      if(tap.UP) menuCursor=(menuCursor+MENU.length-1)%MENU.length;
-      if(tap.B) mode="WORLD";
-      if(tap.A){
-        const m=MENU[menuCursor];
-        if(m==="Items"){ say(inventory.length?("Inventory: "+inventory.map(i=>`${i.name} x${i.qty}`).join(", ")):"Inventory empty."); }
-        else if(m==="Equipment"){ mode="EQUIP"; equipCursor=0; say("Choose a slot to equip."); }
-        else if(m==="Quests"){ const q=[]; if(!flags.boss1) q.push("Beat Alley Cat King."); else if(!flags.boss2) q.push("Beat Goose of Doom."); else if(!flags.boss3) q.push("Win the Dog Show."); else q.push("All done."); say("Quests: "+q.join(" ")); }
-        else if(m==="Map"){ say("Zones: Neighbourhood, City Park, Dog Show Hall."); }
-        else if(m==="Options"){ options.muted=!options.muted; if(options.muted) AudioSys.musicStop(); else AudioSys.musicStart("world"); save(); say("Sound "+(options.muted?"off":"on")+"."); }
-        else if(m==="Quick Skip"){ mode="SKIP"; skipCursor=0; }
-        else if(m==="Save"){ save(); say("Saved."); }
-        else if(m==="Close"){ mode="WORLD"; }
-      }
-    }
-    else if(mode==="EQUIP"){
-      if(!msgOpen){
-        const choices=buildEquip();
-        if(tap.DOWN) equipCursor=(equipCursor+1)%choices.length;
-        if(tap.UP) equipCursor=(equipCursor+choices.length-1)%choices.length;
-        if(tap.B) mode="MENU";
-        if(tap.A){
-          const c=choices[equipCursor];
-          if(c.type==="equip"){ if(c.slot==="head") equipment.head=c.equipment; if(c.slot==="body") equipment.body=c.equipment; say("Equipped "+c.equipment.name+"."); save(); }
-          if(c.type==="unequip"){ if(c.slot==="head") equipment.head=null; if(c.slot==="body") equipment.body=null; say("Removed equipment."); save(); }
-        }
-      }
-    }
-    else if(mode==="SKIP"){
-      if(tap.DOWN) skipCursor=(skipCursor+1)%skipOptions.length;
-      if(tap.UP) skipCursor=(skipCursor+skipOptions.length-1)%skipOptions.length;
-      if(tap.B) mode="MENU";
-      if(tap.A){ const act=skipOptions[skipCursor].act; act(); }
-    }
-    else if(mode==="SHOP"){
-      if(!msgOpen){
-        if(tap.DOWN) shopCursor=(shopCursor+1)%accessories.length;
-        if(tap.UP) shopCursor=(shopCursor+accessories.length-1)%accessories.length;
-        if(tap.A){ const it=accessories[shopCursor]; if(coins<it.price) say("Not enough coins."); else { coins-=it.price; inventory.push({id:"ACC_"+it.id,name:it.name,qty:1,equipment:it}); AudioSys.beep(880,.08,"triangle",.25); say("Purchased "+it.name+"."); save();}}
-        if(tap.B) mode="WORLD";
-      }
-    }
-    else if(mode==="BATTLE"){
-      if(!msgOpen){
-        if(battle.turn==="PLAYER"){
-          if(tap.LEFT){ battle.cursor=(battle.cursor+3)%4; }
-          if(tap.RIGHT){ battle.cursor=(battle.cursor+1)%4; }
-          if(tap.A){
-            if(battle.cursor===0){ const d=dmg(player.atk+(equipment.head?.atk||0)+(equipment.body?.atk||0),battle.enemy.def); battle.enemy.hp=Math.max(0,battle.enemy.hp-d); battle.log.push("You attack for "+d+"."); AudioSys.beep(220,.06,"square",.25); battle.turn="ENEMY"; }
-            else if(battle.cursor===1){ const d=dmg(player.atk+2,battle.enemy.def); battle.enemy.hp=Math.max(0,battle.enemy.hp-d); battle.log.push(`${player.sidekick} barks. ${d} damage.`); AudioSys.beep(520,.08,"square",.25); battle.turn="ENEMY"; }
-            else if(battle.cursor===2){ if(useSnack()) battle.turn="ENEMY"; }
-            else if(battle.cursor===3){ if(battle.canFlee && Math.random()<0.7){ battle.log.push("You flee."); mode="WORLD"; AudioSys.musicStart("world"); return; } else battle.log.push(battle.canFlee?"Failed to flee.":"Cannot flee."); }
-          }
+
+      function renderCards() {
+        els.grid.innerHTML = '';
+        const q = state.q.trim().toLowerCase();
+        const filtered = works.filter(w => {
+          const matchFilter = state.filter === 'All' || w.category === state.filter;
+          const hay = (w.title + ' ' + w.summary + ' ' + w.topics.join(' ')).toLowerCase();
+          const matchQuery = q === '' || hay.includes(q);
+          return matchFilter && matchQuery;
+        });
+
+        if (filtered.length === 0) {
+          els.empty.hidden = false;
+          return;
         } else {
-          if(frame%24===0){ const d=dmg(battle.enemy.atk,player.def+(equipment.head?.def||0)+(equipment.body?.def||0)); player.hp=Math.max(0,player.hp-d); battle.log.push(`${battle.enemy.name} hits for ${d}.`); AudioSys.beep(140,.1,"square",.25); battle.turn="PLAYER"; }
+          els.empty.hidden = true;
+        }
+
+        for (const w of filtered) {
+          const card = document.createElement('article');
+          card.className = 'card';
+          card.setAttribute('data-id', w.id);
+          card.innerHTML = `
+            <div class="cover" aria-hidden="true">
+              ${placeholderCoverSVG(w.title)}
+            </div>
+            <div class="card-body">
+              <h3>${w.title}</h3>
+              <div class="meta">
+                <span>${w.category}</span>
+                <span>&bull;</span>
+                <span>${w.year}</span>
+              </div>
+              <p class="summary">${w.summary}</p>
+            </div>
+            <div class="card-actions">
+              <a href="#" class="btn" data-action="extract" data-id="${w.id}" aria-label="Read an extract from ${w.title}">Read extract</a>
+              <a href="#" class="btn btn-primary" data-action="buy" aria-label="Buy ${w.title}">Buy</a>
+            </div>
+          `;
+          els.grid.appendChild(card);
         }
       }
-      if(battle.enemy.hp<=0){
-        const id=battle.enemy.id; mode="WORLD"; endBattle(true);
-        if(id===3){ flags.boss1=true; location.zone=1; Object.assign(location,ZONES[1].start); say(["Alley clear. Head to the City Park."]); }
-        if(id===4){ flags.boss2=true; location.zone=2; Object.assign(location,ZONES[2].start); say(["Great work. Off to the Dog Show Hall."]); }
-        if(id===5){ flags.boss3=true; say(["You won the show with a sausage dog. Obviously."]); }
-        save();
+
+      function setFilter(name) {
+        state.filter = name;
+        els.chips.forEach(b => b.setAttribute('aria-pressed', b.dataset.filter === name ? 'true' : 'false'));
+        renderCards();
       }
-      if(player.hp<=0){
-        battle.log.push("You fainted. Back to last area."); AudioSys.beep(100,.3,"square",.25);
-        player.hp=Math.ceil(player.maxHP*0.6);
-        if(flags.boss2){location.zone=2; Object.assign(location,ZONES[2].start);} else if(flags.boss1){location.zone=1; Object.assign(location,ZONES[1].start);} else {location.zone=0; Object.assign(location,ZONES[0].start);}
-        mode="WORLD"; AudioSys.musicStart("world");
+
+      function setQuery(q) {
+        state.q = q;
+        renderCards();
       }
-    }
 
-    if(tap.A && msgOpen) advance();
-    clearTaps();
-    frame++;
-  }
+      function initFilters() {
+        els.chips.forEach(btn => {
+          btn.addEventListener('click', () => setFilter(btn.dataset.filter));
+        });
+        els.search.addEventListener('input', (e) => setQuery(e.target.value));
+      }
 
-  function draw(){
-    fill(0,0,CANVAS_W,CANVAS_H,PALETTE.bg);
-    if(mode==="WORLD"||mode==="MENU"||mode==="EQUIP"||mode==="SKIP"||mode==="SHOP"){
-      drawZone(location.zone); const ts=ZONES[location.zone].tileSize; const px=location.x*ts, py=location.y*ts-2; drawHero(px,py); drawSidekick(px-14,py+4);
-      fill(4,4,150,24,PALETTE.ui); ctx.strokeStyle="#2a3350"; ctx.strokeRect(4.5,4.5,149,23);
-      text(8,6,`${player.name}  Lv ${player.level}`,PALETTE.text,10);
-      text(8,16,`HP ${player.hp}/${player.maxHP}  Coins ${coins}`,PALETTE.accent3,10);
-      fill(CANVAS_W-102,4,98,24,PALETTE.ui); ctx.strokeRect(CANVAS_W-101.5,4.5,97,23);
-      text(CANVAS_W-98,6,`Zone: ${ZONES[location.zone].name}`,PALETTE.sub,9);
-      text(CANVAS_W-98,15,`Goal: ${goalText()}`,PALETTE.accent,9);
-    }
-    if(mode==="MENU"){
-      ctx.fillStyle="rgba(0,0,0,.5)"; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
-      fill(50,26,220,128,PALETTE.ui); text(60,30,"Menu",PALETTE.accent2,12);
-      for(let i=0;i<MENU.length;i++){const sel=i===menuCursor; text(64,46+i*12,(sel?"> ":"  ")+MENU[i],sel?PALETTE.accent:PALETTE.text,10);}
-      text(60,152,"A Select  B Close",PALETTE.sub,10);
-    }
-    if(mode==="EQUIP"){
-      ctx.fillStyle="rgba(0,0,0,.5)"; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
-      fill(30,20,260,140,PALETTE.ui); text(36,24,"Equipment",PALETTE.accent2,12);
-      const choices=buildEquip();
-      for(let i=0;i<choices.length;i++){const c=choices[i]; const label=c.type==="equip"?"Equip "+c.name:c.name; const sel=i===equipCursor; text(40,40+i*12,(sel?"> ":"  ")+label,sel?PALETTE.accent:PALETTE.text,10);}
-      text(36,152,`Head: ${equipment.head?equipment.head.name:"None"}  Body: ${equipment.body?equipment.body.name:"None"}`,PALETTE.sub,9);
-    }
-    if(mode==="SKIP"){
-      ctx.fillStyle="rgba(0,0,0,.5)"; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
-      fill(40,22,240,140,PALETTE.ui); text(48,26,"Quick Skip",PALETTE.accent2,12);
-      for(let i=0;i<skipOptions.length;i++){const sel=i===skipCursor; text(52,44+i*14,(sel?"> ":"  ")+skipOptions[i].label,sel?PALETTE.accent:PALETTE.text,10);}
-      text(48,152,"A Apply  B Back",PALETTE.sub,10);
-    }
-    if(mode==="SHOP"){
-      ctx.fillStyle="rgba(0,0,0,.45)"; ctx.fillRect(0,0,CANVAS_W,CANVAS_H);
-      fill(26,18,268,144,PALETTE.ui); text(32,20,"Pet Boutique",PALETTE.accent2,12); text(200,20,`Coins ${coins}`,PALETTE.accent3,10);
-      for(let i=0;i<accessories.length;i++){const a=accessories[i];const sel=i===shopCursor; const y=36+i*18; text(36,y,(sel?"> ":"  ")+a.name,sel?PALETTE.accent:PALETTE.text,10); text(190,y,`${a.price}`,PALETTE.sub,10);}
-      text(32,154,"A Buy  B Close  Menu Menu",PALETTE.sub,10);
-    }
-    if(mode==="BATTLE"){
-      fill(0,0,CANVAS_W,CANVAS_H,"#1b0f1b"); fill(10,10,300,90,"#2b1a38"); text(16,12,`Vs ${battle.enemy.name}`,PALETTE.accent2,12);
-      drawEnemy(200,30,battle.enemy.id);
-      fill(10,104,300,24,PALETTE.ui); text(14,108,`${player.name} HP ${player.hp}/${player.maxHP}`,PALETTE.text,10); text(200,108,`Coins ${coins}`,PALETTE.accent3,10);
-      fill(10,132,300,40,PALETTE.ui);
-      const opts=["Attack","Bark","Snack","Flee"]; for(let i=0;i<4;i++){const x=16+i*70; const sel=battle.cursor===i; text(x,138,(sel?"> ":"  ")+opts[i],sel?PALETTE.accent:PALETTE.text,12);}
-      const l1=battle.log[battle.log.length-2]||"", l2=battle.log[battle.log.length-1]||""; text(16,72,l1,PALETTE.sub,10); text(16,84,l2,PALETTE.text,10);
-    }
-    drawMsg();
-  }
+      function initMenu() {
+        els.menu.addEventListener('click', () => {
+          const open = els.navlist.classList.toggle('open');
+          els.menu.setAttribute('aria-expanded', open ? 'true' : 'false');
+        });
+        document.addEventListener('click', (e) => {
+          if (!els.navlist.contains(e.target) && e.target !== els.menu && els.navlist.classList.contains('open')) {
+            els.navlist.classList.remove('open');
+            els.menu.setAttribute('aria-expanded', 'false');
+          }
+        });
+      }
 
-  // Skip options
-  let skipCursor=0;
-  const skipOptions=[
-    {label:"Go to City Park", act:()=>{flags.boss1=true; location.zone=1; Object.assign(location,ZONES[1].start); mode="WORLD"; say("Skipped to City Park."); save();}},
-    {label:"Go to Dog Show Hall", act:()=>{flags.boss1=true; flags.boss2=true; location.zone=2; Object.assign(location,ZONES[2].start); mode="WORLD"; say("Skipped to Dog Show Hall."); save();}},
-    {label:"Win final boss", act:()=>{flags.boss1=true; flags.boss2=true; flags.boss3=true; mode="WORLD"; say("You won the show. Sausage dogs forever."); save();}},
-    {label:"Give 50 coins", act:()=>{coins+=50; mode="WORLD"; say("Added 50 coins."); save();}}
-  ];
+      function initTheme() {
+        try {
+          const stored = localStorage.getItem('theme');
+          if (stored === 'dark') document.documentElement.style.colorScheme = 'dark';
+          if (stored === 'light') document.documentElement.style.colorScheme = 'light';
+          els.theme.setAttribute('aria-pressed', stored === 'dark' ? 'true' : 'false');
+        } catch (e) {}
+        els.theme.addEventListener('click', () => {
+          const current = document.documentElement.style.colorScheme || (state.prefersDark ? 'dark' : 'light');
+          const next = current === 'dark' ? 'light' : 'dark';
+          document.documentElement.style.colorScheme = next;
+          els.theme.setAttribute('aria-pressed', next === 'dark' ? 'true' : 'false');
+          try { localStorage.setItem('theme', next); } catch (e) {}
+        });
+      }
 
-  // Enemy drawings
-  function drawEnemy(x,y,id){
-    if(id===3){fill(x,y+8,34,12,"#555"); fill(x+12,y+4,10,4,"#ffdd55");}
-    else if(id===4){fill(x+6,y+10,28,10,"#ddd"); fill(x+28,y+8,6,3,"#ffa500");}
-    else if(id===5){fill(x+10,y+6,20,18,"#222"); fill(x+14,y+10,12,8,"#eee");}
-    else if(id===1){fill(x,y+10,30,8,"#444"); fill(x+26,y+6,6,6,"#444");}
-    else if(id===2){fill(x+4,y+12,26,10,"#9aa"); fill(x+20,y+8,6,6,"#ccd");}
-  }
+      function initTop() {
+        const toggle = () => {
+          if (window.scrollY > 240) els.toTop.classList.add('show'); else els.toTop.classList.remove('show');
+        };
+        window.addEventListener('scroll', toggle, { passive: true });
+        toggle();
+        els.toTop.addEventListener('click', () => {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+      }
 
-  // Frame loop
-  function loop(){ update(); draw(); requestAnimationFrame(loop); }
-  requestAnimationFrame(loop);
+      function initNewsletter() {
+        els.nlForm.addEventListener('submit', (e) => {
+          e.preventDefault();
+          const email = els.nlEmail.value.trim();
+          if (!email) return;
+          els.nlMsg.hidden = false;
+          els.nlForm.reset();
+        });
+      }
 
-  // Hook buttons labelled Menu and Quick
-  document.querySelectorAll('[data-press="START"]').forEach(el=>el.addEventListener("click",()=>{tap.START=true;}));
-  document.querySelectorAll('[data-press="SELECT"]').forEach(el=>el.addEventListener("click",()=>{
-    // Quick: toggle mute or open skip depending on context
-    if(mode==="WORLD"){ options.muted=!options.muted; if(options.muted) AudioSys.musicStop(); else AudioSys.musicStart("world"); } else if(mode==="MENU"){ mode="SKIP"; skipCursor=0; }
-  }));
+      function openExtract(id) {
+        const w = works.find(x => x.id === id);
+        if (!w) return;
+        els.modalTitle.textContent = w.title + ' - extract';
+        els.modalBody.innerHTML = `
+          <p><em>From the opening chapter:</em></p>
+          <p>${w.extract}</p>
+          <p><small>This is placeholder text. Replace with an approved excerpt.</small></p>
+        `;
+        if (typeof els.modal.showModal === 'function') els.modal.showModal();
+        else els.modal.setAttribute('open', '');
+      }
 
-  // Helper for enemies start
-  function drawSidekick(px,py){fill(px,py+8,12,4,"#6b3b16"); fill(px+10,py+6,3,3,"#6b3b16"); fill(px+1,py+12,3,2,"#6b3b16"); fill(px+8,py+12,3,2,"#6b3b16"); fill(px+11,py+7,1,1,"#000");}
+      function closeExtract() {
+        if (typeof els.modal.close === 'function') els.modal.close();
+        els.modal.removeAttribute('open');
+      }
 
-})();
-</script>
+      function initCards() {
+        els.grid.addEventListener('click', (e) => {
+          const a = e.target.closest('a');
+          if (!a) return;
+          const action = a.getAttribute('data-action');
+          if (action === 'extract') {
+            e.preventDefault();
+            openExtract(a.getAttribute('data-id'));
+          } else if (action === 'buy') {
+            e.preventDefault();
+            window.alert('Replace this link with your preferred retailer or direct shop.');
+          }
+        });
+        els.closeModal.addEventListener('click', closeExtract);
+        els.closeModal2.addEventListener('click', closeExtract);
+        els.modal.addEventListener('close', () => {});
+        document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && els.modal.open) closeExtract(); });
+      }
+
+      function setYear() {
+        els.year.textContent = new Date().getFullYear();
+      }
+
+      function injectJSONLD() {
+        const books = works.map(w => ({
+          '@type': 'Book',
+          'name': w.title,
+          'bookFormat': 'EBook',
+          'datePublished': String(w.year),
+          'author': { '@type': 'Person', 'name': 'Edwin Hart' },
+          'genre': w.category,
+          'description': w.summary,
+          'inLanguage': 'en-GB'
+        }));
+        const data = {
+          '@context': 'https://schema.org',
+          '@type': 'Person',
+          'name': 'Edwin Hart',
+          'jobTitle': 'Author',
+          'url': 'https://example.com',
+          'worksFor': { '@type': 'Organization', 'name': 'Green & Teal Literary' },
+          'knowsAbout': ['science writing', 'history', 'environment', 'reportage'],
+          'address': { '@type': 'PostalAddress', 'addressLocality': 'London', 'addressCountry': 'GB' },
+          'sameAs': ['https://example.com/social-one', 'https://example.com/social-two'],
+          'hasPart': books
+        };
+        const s = document.createElement('script');
+        s.type = 'application/ld+json';
+        s.textContent = JSON.stringify(data, null, 2);
+        document.head.appendChild(s);
+      }
+
+      renderCards();
+      initFilters();
+      initMenu();
+      initTheme();
+      initTop();
+      initNewsletter();
+      initCards();
+      setYear();
+      injectJSONLD();
+    })();
+  </script>
 </body>
 </html>
