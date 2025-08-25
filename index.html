@@ -1,683 +1,815 @@
-```html
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-GB">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>ABSOLUTELY ATROCIOUS WEBSITE - WORST DESIGN EVER</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Beat Tapper - One Click Rhythm</title>
 <style>
-  /* GLOBAL ABOMINATION */
-  html, body {
-    height: 100%;
+  :root{
+    --bg1:#0a0f1f;
+    --bg2:#0f1a3a;
+    --accent:#8bf6ff;
+    --accent2:#ffc86b;
+    --good:#7cff8b;
+    --great:#5fc5ff;
+    --perfect:#ffd76b;
+    --miss:#ff6b6b;
+    --panel:#10172a;
+    --panel2:#0d1324;
+    --text:#e6f0ff;
   }
-  body {
-    margin: 0;
-    background:
-      repeating-linear-gradient(45deg, #ff00ff, #ff00ff 10px, #00ffff 10px, #00ffff 20px),
-      radial-gradient(circle at 10% 10%, #ffff00, transparent 30%),
-      radial-gradient(circle at 90% 30%, #00ff00, transparent 30%),
-      radial-gradient(circle at 20% 80%, #ff0000, transparent 30%),
-      linear-gradient(90deg, #ff00ff, #ffff00, #00ffff, #00ff00, #ff0000, #0000ff);
-    background-blend-mode: multiply, screen, screen, screen, normal;
-    cursor: crosshair;
-    image-rendering: pixelated;
-    font-family: "Comic Sans MS", "Comic Sans", "Papyrus", "Impact", "Curlz MT", "Chalkduster", cursive, fantasy, "Times New Roman", serif;
-    color: #00ff00;
-    text-shadow: 3px 3px 0 #000, -2px -2px 0 #ff00ff, 0 0 10px #ffff00;
-    letter-spacing: 1.5px;
-    animation: bgshift 8s linear infinite;
-    overflow-x: hidden;
+  *{box-sizing:border-box;-webkit-tap-highlight-color: rgba(0,0,0,0)}
+  html,body{margin:0;height:100%;background: radial-gradient(1200px 700px at 50% 20%, var(--bg2), var(--bg1)); color:var(--text); font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Arial, "Apple Color Emoji","Segoe UI Emoji"; overflow:hidden}
+  #gameWrapper{position:relative; width:100%; height:100%;}
+  canvas{position:absolute; inset:0; width:100%; height:100%;}
+  #hud{
+    position:absolute; left:0; right:0; top:0; display:flex; gap:12px; align-items:stretch; padding:10px; pointer-events:none;
   }
-  @keyframes bgshift {
-    from { filter: hue-rotate(0deg) saturate(150%); }
-    50%  { filter: hue-rotate(180deg) saturate(300%); }
-    to   { filter: hue-rotate(360deg) saturate(150%); }
+  .card{background:linear-gradient(180deg,var(--panel),var(--panel2)); border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:10px 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.3); backdrop-filter: blur(6px); pointer-events:auto}
+  #scoreCard{margin-left:10px; display:flex; gap:16px; align-items:center}
+  .stat{display:flex; flex-direction:column; line-height:1.05}
+  .stat b{font-size:18px}
+  .stat small{opacity:0.75}
+  #combo{font-weight:800; font-size:22px}
+  #judgeFlash{
+    position:absolute; left:50%; transform:translateX(-50%); top: 18%; font-weight:900; font-size:40px; text-shadow:0 2px 0 rgba(0,0,0,0.4); opacity:0; pointer-events:none;
   }
-
-  /* HORRIBLE HEADER */
-  header {
-    position: relative;
-    padding: 30px 10px 50px;
-    background:
-      repeating-linear-gradient(90deg, #ff0000, #ff0000 15px, #0000ff 15px, #0000ff 30px);
-    border-bottom: 10px ridge #00ff00;
-    box-shadow: inset 0 0 30px #ffff00, 0 0 40px #ff00ff;
-    transform: skewY(-2deg);
+  #startOverlay{
+    position:absolute; inset:0; display:flex; align-items:center; justify-content:center; background: linear-gradient(180deg, rgba(10,15,31,0.9), rgba(10,15,31,0.95));
   }
-  header h1 {
-    margin: 0;
-    font-size: 64px;
-    font-weight: 900;
-    font-style: italic;
-    text-align: center;
-    mix-blend-mode: difference;
-    animation: wobble 1.5s ease-in-out infinite;
+  #panel{
+    width:min(780px, 92%); max-width:92vw; background:linear-gradient(180deg,var(--panel), var(--panel2)); border:1px solid rgba(255,255,255,0.06); border-radius:18px; padding:22px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.45);
   }
-  @keyframes wobble {
-    0%,100% { transform: rotate(-2deg) scale(1.02); }
-    50%     { transform: rotate(2deg)  scale(0.98); }
+  #title{font-size:28px; font-weight:900; margin:0 0 6px}
+  #subtitle{opacity:0.85; margin:0 0 16px}
+  .row{display:flex; flex-wrap:wrap; gap:10px; align-items:center; margin:10px 0}
+  .row label{opacity:0.9; font-weight:600}
+  select, button, input[type=range]{
+    appearance:none; background:#141b31; color:var(--text); border:1px solid rgba(255,255,255,0.12); padding:10px 12px; border-radius:10px; font-size:16px;
   }
-  .rainbow {
-    display: inline-block;
+  button.primary{
+    background:linear-gradient(180deg,#3a5cf0,#2e49c1); border-color:rgba(255,255,255,0.2); font-weight:800; letter-spacing:0.2px; box-shadow: 0 6px 18px rgba(46,73,193,0.45);
+    cursor:pointer;
   }
-  .rainbow span {
-    display: inline-block;
-    animation: hue 4s linear infinite;
+  button.secondary{
+    background:#17203e; cursor:pointer;
   }
-  @keyframes hue {
-    from { filter: hue-rotate(0deg); }
-    to { filter: hue-rotate(360deg); }
+  button:active{transform: translateY(1px)}
+  #howTo{margin-top:14px; opacity:0.9}
+  #howTo ul{margin:8px 0 0 18px}
+  #resultOverlay{
+    position:absolute; inset:0; display:none; align-items:center; justify-content:center; background: linear-gradient(180deg, rgba(10,15,31,0.6), rgba(10,15,31,0.9));
   }
-
-  /* SINISTER SCROLLER */
-  .tape {
-    background: repeating-linear-gradient(45deg, #222, #222 6px, #eee 6px, #eee 12px);
-    color: #ff00ff;
-    padding: 5px 0;
-    border-top: 6px dotted #00ffff;
-    border-bottom: 6px dotted #00ffff;
-  }
-  marquee {
-    font-size: 22px;
-    font-weight: bold;
-  }
-
-  /* DISGUSTING NAVIGATION */
-  nav {
-    margin: 0;
-    padding: 0;
-    background: linear-gradient(90deg, #00ffff, #ff00ff);
-    border-top: 8px groove #ffff00;
-    border-bottom: 8px groove #ffff00;
-  }
-  nav table {
-    width: 100%;
-    border-collapse: separate;
-    border-spacing: 10px 0;
-  }
-  nav a {
-    display: block;
-    text-align: center;
-    background: conic-gradient(from 0deg at 50% 50%, #ff00ff, #ffff00, #00ffff, #00ff00, #ff0000, #0000ff, #ff00ff);
-    padding: 18px 8px;
-    font-size: 18px;
-    font-weight: 800;
-    border: 6px outset #000;
-    color: #000;
-    text-decoration: none;
-    text-transform: uppercase;
-    box-shadow: 0 0 0 6px #fff, 0 0 15px #fff, inset 0 0 14px #000;
-    transform: skewX(12deg);
-    transition: transform 0.1s linear, filter 0.1s linear;
-  }
-  nav a:hover {
-    transform: skewX(-12deg) scale(1.08) rotate(-2deg);
-    filter: invert(100%) contrast(200%);
-  }
-  nav a:active {
-    border-style: inset;
-  }
-  nav a:visited {
-    color: #ff00ff;
-  }
-
-  /* APPALLING CONTENT LAYOUT USING TABLES */
-  main {
-    padding: 20px 10px 60px;
-  }
-  .layout {
-    width: 100%;
-    border: 12px ridge #ff00ff;
-    background:
-      repeating-linear-gradient(0deg, rgba(255,255,255,0.2), rgba(255,255,255,0.2) 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 20px);
-  }
-  .layout td {
-    vertical-align: top;
-    padding: 16px;
-    border: 8px double #000;
-    background: linear-gradient(180deg, #ffe600, #ff6 30%, #f0f 60%, #6ff 100%);
-  }
-  .side {
-    width: 23%;
-    filter: saturate(300%) blur(0.2px);
-  }
-  .content {
-    width: 54%;
-  }
-  .ads {
-    width: 23%;
-    background: repeating-linear-gradient(90deg, #000, #000 8px, #333 8px, #333 16px);
-  }
-
-  /* TRULY BAD WIDGETS */
-  .widget {
-    margin: 16px 0;
-    padding: 10px;
-    border: 10px groove #00ffff;
-    background: #ff00ff;
-    color: #fff;
-    box-shadow: 8px 8px 0 #000, inset 0 0 20px #000;
-    transform: rotate(-1deg);
-  }
-  .widget h3 {
-    margin: 0 0 6px;
-    font-family: "Papyrus", cursive, fantasy;
-    letter-spacing: 3px;
-    word-spacing: 8px;
-  }
-  .blink {
-    animation: blink 0.7s steps(1) infinite;
-  }
-  @keyframes blink {
-    50% { opacity: 0; }
-  }
-  .spin {
-    display: inline-block;
-    animation: spin 2s linear infinite;
-  }
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  .bounce {
-    display: inline-block;
-    animation: bounce 0.8s ease-in-out infinite;
-  }
-  @keyframes bounce {
-    0%,100% { transform: translateY(0); }
-    50% { transform: translateY(-8px) scale(1.05); }
-  }
-
-  /* FORM FROM A NIGHTMARE */
-  form.bad {
-    display: grid;
-    gap: 12px;
-    background: repeating-conic-gradient(#ff0 0 10deg, #0ff 10deg 20deg, #f0f 20deg 30deg);
-    padding: 14px;
-    border: 10px outset #000;
-    box-shadow: inset 0 0 50px #fff, 0 0 20px #0ff;
-    transform: rotate(1deg) skewX(5deg);
-  }
-  form.bad label {
-    font-weight: 900;
-    text-transform: uppercase;
-    text-decoration: underline wavy #000;
-  }
-  form.bad input, form.bad select, form.bad textarea, form.bad button {
-    font-family: "Comic Sans MS", "Comic Sans", cursive, fantasy, "Impact", "Papyrus";
-    font-size: 18px;
-    padding: 8px;
-    border: 6px dashed #ff00ff;
-    background: #ffff00;
-    color: #0000ff;
-    outline: 8px solid #00ff00;
-    box-shadow: 6px 6px 0 #000;
-  }
-  form.bad input:focus, form.bad textarea:focus {
-    filter: hue-rotate(180deg) saturate(300%);
-  }
-  .cta {
-    background: repeating-linear-gradient(45deg, #ff0, #ff0 8px, #f00 8px, #f00 16px);
-    color: #000;
-    border: 10px ridge #000;
-    font-size: 22px;
-    font-weight: 900;
-    text-transform: uppercase;
-    letter-spacing: 4px;
-    animation: shake 0.3s infinite, blink 0.6s steps(1) infinite;
-    cursor: wait;
-  }
-  @keyframes shake {
-    0% { transform: translate(0, 0) rotate(0); }
-    25% { transform: translate(2px, -2px) rotate(-1deg); }
-    50% { transform: translate(-2px, 2px) rotate(1deg); }
-    75% { transform: translate(2px, 2px) rotate(0.5deg); }
-    100% { transform: translate(-2px, -2px) rotate(-0.5deg); }
-  }
-
-  /* GALLERY CRIMES */
-  .gallery {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-  }
-  .card {
-    padding: 10px;
-    border: 10px double #fff;
-    background:
-      linear-gradient(0deg, #f0f, #0ff),
-      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="yellow"/><circle cx="30" cy="30" r="12" fill="red"/></svg>');
-    background-size: cover, 60px 60px;
-    box-shadow: 0 0 25px #fff, inset 0 0 20px #000;
-    transform: perspective(400px) rotateY(12deg) skewY(2deg);
-  }
-  .card svg {
-    width: 100%;
-    height: 120px;
-    display: block;
-    transform: scaleX(1.4) scaleY(0.6) rotate(-7deg);
-    filter: sepia(100%) contrast(250%) saturate(400%);
-  }
-  .card p {
-    margin: 8px 0 0;
-    font-family: "Impact", "Comic Sans MS", sans-serif;
-    color: #000;
-    background: #ff0;
-    display: inline-block;
-    padding: 4px 6px;
-    box-shadow: 6px 6px 0 #000;
-  }
-
-  /* FOOTER SHAME */
-  footer {
-    margin-top: 40px;
-    padding: 30px 10px;
-    background:
-      linear-gradient(180deg, #00ff00, #00ffff 50%, #ff00ff),
-      repeating-linear-gradient(0deg, rgba(0,0,0,0.2), rgba(0,0,0,0.2) 5px, rgba(255,255,255,0.2) 5px, rgba(255,255,255,0.2) 10px);
-    color: #000;
-    border-top: 14px groove #000;
-    text-align: center;
-    box-shadow: inset 0 0 40px #fff;
-  }
-  .counter {
-    font-size: 28px;
-    background: #fff;
-    border: 8px inset #000;
-    padding: 6px 10px;
-    display: inline-block;
-    letter-spacing: 8px;
-    box-shadow: 8px 8px 0 #000;
-  }
-
-  /* RAINBOW HR */
-  hr.rainbow {
-    border: 0;
-    height: 16px;
-    background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, indigo, violet);
-    box-shadow: 0 0 10px #fff, 0 0 20px #fff inset;
-  }
-
-  /* EVEN WORSE MODE */
-  .worse * {
-    animation-duration: 0.3s !important;
-    letter-spacing: 6px !important;
-    word-spacing: 12px !important;
-    filter: contrast(300%) saturate(500%) hue-rotate(180deg) !important;
-  }
-
-  /* UTIL */
-  .center { text-align: center; }
-  .tiny { font-size: 10px; }
-  .rotate { transform: rotate(180deg); display: inline-block; }
-  .underline-wavy { text-decoration: underline wavy #ff00ff; }
-  .shadow-text { text-shadow: 2px 2px 0 #fff, -2px -2px 0 #000; }
-
-  /* MOBILE RUINER */
-  @media (max-width: 700px) {
-    header h1 { font-size: 11vw; }
-    nav a { padding: 12px 4px; font-size: 4vw; }
-    .layout { border-width: 8px; }
-    .layout, .layout tr, .layout td { display: block; width: 100%; }
-    .side, .content, .ads { width: 100%; }
-    .gallery { grid-template-columns: repeat(2, 1fr); }
-    .cta { font-size: 6vw; }
+  #resultCard{width:min(620px, 92%); background:linear-gradient(180deg,var(--panel), var(--panel2)); border:1px solid rgba(255,255,255,0.06); border-radius:18px; padding:20px;}
+  #resultTitle{margin:0 0 8px; font-size:26px; font-weight:900}
+  #bigRank{font-size:52px; font-weight:900; margin:6px 0 10px}
+  #resultGrid{display:grid; grid-template-columns: 1fr 1fr; gap:10px; margin-top:8px}
+  #resultGrid .item{background:#0d1428; border:1px solid rgba(255,255,255,0.06); border-radius:12px; padding:10px 12px}
+  #latencyBox{display:flex; gap:8px; align-items:center}
+  #latencyBox button{width:36px; height:36px; display:grid; place-items:center; font-weight:900}
+  #muteBtn.toggled{outline: 2px solid var(--accent2)}
+  #hsBadge{margin-left:auto; background: #133; border:1px solid rgba(255,255,255,0.1); padding:6px 10px; border-radius:10px; font-weight:700}
+  @media (max-width: 720px){
+    #judgeFlash{font-size:32px}
+    .stat b{font-size:16px}
+    #combo{font-size:20px}
   }
 </style>
 </head>
-<body onload="veryImportantAlert()">
+<body>
+<div id="gameWrapper">
+  <canvas id="game"></canvas>
+  <div id="hud">
+    <div id="scoreCard" class="card">
+      <div class="stat"><small>Score</small><b id="score">0</b></div>
+      <div class="stat"><small>Accuracy</small><b id="acc">100.00%</b></div>
+      <div class="stat"><small>Combo</small><b id="combo">0x</b></div>
+      <div class="stat"><small>Health</small><b id="hp">★★★★★</b></div>
+      <div id="hsBadge" title="Best score this session">Best <span id="best">0</span></div>
+    </div>
+    <div class="card" style="margin-left:auto; display:flex; gap:8px; align-items:center">
+      <button id="pauseBtn" class="secondary" title="Pause or resume">Pause</button>
+      <button id="restartBtn" class="secondary" title="Restart the current song">Restart</button>
+      <button id="muteBtn" class="secondary" title="Mute or unmute">Mute</button>
+    </div>
+  </div>
+  <div id="judgeFlash"></div>
 
-<header>
-  <h1>
-    <span class="rainbow">
-      <span>W</span><span>E</span><span>L</span><span>C</span><span>O</span><span>M</span><span>E</span>
-      <span> </span>
-      <span>T</span><span>O</span>
-      <span> </span>
-      <span>M</span><span>Y</span>
-      <span> </span>
-      <span>W</span><span>E</span><span>B</span><span>S</span><span>I</span><span>T</span><span>E</span><span>!</span><span>!</span><span>!</span>
-    </span>
-    <span class="spin">✨</span>
-    <span class="bounce">🎉</span>
-  </h1>
-</header>
+  <div id="startOverlay" role="dialog" aria-modal="true">
+    <div id="panel">
+      <h1 id="title">Beat Tapper</h1>
+      <p id="subtitle">One input. All rhythm. Click or tap anywhere on beat.</p>
+      <div class="row">
+        <label for="difficulty">Difficulty</label>
+        <select id="difficulty" aria-label="Difficulty">
+          <option value="easy">Easy - slow travel, wide window</option>
+          <option value="normal" selected>Normal - balanced</option>
+          <option value="hard">Hard - fast travel, tight window</option>
+          <option value="extreme">Extreme - very fast, very tight</option>
+        </select>
+      </div>
+      <div class="row" id="latencyBox">
+        <label for="latency">Timing offset</label>
+        <button id="latMinus" class="secondary" aria-label="Decrease offset by 5 ms">-</button>
+        <span id="latencyReadout">+0 ms</span>
+        <button id="latPlus" class="secondary" aria-label="Increase offset by 5 ms">+</button>
+      </div>
+      <div class="row">
+        <button id="startBtn" class="primary">Start</button>
+        <button id="previewBtn" class="secondary">Preview beat</button>
+        <button id="muteBtn2" class="secondary">Mute</button>
+      </div>
+      <div id="howTo" class="card">
+        <b>How to play</b>
+        <ul>
+          <li>Notes fall to the target ring. Click or tap anywhere when a note hits the ring.</li>
+          <li>Hold your device steady. The game supports vibration feedback if available.</li>
+          <li>Use Timing offset to fix early or late hits. Positive means you are tapping early.</li>
+        </ul>
+      </div>
+    </div>
+  </div>
 
-<div class="tape">
-  <marquee behavior="alternate" scrollamount="18" onmouseover="this.stop()" onmouseout="this.start()">
-    BREAKING: THIS WEBSITE USES ONLY THE FINEST COMIC SANS COLOURS. CLICK EVERYTHING. EVERYTHING MAKES A NOISE. FREE GLITTER WITH EVERY SCROLL.
-  </marquee>
+  <div id="resultOverlay" role="dialog" aria-modal="true">
+    <div id="resultCard">
+      <h2 id="resultTitle">Results</h2>
+      <div id="bigRank">A</div>
+      <div id="resultGrid">
+        <div class="item"><b>Score</b><div id="rScore">0</div></div>
+        <div class="item"><b>Accuracy</b><div id="rAcc">0.00%</div></div>
+        <div class="item"><b>Combo max</b><div id="rMax">0</div></div>
+        <div class="item"><b>Perfect</b><div id="rP">0</div></div>
+        <div class="item"><b>Great</b><div id="rG">0</div></div>
+        <div class="item"><b>Good</b><div id="rOk">0</div></div>
+        <div class="item"><b>Miss</b><div id="rM">0</div></div>
+        <div class="item"><b>Timing offset</b><div id="rOff">+0 ms</div></div>
+      </div>
+      <div class="row" style="margin-top:14px">
+        <button id="againBtn" class="primary">Play again</button>
+        <button id="homeBtn" class="secondary">Home</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<nav>
-  <table role="presentation">
-    <tr>
-      <td><a href="#about">About</a></td>
-      <td><a href="#gallery">Gallery</a></td>
-      <td><a href="#contact">Contact</a></td>
-      <td><a href="#shop">Shop</a></td>
-      <td><a href="#faq">FAQ</a></td>
-      <td><a href="#legal">Legal</a></td>
-    </tr>
-  </table>
-</nav>
-
-<main>
-  <table class="layout" role="presentation">
-    <tr>
-      <td class="side">
-        <div class="widget">
-          <h3 class="blink">LATEST UPDATES</h3>
-          <ul>
-            <li>New colours added, now 900 percent worse</li>
-            <li>Fonts upgraded to maximum silliness</li>
-            <li>Buttons jitter by design</li>
-            <li>Every link beeps loudly</li>
-          </ul>
-        </div>
-        <div class="widget">
-          <h3>LIVE CLOCK</h3>
-          <div id="clock" class="center" style="font-size:28px; background:#000; color:#0f0; padding:8px; border:8px inset #0f0; letter-spacing:8px;">88:88:88</div>
-          <div class="tiny center">Truly precise, give or take quite a bit</div>
-        </div>
-        <div class="widget">
-          <h3>MAKE IT WORSE</h3>
-          <button class="cta" onclick="toggleWorse()">Toggle Even Worse Mode</button>
-        </div>
-      </td>
-
-      <td class="content">
-        <section id="about">
-          <h2 class="shadow-text">About This Spectacle</h2>
-          <p>
-            This page demonstrates the most questionable design choices known to humankind. It is fully functional yet visually catastrophic.
-            The colour choices are intentional. The font choices are deliberate. The overall effect is heroic in its badness.
-          </p>
-          <hr class="rainbow">
-          <p class="underline-wavy">
-            Scroll to experience gratuitous gradients, misused tables, clashing palettes, and animated distractions that refuse to help.
-          </p>
-        </section>
-
-        <section id="gallery">
-          <h2 class="shadow-text">Gallery Of Crimes Against Aesthetics</h2>
-          <div class="gallery">
-            <div class="card">
-              <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triangle chaos">
-                <rect width="200" height="120" fill="#00f"/>
-                <polygon points="0,120 100,0 200,120" fill="#ff0"/>
-                <circle cx="100" cy="60" r="30" fill="#f0f"/>
-              </svg>
-              <p>Abstract Misery No. 1</p>
-            </div>
-            <div class="card">
-              <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-label="Squares gone wrong">
-                <rect width="200" height="120" fill="#0f0"/>
-                <rect x="10" y="10" width="180" height="100" fill="#f00"/>
-                <rect x="30" y="30" width="140" height="60" fill="#0ff"/>
-              </svg>
-              <p>Layered Disaster</p>
-            </div>
-            <div class="card">
-              <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-label="Wavy lines">
-                <defs>
-                  <linearGradient id="ug" x1="0" y1="0" x2="1" y2="0">
-                    <stop offset="0" stop-color="#ff0"/>
-                    <stop offset="0.5" stop-color="#f0f"/>
-                    <stop offset="1" stop-color="#0ff"/>
-                  </linearGradient>
-                </defs>
-                <rect width="200" height="120" fill="url(#ug)"/>
-                <path d="M0,60 C50,0 150,120 200,60" stroke="#000" stroke-width="6" fill="none"/>
-              </svg>
-              <p>Gradient Havoc</p>
-            </div>
-          </div>
-        </section>
-
-        <section id="contact">
-          <h2 class="shadow-text">Contact Form That Hurts</h2>
-          <form class="bad" onsubmit="annoyingSubmit(event)">
-            <label for="name">Your Name</label>
-            <input id="name" name="name" placeholder="Type your very nice name here" required>
-            <label for="email">Electronic Mail</label>
-            <input id="email" name="email" type="email" placeholder="example@totallylegit.example" required>
-            <label for="colour">Favourite Colour</label>
-            <select id="colour" name="colour">
-              <option>Neon Yellow</option>
-              <option>Magenta Disaster</option>
-              <option>Cyan Explosion</option>
-              <option>Lime Screech</option>
-            </select>
-            <label for="message">Your Beautiful Message</label>
-            <textarea id="message" name="message" rows="4" placeholder="Tell me everything in glorious Comic Sans"></textarea>
-            <button type="submit" class="cta">Submit Loudly</button>
-          </form>
-        </section>
-
-        <section id="shop">
-          <h2 class="shadow-text">Shop Of Dubious Choices</h2>
-          <table role="presentation" style="width:100%; border:8px outset #000; background:#ff0;">
-            <tr style="background:#f0f;">
-              <th style="padding:10px; border:6px solid #000;">Item</th>
-              <th style="padding:10px; border:6px solid #000;">Colour</th>
-              <th style="padding:10px; border:6px solid #000;">Price</th>
-              <th style="padding:10px; border:6px solid #000;">Action</th>
-            </tr>
-            <tr>
-              <td style="padding:10px; border:6px solid #000;">Blinking Cursor Cursor</td>
-              <td style="padding:10px; border:6px solid #000;">Neon Lime</td>
-              <td style="padding:10px; border:6px solid #000;">£9.99</td>
-              <td style="padding:10px; border:6px solid #000;"><button class="cta" onclick="addToCart('Blinking Cursor Cursor')">Add To Basket</button></td>
-            </tr>
-            <tr>
-              <td style="padding:10px; border:6px solid #000;">Papyrus Sticker Pack</td>
-              <td style="padding:10px; border:6px solid #000;">Rainbow</td>
-              <td style="padding:10px; border:6px solid #000;">£4.20</td>
-              <td style="padding:10px; border:6px solid #000;"><button class="cta" onclick="addToCart('Papyrus Sticker Pack')">Add To Basket</button></td>
-            </tr>
-            <tr>
-              <td style="padding:10px; border:6px solid #000;">Comic Sans Mug</td>
-              <td style="padding:10px; border:6px solid #000;">Magenta</td>
-              <td style="padding:10px; border:6px solid #000;">£12.34</td>
-              <td style="padding:10px; border:6px solid #000;"><button class="cta" onclick="addToCart('Comic Sans Mug')">Add To Basket</button></td>
-            </tr>
-          </table>
-          <div id="cart" class="widget" style="margin-top:12px;">
-            <h3>Your Basket</h3>
-            <ul id="cart-list" style="margin:0; padding-left:18px;"></ul>
-          </div>
-        </section>
-
-        <section id="faq">
-          <h2 class="shadow-text">Frequently Asked Questions</h2>
-          <details open>
-            <summary>Why is everything so bright</summary>
-            <p>Brightness increases conversion. Or confusion. Possibly both.</p>
-          </details>
-          <details>
-            <summary>Why is every font terrible</summary>
-            <p>Consistency builds trust. Inconsistent Comic Sans builds character.</p>
-          </details>
-          <details>
-            <summary>Does the site meet accessibility guidelines</summary>
-            <p>It meets guidelines in spirit, which is not how guidelines work.</p>
-          </details>
-        </section>
-
-        <section id="legal">
-          <h2 class="shadow-text">Legal Information</h2>
-          <p>
-            All colours, fonts, animations, and questionable choices are provided for educational demonstration of what not to do. Use responsibly. Or not.
-          </p>
-        </section>
-      </td>
-
-      <td class="ads">
-        <div class="widget">
-          <h3 class="blink">ADVERTISEMENT</h3>
-          <p>Buy a subscription to remove none of these effects.</p>
-          <button class="cta" onclick="window.open('#','_blank')">Click Here Wildly</button>
-        </div>
-        <div class="widget">
-          <h3>Rotating Deal</h3>
-          <p><span class="spin">💎</span> Everything is 0 percent off today only</p>
-        </div>
-        <div class="widget">
-          <h3>Inverted Tips</h3>
-          <ol style="filter: invert(100%);">
-            <li>Use every colour at once</li>
-            <li>Prefer tables for everything</li>
-            <li>Underline absolutely everything</li>
-          </ol>
-        </div>
-      </td>
-    </tr>
-  </table>
-</main>
-
-<footer>
-  <div class="center">
-    <div>Visitors:</div>
-    <div id="counter" class="counter">000000</div>
-  </div>
-  <p class="tiny">If this footer looked any heavier it would need scaffolding</p>
-</footer>
-
-<!-- UTTERLY NECESSARY SCRIPTS TO MAKE THINGS ANNOYING -->
 <script>
-  // Alert on load
-  function veryImportantAlert() {
-    try {
-      alert("Welcome to the most questionable design. Please turn your speakers up. Everything beeps.");
-    } catch (e) {}
+(function(){
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d', { alpha: true, desynchronized: true });
+  const hud = {
+    score: document.getElementById('score'),
+    acc: document.getElementById('acc'),
+    combo: document.getElementById('combo'),
+    hp: document.getElementById('hp'),
+    best: document.getElementById('best'),
+    judgeFlash: document.getElementById('judgeFlash')
+  };
+  const startUI = {
+    root: document.getElementById('startOverlay'),
+    startBtn: document.getElementById('startBtn'),
+    previewBtn: document.getElementById('previewBtn'),
+    muteBtn2: document.getElementById('muteBtn2'),
+    diff: document.getElementById('difficulty'),
+    latMinus: document.getElementById('latMinus'),
+    latPlus: document.getElementById('latencyReadout'),
+    latDec: document.getElementById('latMinus'),
+    latInc: document.getElementById('latPlus'),
+    latencyReadout: document.getElementById('latencyReadout')
+  };
+  const resultUI = {
+    root: document.getElementById('resultOverlay'),
+    title: document.getElementById('resultTitle'),
+    rank: document.getElementById('bigRank'),
+    score: document.getElementById('rScore'),
+    acc: document.getElementById('rAcc'),
+    max: document.getElementById('rMax'),
+    p: document.getElementById('rP'),
+    g: document.getElementById('rG'),
+    ok: document.getElementById('rOk'),
+    m: document.getElementById('rM'),
+    off: document.getElementById('rOff'),
+    again: document.getElementById('againBtn'),
+    home: document.getElementById('homeBtn')
+  };
+  const pauseBtn = document.getElementById('pauseBtn');
+  const restartBtn = document.getElementById('restartBtn');
+  const muteBtn = document.getElementById('muteBtn');
+
+  let W = 0, H = 0, DPR = Math.max(1, window.devicePixelRatio || 1);
+  function resize(){
+    W = canvas.clientWidth = window.innerWidth;
+    H = canvas.clientHeight = window.innerHeight;
+    DPR = Math.max(1, window.devicePixelRatio || 1);
+    canvas.width = Math.floor(W * DPR);
+    canvas.height = Math.floor(H * DPR);
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+  window.addEventListener('resize', resize, { passive:true });
+  resize();
+
+  // Audio
+  let audioCtx = null;
+  let masterGain = null;
+  let isMuted = false;
+  function ensureAudio(){
+    if (audioCtx) return;
+    audioCtx = new (window.AudioContext || window.webkitAudioContext)({ latencyHint: 'interactive' });
+    masterGain = audioCtx.createGain();
+    masterGain.gain.value = isMuted ? 0 : 0.9;
+    masterGain.connect(audioCtx.destination);
+  }
+  function setMuted(m){
+    isMuted = !!m;
+    if (masterGain) masterGain.gain.value = isMuted ? 0 : 0.9;
+    muteBtn.classList.toggle('toggled', isMuted);
   }
 
-  // Live clock with intentionally jittery seconds
-  const clockEl = document.getElementById('clock');
-  function updateClock() {
-    const now = new Date();
-    const h = String(now.getHours()).padStart(2, '0');
-    const m = String(now.getMinutes()).padStart(2, '0');
-    const s = String(now.getSeconds()).padStart(2, '0');
-    const jitter = Math.random() > 0.8 ? String((Number(s) + 1) % 60).padStart(2, '0') : s;
-    if (clockEl) clockEl.textContent = h + ":" + m + ":" + jitter;
+  // Simple chiptune instruments
+  function playKick(t){
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = 'triangle';
+    o.frequency.setValueAtTime(160, t);
+    o.frequency.exponentialRampToValueAtTime(45, t + 0.12);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(0.8, t + 0.005);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + 0.14);
+    o.connect(g).connect(masterGain);
+    o.start(t);
+    o.stop(t + 0.16);
   }
-  setInterval(updateClock, 500);
-  updateClock();
-
-  // Worse mode toggle
-  function toggleWorse() {
-    document.body.classList.toggle('worse');
-    beep(880, 0.08);
+  function playHat(t){
+    const node = audioCtx.createBufferSource();
+    const buffer = audioCtx.createBuffer(1, 4410, 44100);
+    const ch = buffer.getChannelData(0);
+    for(let i=0;i<ch.length;i++){ ch[i] = (Math.random()*2-1) * (1 - i/ch.length); }
+    node.buffer = buffer;
+    const bp = audioCtx.createBiquadFilter();
+    bp.type = 'highpass';
+    bp.frequency.value = 6000;
+    const g = audioCtx.createGain();
+    g.gain.value = 0.25;
+    node.connect(bp).connect(g).connect(masterGain);
+    node.start(t);
+    node.stop(t + 0.05);
   }
-
-  // Fake hit counter stored in localStorage
-  (function counter() {
-    const key = "atrocious-counter";
-    let n = Number(localStorage.getItem(key) || Math.floor(Math.random() * 40000 + 1000));
-    n += Math.floor(Math.random() * 10) + 1;
-    localStorage.setItem(key, String(n));
-    const pad = String(n).padStart(6, '0');
-    const el = document.getElementById('counter');
-    if (el) el.textContent = pad;
-  })();
-
-  // Add to cart
-  function addToCart(item) {
-    const ul = document.getElementById('cart-list');
-    const li = document.createElement('li');
-    li.textContent = item + " x1 — No returns"; // using hyphen, not em dash
-    ul.appendChild(li);
-    beep(660, 0.12);
-  }
-
-  // Annoying form submit
-  function annoyingSubmit(e) {
-    e.preventDefault();
-    confirm("Are you absolutely certain you want to send this splendid message") ? alert("Message dispatched into the void") : alert("Wise choice");
-    beep(220, 0.2);
-  }
-
-  // Before unload confirmation
-  window.addEventListener('beforeunload', function (e) {
-    e.preventDefault();
-    e.returnValue = '';
-  });
-
-  // Cursor emoji trail
-  const trail = [];
-  document.addEventListener('mousemove', function(e) {
-    const s = document.createElement('span');
-    s.textContent = Math.random() < 0.5 ? '✨' : '💥';
-    s.style.position = 'fixed';
-    s.style.left = (e.clientX + (Math.random()*10-5)) + 'px';
-    s.style.top = (e.clientY + (Math.random()*10-5)) + 'px';
-    s.style.pointerEvents = 'none';
-    s.style.fontSize = (Math.random() * 16 + 12) + 'px';
-    s.style.transform = 'rotate(' + (Math.random()*360) + 'deg)';
-    s.style.transition = 'all 600ms linear';
-    document.body.appendChild(s);
-    requestAnimationFrame(() => {
-      s.style.transform += ' translateY(-40px) scale(0.2)';
-      s.style.opacity = '0';
-    });
-    setTimeout(() => s.remove(), 700);
-    trail.push(s);
-    if (trail.length > 60) {
-      const t = trail.shift();
-      if (t && t.remove) t.remove();
+  function playSnare(t){
+    const node = audioCtx.createBufferSource();
+    const len = 44100 * 0.12;
+    const buffer = audioCtx.createBuffer(1, len, 44100);
+    const ch = buffer.getChannelData(0);
+    for(let i=0;i<len;i++){
+      const env = 1 - i/len;
+      ch[i] = (Math.random()*2-1) * env * 0.6;
     }
-  });
+    node.buffer = buffer;
+    const bp = audioCtx.createBiquadFilter();
+    bp.type = 'bandpass';
+    bp.Q.value = 0.6;
+    bp.frequency.value = 1800;
+    const g = audioCtx.createGain();
+    g.gain.value = 0.35;
+    node.connect(bp).connect(g).connect(masterGain);
+    node.start(t);
+    node.stop(t + 0.13);
+  }
+  function playTone(t, freq, dur=0.22, type='square', vol=0.18){
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    o.type = type;
+    o.frequency.value = freq;
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol, t + 0.01);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + dur);
+    o.connect(g).connect(masterGain);
+    o.start(t);
+    o.stop(t + dur + 0.02);
+  }
 
-  // WebAudio beep on interactive elements
-  let audioCtx;
-  function ensureAudio() {
-    if (!audioCtx) {
-      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
-      catch(e) { audioCtx = null; }
+  // Song and chart
+  const charts = {
+    // Generated 16 bars, 4-4, 120 BPM, with simple syncopation
+    base(bpm){
+      const beatDur = 60 / bpm;
+      const bars = 16;
+      const beatsPerBar = 4;
+      const hatPattern = [0,0.5,1,1.5,2,2.5,3,3.5];
+      const snareBeats = [1, 3];
+      const kickBeats = [0, 2];
+      const tonesScale = [261.63, 293.66, 329.63, 392.00, 523.25]; // C major pentatonic
+      const noteTimes = []; // tap notes
+      const events = []; // audio events
+      for(let bar=0; bar<bars; bar++){
+        const barStart = bar * beatsPerBar * beatDur;
+        const density = (bar%4===3)? 1.0 : (bar%4===1? 0.6 : 0.8);
+        // Hats
+        for(const hb of hatPattern){
+          const ht = barStart + hb*beatDur;
+          events.push({t:ht, kind:'hat'});
+        }
+        // Snare and kick
+        for(const b of snareBeats){
+          const t = barStart + b*beatDur;
+          events.push({t, kind:'snare'});
+        }
+        for(const b of kickBeats){
+          const t = barStart + b*beatDur;
+          events.push({t, kind:'kick'});
+        }
+        // Melody: on strong beats plus a syncopated eighth on some bars
+        for(let b=0;b<beatsPerBar;b++){
+          const t = barStart + b*beatDur;
+          const degree = (bar*3 + b)%tonesScale.length;
+          const f = tonesScale[degree];
+          events.push({t, kind:'tone', freq:f});
+          if (Math.random() < density*0.35){
+            const t2 = t + 0.5*beatDur;
+            const f2 = tonesScale[(degree+2)%tonesScale.length];
+            events.push({t:t2, kind:'tone', freq:f2, vol:0.14});
+          }
+        }
+        // Chart note: put on every beat, plus some eighths on accented bars
+        for(let b=0;b<beatsPerBar;b++){
+          noteTimes.push(barStart + b*beatDur);
+          if ((bar%4===2 || bar%4===3) && Math.random()<0.5) noteTimes.push(barStart + (b+0.5)*beatDur);
+        }
+      }
+      // Sort to be safe
+      events.sort((a,b)=>a.t-b.t);
+      noteTimes.sort((a,b)=>a-b);
+      return { bpm, duration: bars*beatsPerBar*beatDur, noteTimes, events };
     }
-    return audioCtx;
-  }
-  function beep(frequency, duration) {
-    const ctx = ensureAudio();
-    if (!ctx) return;
-    const o = ctx.createOscillator();
-    const g = ctx.createGain();
-    o.connect(g); g.connect(ctx.destination);
-    o.type = 'square';
-    o.frequency.value = frequency || 440;
-    g.gain.value = 0.03;
-    const now = ctx.currentTime;
-    o.start(now);
-    g.gain.exponentialRampToValueAtTime(0.0001, now + (duration || 0.1));
-    o.stop(now + (duration || 0.1));
-  }
-  function addBeepListeners() {
-    const clickables = document.querySelectorAll('a, button, input, select, textarea, summary, details');
-    clickables.forEach(el => {
-      el.addEventListener('mouseover', () => beep(1200, 0.05));
-      el.addEventListener('click', () => beep(300, 0.08));
-      el.addEventListener('focus', () => beep(900, 0.05));
-    });
-  }
-  addBeepListeners();
-  const mo = new MutationObserver(addBeepListeners);
-  mo.observe(document.body, { childList: true, subtree: true });
+  };
 
-  // Everything shakes on scroll
-  let shakeTimeout;
-  window.addEventListener('scroll', () => {
-    document.body.style.transform = 'translateX(2px)';
-    clearTimeout(shakeTimeout);
-    shakeTimeout = setTimeout(() => { document.body.style.transform = ''; }, 60);
+  function scheduleSong(baseTime, song){
+    for(const e of song.events){
+      const t = baseTime + e.t;
+      if (e.kind==='kick') playKick(t);
+      else if (e.kind==='snare') playSnare(t);
+      else if (e.kind==='hat') playHat(t);
+      else if (e.kind==='tone') playTone(t, e.freq, 0.2, 'square', e.vol||0.18);
+    }
+  }
+
+  // Game state
+  const DIFF = {
+    easy:    { travel: 1.6, windows: { perfect:0.070, great:0.120, good:0.180 }, hpMiss:1, hpMax:5 },
+    normal:  { travel: 1.2, windows: { perfect:0.055, great:0.100, good:0.160 }, hpMiss:1, hpMax:5 },
+    hard:    { travel: 0.95, windows: { perfect:0.045, great:0.080, good:0.130 }, hpMiss:1, hpMax:5 },
+    extreme: { travel: 0.75, windows: { perfect:0.035, great:0.065, good:0.100 }, hpMiss:1, hpMax:5 },
+  };
+  let latencyOffset = 0.00; // seconds, positive means you tend to hit early
+  function setLatency(ms){
+    latencyOffset = Math.max(-0.25, Math.min(0.25, ms/1000));
+    startUI.latencyReadout.textContent = (latencyOffset>=0? '+' : '') + Math.round(latencyOffset*1000) + ' ms';
+  }
+  setLatency(0);
+
+  const state = {
+    running:false,
+    paused:false,
+    startedAt:0, // audioCtx time
+    chart:null,
+    diff:DIFF.normal,
+    travel:1.2,
+    // scoring
+    score:0,
+    combo:0,
+    maxCombo:0,
+    total:0,
+    judged:0,
+    hitDeltaSum:0,
+    hp:5,
+    hpMax:5,
+    counts:{ perfect:0, great:0, good:0, miss:0 },
+    // spawning
+    noteTimes:[],
+    spawnIdx:0,
+    nextJudgeIdx:0,
+    liveNotes:[], // {time, y, hit:false, judged:false}
+    ended:false
+  };
+
+  function resetGame(){
+    state.running = false;
+    state.paused = false;
+    state.startedAt = 0;
+    state.chart = charts.base(120);
+    const pick = DIFF[(document.getElementById('difficulty').value)||'normal'] || DIFF.normal;
+    state.diff = pick;
+    state.travel = pick.travel;
+    state.noteTimes = [...state.chart.noteTimes];
+    state.spawnIdx = 0;
+    state.nextJudgeIdx = 0;
+    state.liveNotes.length = 0;
+    state.score = 0;
+    state.combo = 0;
+    state.maxCombo = 0;
+    state.total = state.noteTimes.length;
+    state.judged = 0;
+    state.hitDeltaSum = 0;
+    state.hpMax = pick.hpMax;
+    state.hp = state.hpMax;
+    state.counts = {perfect:0,great:0,good:0,miss:0};
+    hud.score.textContent = '0';
+    hud.acc.textContent = '100.00%';
+    hud.combo.textContent = '0x';
+    updateHP();
+    hud.judgeFlash.style.opacity = 0;
+    state.ended = false;
+  }
+  resetGame();
+
+  function updateHP(){
+    const full = '★★★★★';
+    const empty = '☆☆☆☆☆';
+    const val = Math.max(0, Math.min(state.hpMax, state.hp));
+    hud.hp.textContent = full.slice(0, val) + empty.slice(val);
+  }
+
+  function accuracy(){
+    const hits = state.counts.perfect*1.0 + state.counts.great*0.8 + state.counts.good*0.5;
+    const acc = state.judged>0 ? (hits / state.judged) : 1.0;
+    return acc;
+  }
+
+  function gradeFromAcc(acc){
+    if (acc >= 0.98) return 'S';
+    if (acc >= 0.92) return 'A';
+    if (acc >= 0.85) return 'B';
+    if (acc >= 0.75) return 'C';
+    return 'D';
+  }
+
+  // Input handling - single tap or click anywhere
+  function onTap(){
+    if (!state.running || state.paused || state.ended) return;
+    const t = audioCtx.currentTime - state.startedAt + latencyOffset;
+    // find nearest next unjudged note within judge window
+    let idx = state.nextJudgeIdx;
+    while (idx < state.noteTimes.length && state.noteTimes[idx] < t - state.diff.windows.good) {
+      // late miss auto - but we also process misses in update loop
+      idx++;
+    }
+    // search nearby window
+    let bestIdx = -1;
+    let bestErr = Infinity;
+    for(let j=idx-1; j<=idx+2; j++){
+      if (j<0 || j>=state.noteTimes.length) continue;
+      const nt = state.noteTimes[j];
+      // skip if already judged - check liveNotes also
+      const already = state.liveNotes.find(n => n.time===nt && n.judged);
+      if (already) continue;
+      const err = Math.abs(nt - t);
+      if (err < bestErr) { bestErr = err; bestIdx = j; }
+    }
+    if (bestIdx >= 0){
+      const nt = state.noteTimes[bestIdx];
+      const err = bestErr;
+      let result = null;
+      if (err <= state.diff.windows.perfect) result = 'perfect';
+      else if (err <= state.diff.windows.great) result = 'great';
+      else if (err <= state.diff.windows.good) result = 'good';
+      else result = 'miss';
+      judge(bestIdx, result, nt - t);
+    } else {
+      // stray tap
+      judge(null, 'miss', 0);
+    }
+  }
+
+  function judge(noteIdx, result, signedErr){
+    let deltaScore = 0;
+    if (result === 'perfect'){ deltaScore = 1000 + state.combo*2; state.combo++; state.counts.perfect++; flashJudge('PERFECT', 'perfect'); vibrate(10); }
+    else if (result === 'great'){ deltaScore = 700 + state.combo; state.combo++; state.counts.great++; flashJudge('GREAT', 'great'); vibrate(6); }
+    else if (result === 'good'){ deltaScore = 400; state.combo++; state.counts.good++; flashJudge('GOOD', 'good'); vibrate(3); }
+    else { deltaScore = -150; state.combo = 0; state.counts.miss++; state.hp -= state.diff.hpMiss; updateHP(); flashJudge('MISS', 'miss'); vibrate(30); }
+    state.score = Math.max(0, state.score + deltaScore);
+    state.maxCombo = Math.max(state.maxCombo, state.combo);
+    hud.score.textContent = state.score.toString();
+    hud.combo.textContent = state.combo + 'x';
+
+    // mark judged note if any
+    if (noteIdx != null){
+      // mark in liveNotes
+      const ln = state.liveNotes.find(n => n.time === state.noteTimes[noteIdx] && !n.judged);
+      if (ln){ ln.judged = true; ln.hit = (result!=='miss'); ln.err = signedErr; }
+      // advance nextJudgeIdx if we judged the earliest one
+      if (noteIdx === state.nextJudgeIdx) {
+        state.nextJudgeIdx++;
+      }
+      state.judged++;
+      state.hitDeltaSum += Math.abs(signedErr);
+    } else {
+      // stray tap counts as judged miss only if we want to influence accuracy - we will count as miss without increasing judged count
+    }
+
+    const acc = accuracy();
+    hud.acc.textContent = (acc*100).toFixed(2) + '%';
+
+    if (state.hp <= 0){
+      endSong(true);
+    }
+  }
+
+  function flashJudge(text, kind){
+    const el = hud.judgeFlash;
+    el.textContent = text;
+    el.style.color = kind==='perfect' ? 'var(--perfect)' : kind==='great' ? 'var(--great)' : kind==='good' ? 'var(--good)' : 'var(--miss)';
+    el.style.opacity = 1;
+    el.style.transform = 'translate(-50%, 0)';
+    const start = performance.now();
+    function fade(){
+      const t = (performance.now() - start) / 600;
+      if (t >= 1){ el.style.opacity = 0; return; }
+      el.style.opacity = (1 - t).toFixed(3);
+      requestAnimationFrame(fade);
+    }
+    requestAnimationFrame(fade);
+  }
+
+  function vibrate(ms){
+    if (navigator.vibrate) navigator.vibrate(ms);
+  }
+
+  // Game loop and rendering
+  const target = { x: 0, y: 0, r: 70 };
+  function layout(){
+    target.x = W * 0.5;
+    target.y = Math.min(H - 120, H*0.82);
+    target.r = Math.max(52, Math.min(94, Math.min(W,H)*0.06));
+  }
+  layout();
+
+  function spawnNotesUntil(now){
+    while (state.spawnIdx < state.noteTimes.length){
+      const nt = state.noteTimes[state.spawnIdx];
+      const spawnAt = nt - state.travel;
+      if (now >= spawnAt - 0.01){
+        state.liveNotes.push({ time: nt, y: 0, judged:false, hit:false, err:0, born: now });
+        state.spawnIdx++;
+      } else break;
+    }
+  }
+
+  let raf = null;
+  function loop(){
+    if (!state.running) return;
+    raf = requestAnimationFrame(loop);
+    if (state.paused) return drawPaused();
+
+    const nowAudio = audioCtx.currentTime - state.startedAt;
+    const now = nowAudio;
+
+    spawnNotesUntil(now);
+
+    // auto miss for notes that passed window and were not judged
+    while (state.nextJudgeIdx < state.noteTimes.length){
+      const nt = state.noteTimes[state.nextJudgeIdx];
+      if (now > nt + state.diff.windows.good + 0.06){
+        // mark miss
+        const ln = state.liveNotes.find(n => n.time===nt && !n.judged);
+        if (ln){ ln.judged = true; ln.hit = false; }
+        state.counts.miss++;
+        state.combo = 0;
+        state.hp -= state.diff.hpMiss;
+        updateHP();
+        state.judged++;
+        flashJudge('MISS', 'miss');
+        state.nextJudgeIdx++;
+        if (state.hp <= 0){ endSong(true); return; }
+      } else break;
+    }
+
+    // end condition
+    if (!state.ended && now > state.chart.duration + 1.0 && state.judged >= state.total){
+      endSong(false);
+      return;
+    }
+
+    draw(now);
+  }
+
+  function draw(now){
+    // background pulse
+    const beat = (now*2) % 1; // half note pulse
+    const glow = 0.2 + 0.5 * Math.max(0, 1 - Math.abs(beat-0.5)*2);
+    ctx.clearRect(0,0,W,H);
+
+    // gradient background accent
+    const g = ctx.createRadialGradient(W*0.5, H*0.25, 30, W*0.5, H*0.25, Math.max(W,H)*0.8);
+    g.addColorStop(0, `rgba(139,246,255,${0.06 + glow*0.06})`);
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0,0,W,H);
+
+    // track
+    const laneX = target.x;
+    const laneTop = 90;
+    ctx.lineWidth = 8;
+    ctx.strokeStyle = 'rgba(255,255,255,0.06)';
+    ctx.beginPath();
+    ctx.moveTo(laneX, laneTop);
+    ctx.lineTo(laneX, target.y - target.r - 18);
+    ctx.stroke();
+
+    // target ring
+    const ringPulse = 1 + glow*0.08;
+    ctx.save();
+    ctx.translate(target.x, target.y);
+    ctx.scale(ringPulse, ringPulse);
+
+    ctx.beginPath();
+    ctx.arc(0, 0, target.r, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(255,255,255,0.18)';
+    ctx.lineWidth = 10;
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(0, 0, target.r - 16, 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(139,246,255,0.28)';
+    ctx.lineWidth = 6;
+    ctx.stroke();
+
+    ctx.restore();
+
+    // notes
+    for(const n of state.liveNotes){
+      const prog = Math.min(1, Math.max(0, (now - (n.time - state.travel)) / state.travel));
+      n.y = laneTop + (target.y - target.r - 24 - laneTop) * prog;
+
+      // colour based on approach to window
+      const dt = Math.abs(n.time - now);
+      let col = 'rgba(95,197,255,0.90)'; // great
+      if (dt <= state.diff.windows.perfect) col = 'rgba(255,215,107,0.95)';
+      else if (dt <= state.diff.windows.good) col = 'rgba(124,255,139,0.95)';
+
+      // if judged, fade
+      let alpha = 1;
+      if (n.judged){
+        if (n.hit){
+          const ft = Math.min(1, Math.max(0, 1 - (now - n.time)/0.25));
+          alpha = ft;
+        } else {
+          const ft = Math.min(1, Math.max(0, 1 - (now - n.time)/0.35));
+          alpha = ft;
+          col = 'rgba(255,107,107,0.9)';
+        }
+      }
+      // draw note
+      ctx.save();
+      ctx.translate(laneX, n.y);
+      const r = 18 + 10*(1 - prog);
+      ctx.beginPath();
+      ctx.arc(0, 0, r, 0, Math.PI*2);
+      ctx.fillStyle = col.replace(/0\.\d+\)/, alpha+')').replace(/1\)/, alpha+')');
+      ctx.fill();
+
+      // outline
+      ctx.lineWidth = 3;
+      ctx.strokeStyle = 'rgba(255,255,255,' + (0.28*alpha).toFixed(3) + ')';
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // remove old notes
+    state.liveNotes = state.liveNotes.filter(n => now < n.time + 1.0);
+
+    // small HUD flash at lane based on beat
+    ctx.save();
+    ctx.translate(target.x, target.y);
+    ctx.globalAlpha = 0.25 * glow;
+    ctx.beginPath();
+    ctx.arc(0, 0, target.r + 30 + 12*Math.sin(now*6), 0, Math.PI*2);
+    ctx.strokeStyle = 'rgba(139,246,255,0.6)';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawPaused(){
+    // dim overlay
+    ctx.fillStyle = 'rgba(0,0,0,0.25)';
+    ctx.fillRect(0,0,W,H);
+    ctx.fillStyle = 'rgba(255,255,255,0.9)';
+    ctx.font = '700 28px system-ui, sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('Paused', W*0.5, H*0.5);
+  }
+
+  function endSong(failed){
+    if (!state.running) return;
+    state.running = false;
+    state.ended = true;
+    cancelAnimationFrame(raf);
+    const acc = accuracy();
+    const rank = failed ? 'F' : gradeFromAcc(acc);
+    resultUI.rank.textContent = rank;
+    resultUI.score.textContent = state.score.toString();
+    resultUI.acc.textContent = (acc*100).toFixed(2) + '%';
+    resultUI.max.textContent = state.maxCombo.toString();
+    resultUI.p.textContent = state.counts.perfect.toString();
+    resultUI.g.textContent = state.counts.great.toString();
+    resultUI.ok.textContent = state.counts.good.toString();
+    resultUI.m.textContent = state.counts.miss.toString();
+    resultUI.off.textContent = (latencyOffset>=0? '+' : '') + Math.round(latencyOffset*1000) + ' ms';
+    resultUI.root.style.display = 'flex';
+    // best
+    const best = Math.max(parseInt(hud.best.textContent||'0',10), state.score);
+    hud.best.textContent = best.toString();
+  }
+
+  // Start and control
+  function startGame(previewOnly=false){
+    ensureAudio();
+    resetGame();
+    const baseTime = audioCtx.currentTime + 0.4;
+    state.startedAt = baseTime;
+    state.running = true;
+    state.paused = false;
+    state.ended = false;
+    // schedule audio
+    scheduleSong(baseTime, state.chart);
+    if (previewOnly){
+      // quickly start and stop the loop for a short time
+      const previewEnd = baseTime + 2.0;
+      function previewLoop(){
+        if (audioCtx.currentTime > previewEnd) { state.running=false; cancelAnimationFrame(raf); return; }
+        raf = requestAnimationFrame(previewLoop);
+        draw(audioCtx.currentTime - baseTime);
+      }
+      previewLoop();
+      return;
+    }
+    loop();
+  }
+
+  // UI interactions
+  startUI.startBtn.addEventListener('click', ()=>{
+    startUI.root.style.display = 'none';
+    startGame(false);
+  });
+  startUI.previewBtn.addEventListener('click', ()=>{
+    ensureAudio();
+    setMuted(isMuted);
+    startGame(true);
+  });
+  startUI.muteBtn2.addEventListener('click', ()=>{
+    ensureAudio(); setMuted(!isMuted);
+  });
+  muteBtn.addEventListener('click', ()=>{
+    ensureAudio(); setMuted(!isMuted);
+  });
+  startUI.latDec.addEventListener('click', ()=> setLatency(latencyOffset*1000 - 5));
+  startUI.latInc.addEventListener('click', ()=> setLatency(latencyOffset*1000 + 5));
+
+  pauseBtn.addEventListener('click', ()=>{
+    if (!state.running) return;
+    state.paused = !state.paused;
+    pauseBtn.textContent = state.paused ? 'Resume' : 'Pause';
+  });
+  restartBtn.addEventListener('click', ()=>{
+    resultUI.root.style.display = 'none';
+    startUI.root.style.display = 'none';
+    startGame(false);
   });
 
-  // Keyboard shortcuts that nobody asked for
-  window.addEventListener('keydown', e => {
-    if (e.key.toLowerCase() === 'w') toggleWorse();
-    if (e.key === 'Escape') veryImportantAlert();
+  resultUI.again.addEventListener('click', ()=>{
+    resultUI.root.style.display = 'none';
+    startUI.root.style.display = 'none';
+    startGame(false);
   });
+  resultUI.home.addEventListener('click', ()=>{
+    resultUI.root.style.display = 'none';
+    startUI.root.style.display = 'flex';
+  });
+
+  // Global input - single tap or click anywhere to hit notes
+  function enableTapTarget(el){
+    el.addEventListener('pointerdown', (e)=>{
+      // avoid double tap zoom on mobile
+      e.preventDefault();
+      if (!audioCtx) return; // ignore taps before start
+      onTap();
+    }, { passive:false });
+  }
+  enableTapTarget(document.body);
+
+  // Prevent gestures that could interrupt tapping
+  document.addEventListener('gesturestart', e=>e.preventDefault());
+  document.addEventListener('dblclick', e=>e.preventDefault());
+
+  // Keys for pause or restart if desired
+  window.addEventListener('keydown', (e)=>{
+    if (e.key === 'p') { pauseBtn.click(); }
+    if (e.key === 'r') { restartBtn.click(); }
+    if (e.key === 'm') { muteBtn.click(); }
+  });
+
+  // First paint
+  draw(0);
+})();
 </script>
 </body>
 </html>
-```
