@@ -1,1406 +1,683 @@
-<!doctype html>
+```html
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
-<meta name="theme-color" content="#0a0a0b">
-<title>Pocket Physics Playground</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ABSOLUTELY ATROCIOUS WEBSITE - WORST DESIGN EVER</title>
 <style>
-  :root{
-    --bg-0:#0a0a0b;
-    --bg-1:#0f1115;
-    --bg-2:#171a21;
-    --ink-0:#ffffff;
-    --ink-1:#cfd3dc;
-    --ink-2:#8d94a0;
-    --accent:#5dd1ff;
-    --accent-2:#7cff9f;
-    --warn:#ff6b6b;
-    --ok:#6bff95;
-    --card:#12151b;
-    --glass:rgba(18,21,27,0.82);
-    --glass-2:rgba(18,21,27,0.66);
-    --shadow:0 10px 30px rgba(0,0,0,0.35), 0 1px 0 rgba(255,255,255,0.05) inset;
-    --radius:14px;
-    --pad:12px;
-    --pad-lg:16px;
-    --d:10px;
+  /* GLOBAL ABOMINATION */
+  html, body {
+    height: 100%;
   }
-  html,body{
-    height:100%;
-    margin:0;
-    background: radial-gradient(1200px 800px at 75% 20%, #1b2130 0%, #0e1117 45%, #090a0d 100%), var(--bg-0);
-    color:var(--ink-0);
-    font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    touch-action: none;
-    overscroll-behavior: none;
+  body {
+    margin: 0;
+    background:
+      repeating-linear-gradient(45deg, #ff00ff, #ff00ff 10px, #00ffff 10px, #00ffff 20px),
+      radial-gradient(circle at 10% 10%, #ffff00, transparent 30%),
+      radial-gradient(circle at 90% 30%, #00ff00, transparent 30%),
+      radial-gradient(circle at 20% 80%, #ff0000, transparent 30%),
+      linear-gradient(90deg, #ff00ff, #ffff00, #00ffff, #00ff00, #ff0000, #0000ff);
+    background-blend-mode: multiply, screen, screen, screen, normal;
+    cursor: crosshair;
+    image-rendering: pixelated;
+    font-family: "Comic Sans MS", "Comic Sans", "Papyrus", "Impact", "Curlz MT", "Chalkduster", cursive, fantasy, "Times New Roman", serif;
+    color: #00ff00;
+    text-shadow: 3px 3px 0 #000, -2px -2px 0 #ff00ff, 0 0 10px #ffff00;
+    letter-spacing: 1.5px;
+    animation: bgshift 8s linear infinite;
+    overflow-x: hidden;
+  }
+  @keyframes bgshift {
+    from { filter: hue-rotate(0deg) saturate(150%); }
+    50%  { filter: hue-rotate(180deg) saturate(300%); }
+    to   { filter: hue-rotate(360deg) saturate(150%); }
   }
 
-  /* Layout */
-  .wrap{
-    position:fixed;
-    inset:0;
-    display:grid;
-    grid-template-rows: auto 1fr auto;
+  /* HORRIBLE HEADER */
+  header {
+    position: relative;
+    padding: 30px 10px 50px;
+    background:
+      repeating-linear-gradient(90deg, #ff0000, #ff0000 15px, #0000ff 15px, #0000ff 30px);
+    border-bottom: 10px ridge #00ff00;
+    box-shadow: inset 0 0 30px #ffff00, 0 0 40px #ff00ff;
+    transform: skewY(-2deg);
+  }
+  header h1 {
+    margin: 0;
+    font-size: 64px;
+    font-weight: 900;
+    font-style: italic;
+    text-align: center;
+    mix-blend-mode: difference;
+    animation: wobble 1.5s ease-in-out infinite;
+  }
+  @keyframes wobble {
+    0%,100% { transform: rotate(-2deg) scale(1.02); }
+    50%     { transform: rotate(2deg)  scale(0.98); }
+  }
+  .rainbow {
+    display: inline-block;
+  }
+  .rainbow span {
+    display: inline-block;
+    animation: hue 4s linear infinite;
+  }
+  @keyframes hue {
+    from { filter: hue-rotate(0deg); }
+    to { filter: hue-rotate(360deg); }
   }
 
-  /* Top bar */
-  .topbar{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    padding: env(safe-area-inset-top) var(--pad-lg) var(--pad);
-    background: linear-gradient(180deg, rgba(10,11,13,0.92), rgba(10,11,13,0.35));
-    backdrop-filter: blur(8px);
-    border-bottom:1px solid rgba(255,255,255,0.06);
+  /* SINISTER SCROLLER */
+  .tape {
+    background: repeating-linear-gradient(45deg, #222, #222 6px, #eee 6px, #eee 12px);
+    color: #ff00ff;
+    padding: 5px 0;
+    border-top: 6px dotted #00ffff;
+    border-bottom: 6px dotted #00ffff;
   }
-  .brand{
-    font-weight:700;
-    letter-spacing:0.2px;
-    font-size:16px;
-    display:flex;
-    align-items:center;
-    gap:8px;
-  }
-  .brand .dot{
-    width:10px;
-    height:10px;
-    border-radius:50%;
-    background:conic-gradient(from 0deg, var(--accent), var(--accent-2), #ffd36b, var(--accent));
-    box-shadow:0 0 20px rgba(93,209,255,0.7), 0 0 8px rgba(124,255,159,0.7) inset;
+  marquee {
+    font-size: 22px;
+    font-weight: bold;
   }
 
-  /* Canvas stage */
-  .stage{
-    position:relative;
+  /* DISGUSTING NAVIGATION */
+  nav {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(90deg, #00ffff, #ff00ff);
+    border-top: 8px groove #ffff00;
+    border-bottom: 8px groove #ffff00;
   }
-  canvas{
-    position:absolute;
-    inset:0;
-    width:100%;
-    height:100%;
-    display:block;
-    background: linear-gradient(180deg, rgba(18,21,27,0.35), rgba(18,21,27,0.15) 35%, rgba(18,21,27,0.35));
+  nav table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 10px 0;
   }
-
-  /* HUD badges */
-  .badge{
-    position:absolute;
-    left:var(--pad-lg);
-    bottom:var(--pad-lg);
-    background:var(--glass);
-    border:1px solid rgba(255,255,255,0.08);
-    padding:10px 12px;
-    border-radius:var(--radius);
-    box-shadow: var(--shadow);
-    font-size:12px;
-    color:var(--ink-1);
-    display:flex;
-    gap:14px;
-    flex-wrap:wrap;
-    max-width: min(92vw, 560px);
-    pointer-events:none;
-    user-select:none;
+  nav a {
+    display: block;
+    text-align: center;
+    background: conic-gradient(from 0deg at 50% 50%, #ff00ff, #ffff00, #00ffff, #00ff00, #ff0000, #0000ff, #ff00ff);
+    padding: 18px 8px;
+    font-size: 18px;
+    font-weight: 800;
+    border: 6px outset #000;
+    color: #000;
+    text-decoration: none;
+    text-transform: uppercase;
+    box-shadow: 0 0 0 6px #fff, 0 0 15px #fff, inset 0 0 14px #000;
+    transform: skewX(12deg);
+    transition: transform 0.1s linear, filter 0.1s linear;
   }
-  .kv{
-    display:flex;
-    gap:6px;
-    align-items:baseline;
+  nav a:hover {
+    transform: skewX(-12deg) scale(1.08) rotate(-2deg);
+    filter: invert(100%) contrast(200%);
   }
-  .kv b{ color:var(--ink-0); font-weight:700; }
-
-  /* Control dock for mobile */
-  .dock{
-    display:flex;
-    gap:10px;
-    padding: var(--pad) var(--pad-lg) calc(env(safe-area-inset-bottom) + var(--pad));
-    background: linear-gradient(0deg, rgba(10,11,13,0.92), rgba(10,11,13,0.35));
-    border-top:1px solid rgba(255,255,255,0.06);
-    align-items:center;
-    justify-content:space-between;
+  nav a:active {
+    border-style: inset;
+  }
+  nav a:visited {
+    color: #ff00ff;
   }
 
-  .btn{
-    -webkit-tap-highlight-color: transparent;
-    appearance:none;
-    outline:0;
-    border:1px solid rgba(255,255,255,0.12);
-    background:linear-gradient(180deg, #151923, #0e1219);
-    color:var(--ink-0);
-    border-radius:12px;
-    padding:12px 14px;
-    font-weight:700;
-    font-size:14px;
-    letter-spacing:0.2px;
-    box-shadow: var(--shadow);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    gap:10px;
-    min-width:48px;
-    min-height:48px;
+  /* APPALLING CONTENT LAYOUT USING TABLES */
+  main {
+    padding: 20px 10px 60px;
   }
-  .btn[data-variant="primary"]{
-    border-color: rgba(93,209,255,0.7);
-    background: linear-gradient(180deg, rgba(93,209,255,0.22), rgba(14,18,25,1));
+  .layout {
+    width: 100%;
+    border: 12px ridge #ff00ff;
+    background:
+      repeating-linear-gradient(0deg, rgba(255,255,255,0.2), rgba(255,255,255,0.2) 10px, rgba(0,0,0,0.2) 10px, rgba(0,0,0,0.2) 20px);
   }
-  .btn[data-variant="danger"]{
-    border-color: rgba(255,107,107,0.7);
-    background: linear-gradient(180deg, rgba(255,107,107,0.22), rgba(14,18,25,1));
+  .layout td {
+    vertical-align: top;
+    padding: 16px;
+    border: 8px double #000;
+    background: linear-gradient(180deg, #ffe600, #ff6 30%, #f0f 60%, #6ff 100%);
   }
-  .btn:active{
-    transform: translateY(1px) scale(0.995);
+  .side {
+    width: 23%;
+    filter: saturate(300%) blur(0.2px);
   }
-  .btn .icon{
-    width:20px;
-    height:20px;
-    display:inline-block;
+  .content {
+    width: 54%;
+  }
+  .ads {
+    width: 23%;
+    background: repeating-linear-gradient(90deg, #000, #000 8px, #333 8px, #333 16px);
   }
 
-  .dock .group{
-    display:flex;
-    gap:10px;
-    align-items:center;
+  /* TRULY BAD WIDGETS */
+  .widget {
+    margin: 16px 0;
+    padding: 10px;
+    border: 10px groove #00ffff;
+    background: #ff00ff;
+    color: #fff;
+    box-shadow: 8px 8px 0 #000, inset 0 0 20px #000;
+    transform: rotate(-1deg);
+  }
+  .widget h3 {
+    margin: 0 0 6px;
+    font-family: "Papyrus", cursive, fantasy;
+    letter-spacing: 3px;
+    word-spacing: 8px;
+  }
+  .blink {
+    animation: blink 0.7s steps(1) infinite;
+  }
+  @keyframes blink {
+    50% { opacity: 0; }
+  }
+  .spin {
+    display: inline-block;
+    animation: spin 2s linear infinite;
+  }
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+  .bounce {
+    display: inline-block;
+    animation: bounce 0.8s ease-in-out infinite;
+  }
+  @keyframes bounce {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-8px) scale(1.05); }
   }
 
-  /* Settings panel sheet */
-  .sheet{
-    position:fixed;
-    left:0;
-    right:0;
-    bottom:0;
-    transform: translateY(105%);
-    transition: transform 280ms cubic-bezier(.2,.9,.2,1);
-    background: rgba(9,10,13,0.98);
-    border-top-left-radius: 20px;
-    border-top-right-radius: 20px;
-    box-shadow: 0 -30px 60px rgba(0,0,0,0.5);
-    border-top:1px solid rgba(255,255,255,0.06);
-    z-index:50;
-    max-height: 75vh;
-    display:flex;
-    flex-direction:column;
+  /* FORM FROM A NIGHTMARE */
+  form.bad {
+    display: grid;
+    gap: 12px;
+    background: repeating-conic-gradient(#ff0 0 10deg, #0ff 10deg 20deg, #f0f 20deg 30deg);
+    padding: 14px;
+    border: 10px outset #000;
+    box-shadow: inset 0 0 50px #fff, 0 0 20px #0ff;
+    transform: rotate(1deg) skewX(5deg);
   }
-  .sheet.open{ transform: translateY(0%); }
-  .sheet header{
-    padding:16px 18px 8px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
+  form.bad label {
+    font-weight: 900;
+    text-transform: uppercase;
+    text-decoration: underline wavy #000;
   }
-  .sheet header h3{
-    margin:0;
-    font-size:16px;
-    letter-spacing:0.3px;
+  form.bad input, form.bad select, form.bad textarea, form.bad button {
+    font-family: "Comic Sans MS", "Comic Sans", cursive, fantasy, "Impact", "Papyrus";
+    font-size: 18px;
+    padding: 8px;
+    border: 6px dashed #ff00ff;
+    background: #ffff00;
+    color: #0000ff;
+    outline: 8px solid #00ff00;
+    box-shadow: 6px 6px 0 #000;
   }
-  .sheet .grip{
-    width:44px;
-    height:5px;
-    border-radius:3px;
-    background: rgba(255,255,255,0.2);
-    margin:8px auto 0;
+  form.bad input:focus, form.bad textarea:focus {
+    filter: hue-rotate(180deg) saturate(300%);
   }
-  .sheet .content{
-    overflow:auto;
-    padding: 6px 16px 16px;
+  .cta {
+    background: repeating-linear-gradient(45deg, #ff0, #ff0 8px, #f00 8px, #f00 16px);
+    color: #000;
+    border: 10px ridge #000;
+    font-size: 22px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    animation: shake 0.3s infinite, blink 0.6s steps(1) infinite;
+    cursor: wait;
   }
-
-  /* Form controls */
-  .field{
-    background: var(--card);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:14px;
-    padding:12px;
-    margin:10px 0;
-    box-shadow: var(--shadow);
-  }
-  .field h4{
-    margin:0 0 8px 0;
-    font-size:13px;
-    color:var(--ink-1);
-    letter-spacing:0.2px;
-  }
-  .row{
-    display:grid;
-    grid-template-columns: 1fr auto;
-    align-items:center;
-    gap:10px;
-    margin:6px 0;
-  }
-  .row .value{
-    font-variant-numeric: tabular-nums;
-    color:var(--accent);
-    min-width:68px;
-    text-align:right;
-  }
-  input[type="range"]{
-    width:100%;
-    -webkit-appearance:none;
-    height:32px;
-    background:transparent;
-  }
-  input[type="range"]::-webkit-slider-thumb{
-    -webkit-appearance:none;
-    appearance:none;
-    width:26px;
-    height:26px;
-    border-radius:50%;
-    background: radial-gradient(circle at 35% 35%, #fff, #bfeaff 40%, #5dd1ff);
-    border:1px solid rgba(255,255,255,0.7);
-    box-shadow: 0 2px 10px rgba(93,209,255,0.6);
-    margin-top:-11px;
-  }
-  input[type="range"]::-webkit-slider-runnable-track{
-    height:4px;
-    background: linear-gradient(90deg, var(--accent), var(--accent-2));
-    border-radius:999px;
-  }
-  .switch{
-    display:inline-flex;
-    align-items:center;
-    gap:10px;
-    font-size:14px;
-  }
-  .switch input{
-    display:none;
-  }
-  .switch .track{
-    width:48px;
-    height:28px;
-    border-radius:999px;
-    background: rgba(255,255,255,0.12);
-    border:1px solid rgba(255,255,255,0.15);
-    position:relative;
-    box-shadow: inset 0 2px 8px rgba(0,0,0,0.35);
-  }
-  .switch .thumb{
-    position:absolute;
-    top:2px;
-    left:2px;
-    width:24px;
-    height:24px;
-    border-radius:50%;
-    background: radial-gradient(circle at 35% 35%, #fff, #bfeaff 40%, #5dd1ff);
-    transition: transform 180ms ease;
-    box-shadow: 0 2px 10px rgba(93,209,255,0.6);
-  }
-  .switch input:checked + .track .thumb{
-    transform: translateX(20px);
+  @keyframes shake {
+    0% { transform: translate(0, 0) rotate(0); }
+    25% { transform: translate(2px, -2px) rotate(-1deg); }
+    50% { transform: translate(-2px, 2px) rotate(1deg); }
+    75% { transform: translate(2px, 2px) rotate(0.5deg); }
+    100% { transform: translate(-2px, -2px) rotate(-0.5deg); }
   }
 
-  /* Help hint */
-  .hint{
-    position:absolute;
-    right:var(--pad-lg);
-    top: calc(env(safe-area-inset-top) + 66px);
-    font-size:12px;
-    color:var(--ink-2);
-    background:var(--glass-2);
-    border:1px solid rgba(255,255,255,0.08);
-    padding:10px 12px;
-    border-radius:12px;
-    max-width:min(56ch, 70vw);
-    box-shadow: var(--shadow);
-    user-select:none;
+  /* GALLERY CRIMES */
+  .gallery {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+  }
+  .card {
+    padding: 10px;
+    border: 10px double #fff;
+    background:
+      linear-gradient(0deg, #f0f, #0ff),
+      url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="60" height="60"><rect width="60" height="60" fill="yellow"/><circle cx="30" cy="30" r="12" fill="red"/></svg>');
+    background-size: cover, 60px 60px;
+    box-shadow: 0 0 25px #fff, inset 0 0 20px #000;
+    transform: perspective(400px) rotateY(12deg) skewY(2deg);
+  }
+  .card svg {
+    width: 100%;
+    height: 120px;
+    display: block;
+    transform: scaleX(1.4) scaleY(0.6) rotate(-7deg);
+    filter: sepia(100%) contrast(250%) saturate(400%);
+  }
+  .card p {
+    margin: 8px 0 0;
+    font-family: "Impact", "Comic Sans MS", sans-serif;
+    color: #000;
+    background: #ff0;
+    display: inline-block;
+    padding: 4px 6px;
+    box-shadow: 6px 6px 0 #000;
   }
 
-  /* Desktop tweaks */
-  @media (min-width: 900px){
-    .sheet{
-      left:auto;
-      right:16px;
-      bottom:16px;
-      border-radius:16px;
-      max-height:80vh;
-      width:420px;
-    }
-    .sheet header .close{
-      display:none;
-    }
-    .hint{ top: 110px; }
+  /* FOOTER SHAME */
+  footer {
+    margin-top: 40px;
+    padding: 30px 10px;
+    background:
+      linear-gradient(180deg, #00ff00, #00ffff 50%, #ff00ff),
+      repeating-linear-gradient(0deg, rgba(0,0,0,0.2), rgba(0,0,0,0.2) 5px, rgba(255,255,255,0.2) 5px, rgba(255,255,255,0.2) 10px);
+    color: #000;
+    border-top: 14px groove #000;
+    text-align: center;
+    box-shadow: inset 0 0 40px #fff;
+  }
+  .counter {
+    font-size: 28px;
+    background: #fff;
+    border: 8px inset #000;
+    padding: 6px 10px;
+    display: inline-block;
+    letter-spacing: 8px;
+    box-shadow: 8px 8px 0 #000;
   }
 
-  /* Accessibility */
-  .sr-only{
-    position:absolute!important;
-    width:1px!important;
-    height:1px!important;
-    padding:0!important;
-    margin:-1px!important;
-    overflow:hidden!important;
-    clip:rect(0,0,0,0)!important;
-    white-space:nowrap!important;
-    border:0!important;
+  /* RAINBOW HR */
+  hr.rainbow {
+    border: 0;
+    height: 16px;
+    background: linear-gradient(90deg, red, orange, yellow, green, cyan, blue, indigo, violet);
+    box-shadow: 0 0 10px #fff, 0 0 20px #fff inset;
+  }
+
+  /* EVEN WORSE MODE */
+  .worse * {
+    animation-duration: 0.3s !important;
+    letter-spacing: 6px !important;
+    word-spacing: 12px !important;
+    filter: contrast(300%) saturate(500%) hue-rotate(180deg) !important;
+  }
+
+  /* UTIL */
+  .center { text-align: center; }
+  .tiny { font-size: 10px; }
+  .rotate { transform: rotate(180deg); display: inline-block; }
+  .underline-wavy { text-decoration: underline wavy #ff00ff; }
+  .shadow-text { text-shadow: 2px 2px 0 #fff, -2px -2px 0 #000; }
+
+  /* MOBILE RUINER */
+  @media (max-width: 700px) {
+    header h1 { font-size: 11vw; }
+    nav a { padding: 12px 4px; font-size: 4vw; }
+    .layout { border-width: 8px; }
+    .layout, .layout tr, .layout td { display: block; width: 100%; }
+    .side, .content, .ads { width: 100%; }
+    .gallery { grid-template-columns: repeat(2, 1fr); }
+    .cta { font-size: 6vw; }
   }
 </style>
 </head>
-<body>
-<div class="wrap" id="app">
-  <div class="topbar">
-    <div class="brand" aria-label="Pocket Physics Playground">
-      <span class="dot" aria-hidden="true"></span>
-      <span>Pocket Physics Playground</span>
-    </div>
-    <div style="flex:1"></div>
-    <button class="btn" id="btnFull" title="Full screen" aria-label="Full screen">
-      <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <polyline points="15 3 21 3 21 9"></polyline>
-        <polyline points="9 21 3 21 3 15"></polyline>
-        <line x1="21" y1="3" x2="14" y2="10"></line>
-        <line x1="3" y1="21" x2="10" y2="14"></line>
-      </svg>
-    </button>
-  </div>
+<body onload="veryImportantAlert()">
 
-  <div class="stage">
-    <canvas id="canvas" aria-label="Physics simulation canvas"></canvas>
-    <div class="badge" id="hud" role="status" aria-live="polite"></div>
-    <div class="hint" id="hint">
-      Tap to add balls. Press and drag to throw. Pinch to scale. Two finger rotate is not used. Double tap toggles pause. Long press opens settings.
-    </div>
-  </div>
+<header>
+  <h1>
+    <span class="rainbow">
+      <span>W</span><span>E</span><span>L</span><span>C</span><span>O</span><span>M</span><span>E</span>
+      <span> </span>
+      <span>T</span><span>O</span>
+      <span> </span>
+      <span>M</span><span>Y</span>
+      <span> </span>
+      <span>W</span><span>E</span><span>B</span><span>S</span><span>I</span><span>T</span><span>E</span><span>!</span><span>!</span><span>!</span>
+    </span>
+    <span class="spin">✨</span>
+    <span class="bounce">🎉</span>
+  </h1>
+</header>
 
-  <div class="dock" role="toolbar" aria-label="Controls">
-    <div class="group">
-      <button class="btn" id="btnPause" data-variant="primary" aria-pressed="false" title="Play or pause">
-        <svg class="icon" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path id="iconPlay" d="M8 5v14l11-7z"></path>
-          <g id="iconPause" style="display:none"><rect x="6" y="5" width="4" height="14"></rect><rect x="14" y="5" width="4" height="14"></rect></g>
-        </svg>
-        <span id="lblPause">Play</span>
-      </button>
-      <button class="btn" id="btnAdd" title="Add balls">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="10"></circle>
-          <line x1="12" y1="8" x2="12" y2="16"></line>
-          <line x1="8" y1="12" x2="16" y2="12"></line>
-        </svg>
-        Add
-      </button>
-      <button class="btn" id="btnClear" data-variant="danger" title="Clear">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <polyline points="3 6 5 6 21 6"></polyline>
-          <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
-          <path d="M10 11v6"></path>
-          <path d="M14 11v6"></path>
-          <path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
-        </svg>
-        Clear
-      </button>
-    </div>
-    <div class="group">
-      <button class="btn" id="btnSettings" title="Settings">
-        <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <circle cx="12" cy="12" r="3"></circle>
-          <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09a1.65 1.65 0 0 0-1-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09a1.65 1.65 0 0 0 1.51-1 1.65 1.65 0 0 0-.33-1.82l-.06-.06A2 2 0 1 1 7.04 3.4l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9c0 .66.39 1.26 1 1.51H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
-        </svg>
-        Settings
-      </button>
-    </div>
-  </div>
-
-  <div class="sheet" id="sheet">
-    <div class="grip" aria-hidden="true"></div>
-    <header>
-      <h3>Settings</h3>
-      <button class="btn close" id="btnCloseSheet" title="Close">Close</button>
-    </header>
-    <div class="content" id="settingsContent" role="region" aria-label="Settings content">
-      <div class="field">
-        <h4>World</h4>
-        <div class="row">
-          <label for="rngGravity">Gravity g (m·s⁻²)</label>
-          <span class="value" id="valGravity">9.81</span>
-        </div>
-        <input type="range" id="rngGravity" min="0" max="30" step="0.01" value="9.81" aria-label="Gravity">
-        <div class="row">
-          <label for="rngScale">Scale (px per metre)</label>
-          <span class="value" id="valScale">100</span>
-        </div>
-        <input type="range" id="rngScale" min="40" max="200" step="1" value="100" aria-label="Scale in pixels per metre">
-        <div class="row">
-          <label for="rngAir">Air drag (s⁻¹)</label>
-          <span class="value" id="valAir">0.10</span>
-        </div>
-        <input type="range" id="rngAir" min="0" max="2" step="0.01" value="0.10" aria-label="Air drag coefficient">
-        <div class="row">
-          <label for="rngWind">Wind (N per kg)</label>
-          <span class="value" id="valWind">0.00</span>
-        </div>
-        <input type="range" id="rngWind" min="-10" max="10" step="0.01" value="0.00" aria-label="Wind acceleration">
-        <label class="switch" style="margin-top:8px;">
-          <input type="checkbox" id="chkGusts" aria-label="Wind gusts">
-          <span class="track"><span class="thumb"></span></span>
-          <span>Wind gusts</span>
-        </label>
-        <label class="switch" style="margin-top:8px;">
-          <input type="checkbox" id="chkWalls" checked aria-label="Solid walls">
-          <span class="track"><span class="thumb"></span></span>
-          <span>Solid walls</span>
-        </label>
-      </div>
-
-      <div class="field">
-        <h4>Material</h4>
-        <div class="row">
-          <label for="rngRest">Restitution (bounciness)</label>
-          <span class="value" id="valRest">0.85</span>
-        </div>
-        <input type="range" id="rngRest" min="0" max="1" step="0.01" value="0.85" aria-label="Restitution">
-        <div class="row">
-          <label for="rngFric">Surface friction</label>
-          <span class="value" id="valFric">0.02</span>
-        </div>
-        <input type="range" id="rngFric" min="0" max="0.2" step="0.001" value="0.02" aria-label="Friction">
-        <div class="row">
-          <label for="rngDensity">Density (kg·m⁻²)</label>
-          <span class="value" id="valDensity">3.0</span>
-        </div>
-        <input type="range" id="rngDensity" min="0.5" max="10" step="0.1" value="3.0" aria-label="Density per area">
-      </div>
-
-      <div class="field">
-        <h4>Spawning</h4>
-        <div class="row">
-          <label for="rngRadius">Radius (cm)</label>
-          <span class="value" id="valRadius">2.0</span>
-        </div>
-        <input type="range" id="rngRadius" min="1" max="10" step="0.1" value="2" aria-label="Ball radius in centimetres">
-        <div class="row">
-          <label for="rngBurst">Burst count</label>
-          <span class="value" id="valBurst">6</span>
-        </div>
-        <input type="range" id="rngBurst" min="1" max="40" step="1" value="6" aria-label="Number of balls to add">
-        <label class="switch" style="margin-top:8px;">
-          <input type="checkbox" id="chkRainbow" checked aria-label="Rainbow colours">
-          <span class="track"><span class="thumb"></span></span>
-          <span>Rainbow colours</span>
-        </label>
-        <label class="switch" style="margin-top:8px;">
-          <input type="checkbox" id="chkConfetti" aria-label="Confetti trails">
-          <span class="track"><span class="thumb"></span></span>
-          <span>Trails</span>
-        </label>
-      </div>
-
-      <div class="field">
-        <h4>Interaction</h4>
-        <div class="row">
-          <label for="rngSpring">Drag spring (N·m⁻¹)</label>
-          <span class="value" id="valSpring">200</span>
-        </div>
-        <input type="range" id="rngSpring" min="20" max="800" step="1" value="200" aria-label="Drag spring stiffness">
-        <div class="row">
-          <label for="rngDamp">Drag damping (s⁻¹)</label>
-          <span class="value" id="valDamp">6.0</span>
-        </div>
-        <input type="range" id="rngDamp" min="0" max="20" step="0.1" value="6" aria-label="Drag damping">
-        <label class="switch" style="margin-top:8px;">
-          <input type="checkbox" id="chkSlowMo" aria-label="Slow motion">
-          <span class="track"><span class="thumb"></span></span>
-          <span>Slow motion</span>
-        </label>
-        <label class="switch" style="margin-top:8px;">
-          <input type="checkbox" id="chkVibrate" checked aria-label="Haptic feedback">
-          <span class="track"><span class="thumb"></span></span>
-          <span>Haptics</span>
-        </label>
-      </div>
-
-      <div class="field">
-        <h4>Visuals</h4>
-        <div class="row">
-          <label for="rngTrail">Trail fade per frame</label>
-          <span class="value" id="valTrail">0.12</span>
-        </div>
-        <input type="range" id="rngTrail" min="0" max="1" step="0.01" value="0.12" aria-label="Trail fade factor">
-        <label class="switch" style="margin-top:8px;">
-          <input type="checkbox" id="chkGrid" aria-label="Grid">
-          <span class="track"><span class="thumb"></span></span>
-          <span>Grid</span>
-        </label>
-        <label class="switch" style="margin-top:8px;">
-          <input type="checkbox" id="chkStats" checked aria-label="Stats">
-          <span class="track"><span class="thumb"></span></span>
-          <span>Stats</span>
-        </label>
-      </div>
-
-      <div class="field">
-        <h4>Presets</h4>
-        <div style="display:flex; flex-wrap:wrap; gap:10px;">
-          <button class="btn" id="presetBouncy">Bouncy</button>
-          <button class="btn" id="presetCalm">Calm</button>
-          <button class="btn" id="presetStorm">Storm</button>
-          <button class="btn" id="presetZeroG">Zero g</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="tape">
+  <marquee behavior="alternate" scrollamount="18" onmouseover="this.stop()" onmouseout="this.start()">
+    BREAKING: THIS WEBSITE USES ONLY THE FINEST COMIC SANS COLOURS. CLICK EVERYTHING. EVERYTHING MAKES A NOISE. FREE GLITTER WITH EVERY SCROLL.
+  </marquee>
 </div>
 
+<nav>
+  <table role="presentation">
+    <tr>
+      <td><a href="#about">About</a></td>
+      <td><a href="#gallery">Gallery</a></td>
+      <td><a href="#contact">Contact</a></td>
+      <td><a href="#shop">Shop</a></td>
+      <td><a href="#faq">FAQ</a></td>
+      <td><a href="#legal">Legal</a></td>
+    </tr>
+  </table>
+</nav>
+
+<main>
+  <table class="layout" role="presentation">
+    <tr>
+      <td class="side">
+        <div class="widget">
+          <h3 class="blink">LATEST UPDATES</h3>
+          <ul>
+            <li>New colours added, now 900 percent worse</li>
+            <li>Fonts upgraded to maximum silliness</li>
+            <li>Buttons jitter by design</li>
+            <li>Every link beeps loudly</li>
+          </ul>
+        </div>
+        <div class="widget">
+          <h3>LIVE CLOCK</h3>
+          <div id="clock" class="center" style="font-size:28px; background:#000; color:#0f0; padding:8px; border:8px inset #0f0; letter-spacing:8px;">88:88:88</div>
+          <div class="tiny center">Truly precise, give or take quite a bit</div>
+        </div>
+        <div class="widget">
+          <h3>MAKE IT WORSE</h3>
+          <button class="cta" onclick="toggleWorse()">Toggle Even Worse Mode</button>
+        </div>
+      </td>
+
+      <td class="content">
+        <section id="about">
+          <h2 class="shadow-text">About This Spectacle</h2>
+          <p>
+            This page demonstrates the most questionable design choices known to humankind. It is fully functional yet visually catastrophic.
+            The colour choices are intentional. The font choices are deliberate. The overall effect is heroic in its badness.
+          </p>
+          <hr class="rainbow">
+          <p class="underline-wavy">
+            Scroll to experience gratuitous gradients, misused tables, clashing palettes, and animated distractions that refuse to help.
+          </p>
+        </section>
+
+        <section id="gallery">
+          <h2 class="shadow-text">Gallery Of Crimes Against Aesthetics</h2>
+          <div class="gallery">
+            <div class="card">
+              <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Triangle chaos">
+                <rect width="200" height="120" fill="#00f"/>
+                <polygon points="0,120 100,0 200,120" fill="#ff0"/>
+                <circle cx="100" cy="60" r="30" fill="#f0f"/>
+              </svg>
+              <p>Abstract Misery No. 1</p>
+            </div>
+            <div class="card">
+              <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-label="Squares gone wrong">
+                <rect width="200" height="120" fill="#0f0"/>
+                <rect x="10" y="10" width="180" height="100" fill="#f00"/>
+                <rect x="30" y="30" width="140" height="60" fill="#0ff"/>
+              </svg>
+              <p>Layered Disaster</p>
+            </div>
+            <div class="card">
+              <svg viewBox="0 0 200 120" xmlns="http://www.w3.org/2000/svg" aria-label="Wavy lines">
+                <defs>
+                  <linearGradient id="ug" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0" stop-color="#ff0"/>
+                    <stop offset="0.5" stop-color="#f0f"/>
+                    <stop offset="1" stop-color="#0ff"/>
+                  </linearGradient>
+                </defs>
+                <rect width="200" height="120" fill="url(#ug)"/>
+                <path d="M0,60 C50,0 150,120 200,60" stroke="#000" stroke-width="6" fill="none"/>
+              </svg>
+              <p>Gradient Havoc</p>
+            </div>
+          </div>
+        </section>
+
+        <section id="contact">
+          <h2 class="shadow-text">Contact Form That Hurts</h2>
+          <form class="bad" onsubmit="annoyingSubmit(event)">
+            <label for="name">Your Name</label>
+            <input id="name" name="name" placeholder="Type your very nice name here" required>
+            <label for="email">Electronic Mail</label>
+            <input id="email" name="email" type="email" placeholder="example@totallylegit.example" required>
+            <label for="colour">Favourite Colour</label>
+            <select id="colour" name="colour">
+              <option>Neon Yellow</option>
+              <option>Magenta Disaster</option>
+              <option>Cyan Explosion</option>
+              <option>Lime Screech</option>
+            </select>
+            <label for="message">Your Beautiful Message</label>
+            <textarea id="message" name="message" rows="4" placeholder="Tell me everything in glorious Comic Sans"></textarea>
+            <button type="submit" class="cta">Submit Loudly</button>
+          </form>
+        </section>
+
+        <section id="shop">
+          <h2 class="shadow-text">Shop Of Dubious Choices</h2>
+          <table role="presentation" style="width:100%; border:8px outset #000; background:#ff0;">
+            <tr style="background:#f0f;">
+              <th style="padding:10px; border:6px solid #000;">Item</th>
+              <th style="padding:10px; border:6px solid #000;">Colour</th>
+              <th style="padding:10px; border:6px solid #000;">Price</th>
+              <th style="padding:10px; border:6px solid #000;">Action</th>
+            </tr>
+            <tr>
+              <td style="padding:10px; border:6px solid #000;">Blinking Cursor Cursor</td>
+              <td style="padding:10px; border:6px solid #000;">Neon Lime</td>
+              <td style="padding:10px; border:6px solid #000;">£9.99</td>
+              <td style="padding:10px; border:6px solid #000;"><button class="cta" onclick="addToCart('Blinking Cursor Cursor')">Add To Basket</button></td>
+            </tr>
+            <tr>
+              <td style="padding:10px; border:6px solid #000;">Papyrus Sticker Pack</td>
+              <td style="padding:10px; border:6px solid #000;">Rainbow</td>
+              <td style="padding:10px; border:6px solid #000;">£4.20</td>
+              <td style="padding:10px; border:6px solid #000;"><button class="cta" onclick="addToCart('Papyrus Sticker Pack')">Add To Basket</button></td>
+            </tr>
+            <tr>
+              <td style="padding:10px; border:6px solid #000;">Comic Sans Mug</td>
+              <td style="padding:10px; border:6px solid #000;">Magenta</td>
+              <td style="padding:10px; border:6px solid #000;">£12.34</td>
+              <td style="padding:10px; border:6px solid #000;"><button class="cta" onclick="addToCart('Comic Sans Mug')">Add To Basket</button></td>
+            </tr>
+          </table>
+          <div id="cart" class="widget" style="margin-top:12px;">
+            <h3>Your Basket</h3>
+            <ul id="cart-list" style="margin:0; padding-left:18px;"></ul>
+          </div>
+        </section>
+
+        <section id="faq">
+          <h2 class="shadow-text">Frequently Asked Questions</h2>
+          <details open>
+            <summary>Why is everything so bright</summary>
+            <p>Brightness increases conversion. Or confusion. Possibly both.</p>
+          </details>
+          <details>
+            <summary>Why is every font terrible</summary>
+            <p>Consistency builds trust. Inconsistent Comic Sans builds character.</p>
+          </details>
+          <details>
+            <summary>Does the site meet accessibility guidelines</summary>
+            <p>It meets guidelines in spirit, which is not how guidelines work.</p>
+          </details>
+        </section>
+
+        <section id="legal">
+          <h2 class="shadow-text">Legal Information</h2>
+          <p>
+            All colours, fonts, animations, and questionable choices are provided for educational demonstration of what not to do. Use responsibly. Or not.
+          </p>
+        </section>
+      </td>
+
+      <td class="ads">
+        <div class="widget">
+          <h3 class="blink">ADVERTISEMENT</h3>
+          <p>Buy a subscription to remove none of these effects.</p>
+          <button class="cta" onclick="window.open('#','_blank')">Click Here Wildly</button>
+        </div>
+        <div class="widget">
+          <h3>Rotating Deal</h3>
+          <p><span class="spin">💎</span> Everything is 0 percent off today only</p>
+        </div>
+        <div class="widget">
+          <h3>Inverted Tips</h3>
+          <ol style="filter: invert(100%);">
+            <li>Use every colour at once</li>
+            <li>Prefer tables for everything</li>
+            <li>Underline absolutely everything</li>
+          </ol>
+        </div>
+      </td>
+    </tr>
+  </table>
+</main>
+
+<footer>
+  <div class="center">
+    <div>Visitors:</div>
+    <div id="counter" class="counter">000000</div>
+  </div>
+  <p class="tiny">If this footer looked any heavier it would need scaffolding</p>
+</footer>
+
+<!-- UTTERLY NECESSARY SCRIPTS TO MAKE THINGS ANNOYING -->
 <script>
-(function(){
-  "use strict";
-
-  const clamp = (v, a, b)=> Math.max(a, Math.min(b, v));
-  const rand = (a,b)=> a + Math.random()*(b-a);
-  const randInt = (a,b)=> Math.floor(rand(a, b+1));
-  const TAU = Math.PI*2;
-
-  const el = {
-    canvas: document.getElementById("canvas"),
-    hud: document.getElementById("hud"),
-    hint: document.getElementById("hint"),
-    btnPause: document.getElementById("btnPause"),
-    btnAdd: document.getElementById("btnAdd"),
-    btnClear: document.getElementById("btnClear"),
-    btnSettings: document.getElementById("btnSettings"),
-    btnFull: document.getElementById("btnFull"),
-    iconPlay: document.getElementById("iconPlay"),
-    iconPause: document.getElementById("iconPause"),
-    lblPause: document.getElementById("lblPause"),
-    sheet: document.getElementById("sheet"),
-    btnCloseSheet: document.getElementById("btnCloseSheet"),
-
-    rngGravity: document.getElementById("rngGravity"),
-    valGravity: document.getElementById("valGravity"),
-    rngScale: document.getElementById("rngScale"),
-    valScale: document.getElementById("valScale"),
-    rngAir: document.getElementById("rngAir"),
-    valAir: document.getElementById("valAir"),
-    rngWind: document.getElementById("rngWind"),
-    valWind: document.getElementById("valWind"),
-    chkGusts: document.getElementById("chkGusts"),
-    chkWalls: document.getElementById("chkWalls"),
-
-    rngRest: document.getElementById("rngRest"),
-    valRest: document.getElementById("valRest"),
-    rngFric: document.getElementById("rngFric"),
-    valFric: document.getElementById("valFric"),
-    rngDensity: document.getElementById("rngDensity"),
-    valDensity: document.getElementById("valDensity"),
-
-    rngRadius: document.getElementById("rngRadius"),
-    valRadius: document.getElementById("valRadius"),
-    rngBurst: document.getElementById("rngBurst"),
-    valBurst: document.getElementById("valBurst"),
-    chkRainbow: document.getElementById("chkRainbow"),
-    chkConfetti: document.getElementById("chkConfetti"),
-
-    rngSpring: document.getElementById("rngSpring"),
-    valSpring: document.getElementById("valSpring"),
-    rngDamp: document.getElementById("rngDamp"),
-    valDamp: document.getElementById("valDamp"),
-    chkSlowMo: document.getElementById("chkSlowMo"),
-    chkVibrate: document.getElementById("chkVibrate"),
-
-    rngTrail: document.getElementById("rngTrail"),
-    valTrail: document.getElementById("valTrail"),
-    chkGrid: document.getElementById("chkGrid"),
-    chkStats: document.getElementById("chkStats"),
-
-    presetBouncy: document.getElementById("presetBouncy"),
-    presetCalm: document.getElementById("presetCalm"),
-    presetStorm: document.getElementById("presetStorm"),
-    presetZeroG: document.getElementById("presetZeroG"),
-  };
-
-  const DPR = Math.max(1, Math.min(window.devicePixelRatio || 1, 3));
-  const ctx = el.canvas.getContext("2d", { alpha:true, desynchronized:true });
-
-  const state = {
-    paused: false,
-    lastStamp: performance.now(),
-    fps: 0,
-    frameCount: 0,
-    msAcc: 0,
-    world: {
-      scale: 100,           // px per metre
-      gravity: 9.81,        // m s^-2
-      air: 0.10,            // s^-1
-      wind: 0.00,           // m s^-2 horizontal
-      gusts: false,
-      walls: true,
-      restitution: 0.85,    // coefficient of restitution
-      friction: 0.02,       // tangential damping on wall hit
-      density: 3.0,         // kg per square metre (for discs, mass ~ density * area)
-      trailFade: 0.12,      // alpha for frame fade
-      grid: false,
-      stats: true
-    },
-    spawn: {
-      radius_m: 0.02,       // 2 cm
-      burst: 6,
-      rainbow: true,
-      trails: false
-    },
-    drag: {
-      k: 200.0,             // N per m
-      c: 6.0,               // s^-1
-      slowMo: false,
-      haptics: true
-    },
-    bounds: { w: 0, h: 0 },
-    balls: [],
-    grid: null,
-    selected: new Map(), // pointerId -> constraint
-  };
-
-  /* Spatial hashing grid for broadphase */
-  class HashGrid{
-    constructor(cell){
-      this.cell = cell;
-      this.map = new Map();
-    }
-    key(ix,iy){ return ix + "," + iy; }
-    clear(){ this.map.clear(); }
-    insert(ball){
-      const r = ball.r;
-      const minx = Math.floor((ball.x - r)/this.cell);
-      const maxx = Math.floor((ball.x + r)/this.cell);
-      const miny = Math.floor((ball.y - r)/this.cell);
-      const maxy = Math.floor((ball.y + r)/this.cell);
-      for(let ix=minx; ix<=maxx; ix++){
-        for(let iy=miny; iy<=maxy; iy++){
-          const k = this.key(ix,iy);
-          let arr = this.map.get(k);
-          if(!arr){ arr = []; this.map.set(k, arr); }
-          arr.push(ball);
-        }
-      }
-    }
-    pairs(callback){
-      const visited = new Set();
-      for(const [k, list] of this.map){
-        for(let i=0; i<list.length; i++){
-          const a = list[i];
-          for(let j=i+1; j<list.length; j++){
-            const b = list[j];
-            const id = a.id < b.id ? a.id + "|" + b.id : b.id + "|" + a.id;
-            if(visited.has(id)) continue;
-            visited.add(id);
-            callback(a,b);
-          }
-        }
-      }
-    }
+  // Alert on load
+  function veryImportantAlert() {
+    try {
+      alert("Welcome to the most questionable design. Please turn your speakers up. Everything beeps.");
+    } catch (e) {}
   }
 
-  let nextBallId = 1;
+  // Live clock with intentionally jittery seconds
+  const clockEl = document.getElementById('clock');
+  function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    const jitter = Math.random() > 0.8 ? String((Number(s) + 1) % 60).padStart(2, '0') : s;
+    if (clockEl) clockEl.textContent = h + ":" + m + ":" + jitter;
+  }
+  setInterval(updateClock, 500);
+  updateClock();
 
-  class Ball{
-    constructor(x,y,vx,vy,r, color){
-      this.id = nextBallId++;
-      this.x = x;
-      this.y = y;
-      this.vx = vx;
-      this.vy = vy;
-      this.r = r;
-      this.color = color;
-      this.ax = 0;
-      this.ay = 0;
-      const area = Math.PI * (r*r) / (state.world.scale*state.world.scale); // m^2
-      this.m = Math.max(0.01, state.world.density * area); // kg
-      this.trail = state.spawn.trails ? [] : null;
-    }
+  // Worse mode toggle
+  function toggleWorse() {
+    document.body.classList.toggle('worse');
+    beep(880, 0.08);
   }
 
-  function resize(){
-    const rect = el.canvas.getBoundingClientRect();
-    const w = Math.max(320, Math.floor(rect.width * DPR));
-    const h = Math.max(320, Math.floor(rect.height * DPR));
-    if(el.canvas.width !== w || el.canvas.height !== h){
-      el.canvas.width = w;
-      el.canvas.height = h;
-    }
-    state.bounds.w = w;
-    state.bounds.h = h;
+  // Fake hit counter stored in localStorage
+  (function counter() {
+    const key = "atrocious-counter";
+    let n = Number(localStorage.getItem(key) || Math.floor(Math.random() * 40000 + 1000));
+    n += Math.floor(Math.random() * 10) + 1;
+    localStorage.setItem(key, String(n));
+    const pad = String(n).padStart(6, '0');
+    const el = document.getElementById('counter');
+    if (el) el.textContent = pad;
+  })();
+
+  // Add to cart
+  function addToCart(item) {
+    const ul = document.getElementById('cart-list');
+    const li = document.createElement('li');
+    li.textContent = item + " x1 — No returns"; // using hyphen, not em dash
+    ul.appendChild(li);
+    beep(660, 0.12);
   }
 
-  function setPaused(p){
-    state.paused = p;
-    if(p){
-      el.iconPlay.style.display = "none";
-      el.iconPause.style.display = "block";
-      el.lblPause.textContent = "Pause";
-    }else{
-      el.iconPlay.style.display = "block";
-      el.iconPause.style.display = "none";
-      el.lblPause.textContent = "Play";
-    }
+  // Annoying form submit
+  function annoyingSubmit(e) {
+    e.preventDefault();
+    confirm("Are you absolutely certain you want to send this splendid message") ? alert("Message dispatched into the void") : alert("Wise choice");
+    beep(220, 0.2);
   }
 
-  function vibrate(ms){
-    try{
-      if(state.drag.haptics && navigator.vibrate){
-        navigator.vibrate(ms);
-      }
-    }catch(e){}
-  }
+  // Before unload confirmation
+  window.addEventListener('beforeunload', function (e) {
+    e.preventDefault();
+    e.returnValue = '';
+  });
 
-  function addBalls(cx, cy, count){
-    const S = state.world.scale;
-    const r = state.spawn.radius_m * S;
-    for(let i=0;i<count;i++){
-      const a = rand(0, TAU);
-      const mag = rand(0, 1.2) * S * 0.6;
-      const vx = Math.cos(a) * mag;
-      const vy = Math.sin(a) * mag;
-      const jitter = rand(-r*0.25, r*0.25);
-      const color = state.spawn.rainbow ? `hsl(${randInt(0,359)} 90% 60%)` : `hsl(200 20% ${randInt(55,70)}%)`;
-      const ball = new Ball(cx + jitter, cy + jitter, vx, vy, r, color);
-      state.balls.push(ball);
+  // Cursor emoji trail
+  const trail = [];
+  document.addEventListener('mousemove', function(e) {
+    const s = document.createElement('span');
+    s.textContent = Math.random() < 0.5 ? '✨' : '💥';
+    s.style.position = 'fixed';
+    s.style.left = (e.clientX + (Math.random()*10-5)) + 'px';
+    s.style.top = (e.clientY + (Math.random()*10-5)) + 'px';
+    s.style.pointerEvents = 'none';
+    s.style.fontSize = (Math.random() * 16 + 12) + 'px';
+    s.style.transform = 'rotate(' + (Math.random()*360) + 'deg)';
+    s.style.transition = 'all 600ms linear';
+    document.body.appendChild(s);
+    requestAnimationFrame(() => {
+      s.style.transform += ' translateY(-40px) scale(0.2)';
+      s.style.opacity = '0';
+    });
+    setTimeout(() => s.remove(), 700);
+    trail.push(s);
+    if (trail.length > 60) {
+      const t = trail.shift();
+      if (t && t.remove) t.remove();
     }
-    vibrate(10);
-  }
+  });
 
-  function clearBalls(){
-    state.balls.length = 0;
-    vibrate(8);
-  }
-
-  function updateMasses(){
-    for(const b of state.balls){
-      const area = Math.PI * (b.r*b.r) / (state.world.scale*state.world.scale);
-      b.m = Math.max(0.01, state.world.density * area);
+  // WebAudio beep on interactive elements
+  let audioCtx;
+  function ensureAudio() {
+    if (!audioCtx) {
+      try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); }
+      catch(e) { audioCtx = null; }
     }
+    return audioCtx;
   }
-
-  function step(dt){
-    const W = state.bounds.w;
-    const H = state.bounds.h;
-    const S = state.world.scale;
-
-    // Wind gusts
-    let wind = state.world.wind;
-    if(state.world.gusts){
-      wind += Math.sin(performance.now()*0.0017)*2.0 + Math.sin(performance.now()*0.00057)*3.0;
-    }
-
-    // Integrate
-    const drag = Math.exp(-state.world.air * dt); // velocity decay factor
-    for(const b of state.balls){
-      const gx = wind * S;          // px s^-2
-      const gy = state.world.gravity * S;
-      b.vx = (b.vx + gx * dt) * drag;
-      b.vy = (b.vy + gy * dt) * drag;
-
-      // Drag springs from pointers
-      for(const c of state.selected.values()){
-        if(c.ball === b){
-          // target in pixels already
-          const dx = c.tx - b.x;
-          const dy = c.ty - b.y;
-          const fx = state.drag.k * dx - state.drag.c * b.vx;
-          const fy = state.drag.k * dy - state.drag.c * b.vy;
-          b.vx += (fx / b.m) * dt;
-          b.vy += (fy / b.m) * dt;
-        }
-      }
-
-      b.x += b.vx * dt;
-      b.y += b.vy * dt;
-
-      // Walls
-      if(state.world.walls){
-        const r = b.r;
-        if(b.x < r){
-          b.x = r;
-          b.vx = -b.vx * state.world.restitution;
-          b.vy *= (1 - state.world.friction);
-          if(Math.abs(b.vx) > 20) vibrate(4);
-        }else if(b.x > W - r){
-          b.x = W - r;
-          b.vx = -b.vx * state.world.restitution;
-          b.vy *= (1 - state.world.friction);
-          if(Math.abs(b.vx) > 20) vibrate(4);
-        }
-        if(b.y < r){
-          b.y = r;
-          b.vy = -b.vy * state.world.restitution;
-          b.vx *= (1 - state.world.friction);
-          if(Math.abs(b.vy) > 20) vibrate(4);
-        }else if(b.y > H - r){
-          b.y = H - r;
-          b.vy = -b.vy * state.world.restitution;
-          b.vx *= (1 - state.world.friction);
-          if(Math.abs(b.vy) > 20) vibrate(6);
-        }
-      }
-
-      // Trails
-      if(b.trail){
-        b.trail.push({x:b.x, y:b.y, t: performance.now()});
-        if(b.trail.length > 40) b.trail.shift();
-      }
-    }
-
-    // Broadphase with spatial hash
-    const cell = 64;
-    state.grid.clear();
-    for(const b of state.balls) state.grid.insert(b);
-
-    // Narrowphase circle collisions
-    const e = state.world.restitution;
-    state.grid.pairs((a,b)=>{
-      const dx = b.x - a.x;
-      const dy = b.y - a.y;
-      const rr = a.r + b.r;
-      const d2 = dx*dx + dy*dy;
-      if(d2 > rr*rr || d2 === 0) return;
-      const d = Math.sqrt(d2);
-
-      // Minimum translation to separate
-      const nx = dx / d;
-      const ny = dy / d;
-      const overlap = rr - d;
-      // Push out proportionally to mass
-      const im1 = 1/a.m, im2 = 1/b.m;
-      const sumInv = im1 + im2;
-      a.x -= nx * overlap * (im1 / sumInv);
-      a.y -= ny * overlap * (im1 / sumInv);
-      b.x += nx * overlap * (im2 / sumInv);
-      b.y += ny * overlap * (im2 / sumInv);
-
-      // Relative velocity
-      const rvx = b.vx - a.vx;
-      const rvy = b.vy - a.vy;
-      const velAlongNormal = rvx*nx + rvy*ny;
-      if(velAlongNormal > 0) return;
-
-      const restitution = e;
-      let j = -(1 + restitution) * velAlongNormal;
-      j /= im1 + im2;
-
-      const ix = j * nx;
-      const iy = j * ny;
-
-      a.vx -= ix * im1;
-      a.vy -= iy * im1;
-      b.vx += ix * im2;
-      b.vy += iy * im2;
-
-      // Tangential friction like effect
-      const tx = -ny;
-      const ty = nx;
-      const vt = rvx*tx + rvy*ty;
-      const mu = state.world.friction * 3.0;
-      const jt = -vt;
-      const jtf = clamp(jt, -mu*j, mu*j);
-      const itx = jtf * tx;
-      const ity = jtf * ty;
-      a.vx -= itx * im1;
-      a.vy -= ity * im1;
-      b.vx += itx * im2;
-      b.vy += ity * im2;
+  function beep(frequency, duration) {
+    const ctx = ensureAudio();
+    if (!ctx) return;
+    const o = ctx.createOscillator();
+    const g = ctx.createGain();
+    o.connect(g); g.connect(ctx.destination);
+    o.type = 'square';
+    o.frequency.value = frequency || 440;
+    g.gain.value = 0.03;
+    const now = ctx.currentTime;
+    o.start(now);
+    g.gain.exponentialRampToValueAtTime(0.0001, now + (duration || 0.1));
+    o.stop(now + (duration || 0.1));
+  }
+  function addBeepListeners() {
+    const clickables = document.querySelectorAll('a, button, input, select, textarea, summary, details');
+    clickables.forEach(el => {
+      el.addEventListener('mouseover', () => beep(1200, 0.05));
+      el.addEventListener('click', () => beep(300, 0.08));
+      el.addEventListener('focus', () => beep(900, 0.05));
     });
   }
+  addBeepListeners();
+  const mo = new MutationObserver(addBeepListeners);
+  mo.observe(document.body, { childList: true, subtree: true });
 
-  function draw(){
-    const W = state.bounds.w;
-    const H = state.bounds.h;
-    ctx.save();
-    ctx.setTransform(1,0,0,1,0,0);
-
-    // Trails fade
-    ctx.globalCompositeOperation = "source-over";
-    ctx.fillStyle = `rgba(9,10,13,${state.world.trailFade})`;
-    ctx.fillRect(0,0,W,H);
-
-    // Optional grid
-    if(state.world.grid){
-      ctx.strokeStyle = "rgba(255,255,255,0.06)";
-      ctx.lineWidth = 1;
-      ctx.beginPath();
-      const step = state.world.scale;
-      for(let x=0; x<W; x+=step){
-        ctx.moveTo(x+0.5,0);
-        ctx.lineTo(x+0.5,H);
-      }
-      for(let y=0; y<H; y+=step){
-        ctx.moveTo(0,y+0.5);
-        ctx.lineTo(W,y+0.5);
-      }
-      ctx.stroke();
-    }
-
-    // Balls
-    for(const b of state.balls){
-      if(b.trail){
-        ctx.globalAlpha = 0.9;
-        for(let i=1;i<b.trail.length;i++){
-          const a = b.trail[i-1];
-          const c = b.trail[i];
-          const t = i/b.trail.length;
-          ctx.strokeStyle = b.color;
-          ctx.lineWidth = Math.max(1, b.r*0.15 * t);
-          ctx.beginPath();
-          ctx.moveTo(a.x, a.y);
-          ctx.lineTo(c.x, c.y);
-          ctx.stroke();
-        }
-      }
-
-      ctx.globalAlpha = 1;
-      // Ball rim and fill
-      const grad = ctx.createRadialGradient(b.x - b.r*0.35, b.y - b.r*0.35, b.r*0.1, b.x, b.y, b.r);
-      grad.addColorStop(0, "rgba(255,255,255,0.95)");
-      grad.addColorStop(0.25, b.color);
-      grad.addColorStop(1, "rgba(0,0,0,0.6)");
-      ctx.fillStyle = grad;
-      ctx.beginPath();
-      ctx.arc(b.x, b.y, b.r, 0, TAU);
-      ctx.fill();
-
-      // Small highlight
-      ctx.fillStyle = "rgba(255,255,255,0.25)";
-      ctx.beginPath();
-      ctx.ellipse(b.x - b.r*0.35, b.y - b.r*0.35, b.r*0.35, b.r*0.25, -0.8, 0, TAU);
-      ctx.fill();
-    }
-
-    // Drag springs
-    for(const c of state.selected.values()){
-      const b = c.ball;
-      ctx.globalAlpha = 0.7;
-      ctx.strokeStyle = "rgba(124,255,159,0.9)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(c.tx, c.ty);
-      ctx.lineTo(b.x, b.y);
-      ctx.stroke();
-
-      ctx.globalAlpha = 0.9;
-      ctx.fillStyle = "rgba(93,209,255,0.9)";
-      ctx.beginPath();
-      ctx.arc(c.tx, c.ty, 8, 0, TAU);
-      ctx.fill();
-    }
-
-    ctx.restore();
-  }
-
-  function updateHUD(dt){
-    state.msAcc += dt*1000;
-    state.frameCount++;
-    if(state.msAcc >= 400){
-      state.fps = Math.round((state.frameCount/state.msAcc)*1000);
-      state.msAcc = 0;
-      state.frameCount = 0;
-    }
-    const S = state.world.scale;
-    const count = state.balls.length;
-    const txt = `
-      <span class="kv"><b>FPS</b> <span>${state.fps}</span></span>
-      <span class="kv"><b>Balls</b> <span>${count}</span></span>
-      <span class="kv"><b>Scale</b> <span>${S} px·m⁻¹</span></span>
-      <span class="kv"><b>g</b> <span>${state.world.gravity.toFixed(2)} m·s⁻²</span></span>
-      <span class="kv"><b>Wind</b> <span>${state.world.wind.toFixed(2)} m·s⁻²</span></span>
-      <span class="kv"><b>Restitution</b> <span>${state.world.restitution.toFixed(2)}</span></span>
-      <span class="kv"><b>Air</b> <span>${state.world.air.toFixed(2)} s⁻¹</span></span>
-    `;
-    el.hud.innerHTML = txt;
-    el.hud.style.display = state.world.stats ? "flex" : "none";
-  }
-
-  function loop(now){
-    resize();
-    let dt = (now - state.lastStamp)/1000;
-    state.lastStamp = now;
-    dt = clamp(dt, 0, 1/20); // clamp large pauses
-
-    if(state.drag.slowMo) dt *= 0.35;
-
-    if(!state.paused){
-      step(dt);
-      draw();
-    }
-
-    updateHUD(dt);
-    requestAnimationFrame(loop);
-  }
-
-  // Pointer handling
-  function canvasPosFromEvent(ev){
-    const rect = el.canvas.getBoundingClientRect();
-    const px = (ev.clientX - rect.left) * DPR;
-    const py = (ev.clientY - rect.top) * DPR;
-    return {x:px, y:py};
-  }
-
-  function nearestBall(x,y, maxDist){
-    let best = null;
-    let bestD2 = (maxDist!==undefined? maxDist*maxDist : Infinity);
-    for(const b of state.balls){
-      const dx = b.x - x;
-      const dy = b.y - y;
-      const d2 = dx*dx + dy*dy;
-      if(d2 < bestD2){
-        best = b;
-        bestD2 = d2;
-      }
-    }
-    return best;
-  }
-
-  function onPointerDown(ev){
-    if(ev.pointerType === "mouse" && ev.button !== 0) return;
-    el.canvas.setPointerCapture(ev.pointerId);
-    const {x,y} = canvasPosFromEvent(ev);
-
-    // Long press detection for settings
-    const longPressTimer = setTimeout(()=>{
-      openSheet(true);
-    }, 550);
-
-    // Store pointer data
-    const hit = nearestBall(x,y, state.world.scale*0.9);
-    if(hit){
-      state.selected.set(ev.pointerId, {ball:hit, tx:x, ty:y, longTimer: longPressTimer});
-      vibrate(3);
-    }else{
-      state.selected.set(ev.pointerId, {ball:null, tx:x, ty:y, longTimer: longPressTimer});
-    }
-  }
-
-  function onPointerMove(ev){
-    if(!state.selected.has(ev.pointerId)) return;
-    const s = state.selected.get(ev.pointerId);
-    const {x,y} = canvasPosFromEvent(ev);
-    s.tx = x; s.ty = y;
-  }
-
-  function onPointerUp(ev){
-    if(!state.selected.has(ev.pointerId)) return;
-    const s = state.selected.get(ev.pointerId);
-    clearTimeout(s.longTimer);
-    const wasDraggingBall = s.ball !== null;
-    if(!wasDraggingBall){
-      // If no ball was held, tap to add burst
-      addBalls(s.tx, s.ty, state.spawn.burst);
-    }else{
-      // Give a tiny buzz on release
-      vibrate(6);
-    }
-    state.selected.delete(ev.pointerId);
-  }
-
-  function onDblClick(){
-    setPaused(!state.paused);
-  }
-
-  // Pinch to change scale
-  const pinch = {
-    active:false,
-    id1:null, id2:null,
-    d0:0,
-    scale0: state.world.scale
-  };
-  function onPointerDownPinch(ev){
-    if(state.selected.size === 2 && !pinch.active){
-      const ids = Array.from(state.selected.keys());
-      pinch.id1 = ids[0]; pinch.id2 = ids[1];
-      const p1 = state.selected.get(pinch.id1);
-      const p2 = state.selected.get(pinch.id2);
-      pinch.d0 = Math.hypot(p1.tx - p2.tx, p1.ty - p2.ty);
-      pinch.scale0 = state.world.scale;
-      pinch.active = true;
-    }
-  }
-  function onPointerMovePinch(){
-    if(pinch.active){
-      const p1 = state.selected.get(pinch.id1);
-      const p2 = state.selected.get(pinch.id2);
-      if(!p1 || !p2){
-        pinch.active = false;
-        return;
-      }
-      const d = Math.hypot(p1.tx - p2.tx, p1.ty - p2.ty);
-      if(pinch.d0 > 0){
-        const ratio = clamp(d / pinch.d0, 0.5, 2.0);
-        const newScale = clamp(Math.round(pinch.scale0 * ratio), 40, 200);
-        state.world.scale = newScale;
-        el.rngScale.value = String(newScale);
-        el.valScale.textContent = String(newScale);
-        updateMasses();
-      }
-    }
-  }
-  function onPointerUpPinch(){
-    if(state.selected.size < 2) pinch.active = false;
-  }
-
-  // Buttons and settings
-  function openSheet(open){
-    el.sheet.classList.toggle("open", open);
-  }
-
-  el.btnSettings.addEventListener("click", ()=> openSheet(true));
-  el.btnCloseSheet.addEventListener("click", ()=> openSheet(false));
-
-  el.btnPause.addEventListener("click", ()=> setPaused(!state.paused));
-  el.btnClear.addEventListener("click", ()=> { clearBalls(); });
-  el.btnAdd.addEventListener("click", ()=>{
-    const x = state.bounds.w*0.5, y = state.bounds.h*0.25;
-    addBalls(x, y, state.spawn.burst);
+  // Everything shakes on scroll
+  let shakeTimeout;
+  window.addEventListener('scroll', () => {
+    document.body.style.transform = 'translateX(2px)';
+    clearTimeout(shakeTimeout);
+    shakeTimeout = setTimeout(() => { document.body.style.transform = ''; }, 60);
   });
 
-  // Fullscreen toggle
-  el.btnFull.addEventListener("click", async ()=>{
-    try{
-      const root = document.documentElement;
-      if(!document.fullscreenElement){
-        await root.requestFullscreen();
-      }else{
-        await document.exitFullscreen();
-      }
-    }catch(e){}
+  // Keyboard shortcuts that nobody asked for
+  window.addEventListener('keydown', e => {
+    if (e.key.toLowerCase() === 'w') toggleWorse();
+    if (e.key === 'Escape') veryImportantAlert();
   });
-
-  // Settings bindings
-  function bindRange(rng, out, propPath, fmt){
-    const get = ()=> propPath.reduce((o,k)=>o[k], state);
-    const set = (val)=>{
-      let o = state; for(let i=0;i<propPath.length-1;i++) o = o[propPath[i]];
-      o[propPath[propPath.length-1]] = val;
-      if(out) out.textContent = fmt(val);
-    };
-    // Init
-    out && (out.textContent = fmt(get()));
-    rng.value = String(get());
-    rng.addEventListener("input", ()=>{
-      const v = Number(rng.value);
-      set(v);
-      if(propPath.join(".")==="world.scale") updateMasses();
-      if(propPath.join(".")==="world.gravity"){} // live
-    });
-  }
-
-  bindRange(el.rngGravity, el.valGravity, ["world","gravity"], v=> v.toFixed(2));
-  bindRange(el.rngScale, el.valScale, ["world","scale"], v=> Math.round(v));
-  bindRange(el.rngAir, el.valAir, ["world","air"], v=> v.toFixed(2));
-  bindRange(el.rngWind, el.valWind, ["world","wind"], v=> v.toFixed(2));
-
-  el.chkGusts.addEventListener("change", ()=> state.world.gusts = el.chkGusts.checked);
-  el.chkWalls.addEventListener("change", ()=> state.world.walls = el.chkWalls.checked);
-
-  bindRange(el.rngRest, el.valRest, ["world","restitution"], v=> v.toFixed(2));
-  bindRange(el.rngFric, el.valFric, ["world","friction"], v=> v.toFixed(3));
-  bindRange(el.rngDensity, el.valDensity, ["world","density"], v=> v.toFixed(1));
-  el.rngDensity.addEventListener("input", updateMasses);
-
-  bindRange(el.rngRadius, el.valRadius, ["spawn","radius_m"], v=> (v*1).toFixed(2));
-  el.rngRadius.addEventListener("input", ()=>{
-    // shown in cm
-    el.valRadius.textContent = (Number(el.rngRadius.value)).toFixed(2);
-    state.spawn.radius_m = Number(el.rngRadius.value)/100.0;
-  });
-  bindRange(el.rngBurst, el.valBurst, ["spawn","burst"], v=> Math.round(v));
-  el.chkRainbow.addEventListener("change", ()=> state.spawn.rainbow = el.chkRainbow.checked);
-  el.chkConfetti.addEventListener("change", ()=>{
-    state.spawn.trails = el.chkConfetti.checked;
-    for(const b of state.balls){
-      b.trail = state.spawn.trails ? (b.trail || []) : null;
-    }
-  });
-
-  bindRange(el.rngSpring, el.valSpring, ["drag","k"], v=> Math.round(v));
-  bindRange(el.rngDamp, el.valDamp, ["drag","c"], v=> v.toFixed(1));
-  el.chkSlowMo.addEventListener("change", ()=> state.drag.slowMo = el.chkSlowMo.checked);
-  el.chkVibrate.addEventListener("change", ()=> state.drag.haptics = el.chkVibrate.checked);
-
-  bindRange(el.rngTrail, el.valTrail, ["world","trailFade"], v=> v.toFixed(2));
-  el.chkGrid.addEventListener("change", ()=> state.world.grid = el.chkGrid.checked);
-  el.chkStats.addEventListener("change", ()=> state.world.stats = el.chkStats.checked);
-
-  // Presets
-  el.presetBouncy.addEventListener("click", ()=>{
-    el.rngRest.value = "0.9"; el.rngRest.dispatchEvent(new Event("input"));
-    el.rngAir.value = "0.05"; el.rngAir.dispatchEvent(new Event("input"));
-    el.rngFric.value = "0.015"; el.rngFric.dispatchEvent(new Event("input"));
-    el.rngWind.value = "0.0"; el.rngWind.dispatchEvent(new Event("input"));
-    el.chkGusts.checked = false; state.world.gusts = false;
-    el.rngTrail.value = "0.08"; el.rngTrail.dispatchEvent(new Event("input"));
-  });
-  el.presetCalm.addEventListener("click", ()=>{
-    el.rngRest.value = "0.6"; el.rngRest.dispatchEvent(new Event("input"));
-    el.rngAir.value = "0.4"; el.rngAir.dispatchEvent(new Event("input"));
-    el.rngFric.value = "0.05"; el.rngFric.dispatchEvent(new Event("input"));
-    el.rngWind.value = "0.0"; el.rngWind.dispatchEvent(new Event("input"));
-    el.chkGusts.checked = false; state.world.gusts = false;
-    el.rngTrail.value = "0.18"; el.rngTrail.dispatchEvent(new Event("input"));
-  });
-  el.presetStorm.addEventListener("click", ()=>{
-    el.rngRest.value = "0.85"; el.rngRest.dispatchEvent(new Event("input"));
-    el.rngAir.value = "0.15"; el.rngAir.dispatchEvent(new Event("input"));
-    el.rngFric.value = "0.02"; el.rngFric.dispatchEvent(new Event("input"));
-    el.rngWind.value = "6.0"; el.rngWind.dispatchEvent(new Event("input"));
-    el.chkGusts.checked = true; state.world.gusts = true;
-    el.rngTrail.value = "0.10"; el.rngTrail.dispatchEvent(new Event("input"));
-  });
-  el.presetZeroG.addEventListener("click", ()=>{
-    el.rngGravity.value = "0.00"; el.rngGravity.dispatchEvent(new Event("input"));
-    el.rngAir.value = "0.01"; el.rngAir.dispatchEvent(new Event("input"));
-    el.rngWind.value = "0.0"; el.rngWind.dispatchEvent(new Event("input"));
-    el.chkGusts.checked = false; state.world.gusts = false;
-    el.rngTrail.value = "0.06"; el.rngTrail.dispatchEvent(new Event("input"));
-  });
-
-  // Canvas events
-  el.canvas.addEventListener("pointerdown", (ev)=>{ onPointerDown(ev); onPointerDownPinch(ev); });
-  el.canvas.addEventListener("pointermove", (ev)=>{ onPointerMove(ev); onPointerMovePinch(); });
-  el.canvas.addEventListener("pointerup", (ev)=>{ onPointerUp(ev); onPointerUpPinch(); });
-  el.canvas.addEventListener("pointercancel", (ev)=>{ onPointerUp(ev); onPointerUpPinch(); });
-  el.canvas.addEventListener("dblclick", onDblClick);
-
-  // Long press on canvas opens settings as well
-  let pressTimer = null;
-  el.canvas.addEventListener("touchstart", ()=>{
-    clearTimeout(pressTimer);
-    pressTimer = setTimeout(()=> openSheet(true), 650);
-  }, {passive:true});
-  el.canvas.addEventListener("touchend", ()=> clearTimeout(pressTimer), {passive:true});
-
-  // Prevent pull to refresh on iOS Safari when interacting
-  document.addEventListener("touchmove", (e)=>{
-    if(e.touches.length>0) e.preventDefault();
-  }, {passive:false});
-
-  // Hide hint after first interaction
-  function hideHintSoon(){
-    if(!el.hint) return;
-    el.hint.style.transition = "opacity 260ms ease";
-    el.hint.style.opacity = "0";
-    setTimeout(()=> el.hint.style.display = "none", 320);
-  }
-  ["pointerdown","keydown","touchstart"].forEach(evt=>{
-    window.addEventListener(evt, hideHintSoon, {once:true});
-  });
-
-  // Restore some settings from localStorage
-  try{
-    const saved = JSON.parse(localStorage.getItem("ppp-settings")||"{}");
-    if(saved && typeof saved==="object"){
-      // selectively restore
-      const applyIf = (k, elRange, out, fmt)=> {
-        if(saved[k]!==undefined){
-          elRange.value = String(saved[k]);
-          out && (out.textContent = fmt(saved[k]));
-          const path = {
-            gravity: ["world","gravity"],
-            scale: ["world","scale"],
-            air: ["world","air"],
-            wind: ["world","wind"],
-            rest: ["world","restitution"],
-            fric: ["world","friction"],
-            density: ["world","density"],
-            radius_cm: ["spawn","radius_m"],
-            burst: ["spawn","burst"],
-            spring: ["drag","k"],
-            damp: ["drag","c"],
-            trail: ["world","trailFade"]
-          }[k];
-          if(path){
-            let o = state; for(let i=0;i<path.length-1;i++) o = o[path[i]];
-            if(k==="radius_cm"){ o[path[path.length-1]] = saved[k]/100.0; }
-            else o[path[path.length-1]] = saved[k];
-          }
-        }
-      };
-      applyIf("gravity", el.rngGravity, el.valGravity, v=> Number(v).toFixed(2));
-      applyIf("scale", el.rngScale, el.valScale, v=> Math.round(v));
-      applyIf("air", el.rngAir, el.valAir, v=> Number(v).toFixed(2));
-      applyIf("wind", el.rngWind, el.valWind, v=> Number(v).toFixed(2));
-      applyIf("rest", el.rngRest, el.valRest, v=> Number(v).toFixed(2));
-      applyIf("fric", el.rngFric, el.valFric, v=> Number(v).toFixed(3));
-      applyIf("density", el.rngDensity, el.valDensity, v=> Number(v).toFixed(1));
-      applyIf("radius_cm", el.rngRadius, el.valRadius, v=> Number(v).toFixed(2));
-      applyIf("burst", el.rngBurst, el.valBurst, v=> Math.round(v));
-      applyIf("spring", el.rngSpring, el.valSpring, v=> Math.round(v));
-      applyIf("damp", el.rngDamp, el.valDamp, v=> Number(v).toFixed(1));
-      applyIf("trail", el.rngTrail, el.valTrail, v=> Number(v).toFixed(2));
-
-      if(saved.rainbow!==undefined){ el.chkRainbow.checked = !!saved.rainbow; state.spawn.rainbow = !!saved.rainbow; }
-      if(saved.trails!==undefined){ el.chkConfetti.checked = !!saved.trails; state.spawn.trails = !!saved.trails; }
-      if(saved.grid!==undefined){ el.chkGrid.checked = !!saved.grid; state.world.grid = !!saved.grid; }
-      if(saved.stats!==undefined){ el.chkStats.checked = !!saved.stats; state.world.stats = !!saved.stats; }
-      if(saved.gusts!==undefined){ el.chkGusts.checked = !!saved.gusts; state.world.gusts = !!saved.gusts; }
-      if(saved.walls!==undefined){ el.chkWalls.checked = !!saved.walls; state.world.walls = !!saved.walls; }
-      if(saved.slowMo!==undefined){ el.chkSlowMo.checked = !!saved.slowMo; state.drag.slowMo = !!saved.slowMo; }
-      if(saved.haptics!==undefined){ el.chkVibrate.checked = !!saved.haptics; state.drag.haptics = !!saved.haptics; }
-    }
-  }catch(e){}
-
-  // Persist settings on changes
-  function persist(){
-    const snapshot = {
-      gravity: state.world.gravity,
-      scale: state.world.scale,
-      air: state.world.air,
-      wind: state.world.wind,
-      rest: state.world.restitution,
-      fric: state.world.friction,
-      density: state.world.density,
-      radius_cm: state.spawn.radius_m*100.0,
-      burst: state.spawn.burst,
-      spring: state.drag.k,
-      damp: state.drag.c,
-      trail: state.world.trailFade,
-      rainbow: state.spawn.rainbow,
-      trails: state.spawn.trails,
-      grid: state.world.grid,
-      stats: state.world.stats,
-      gusts: state.world.gusts,
-      walls: state.world.walls,
-      slowMo: state.drag.slowMo,
-      haptics: state.drag.haptics
-    };
-    try{
-      localStorage.setItem("ppp-settings", JSON.stringify(snapshot));
-    }catch(e){}
-  }
-
-  // Observe a bunch of inputs to save automatically
-  const observeIds = [
-    "rngGravity","rngScale","rngAir","rngWind","rngRest","rngFric","rngDensity",
-    "rngRadius","rngBurst","rngSpring","rngDamp","rngTrail",
-    "chkRainbow","chkConfetti","chkGrid","chkStats","chkGusts","chkWalls","chkSlowMo","chkVibrate"
-  ];
-  observeIds.forEach(id=>{
-    const n = document.getElementById(id);
-    if(n){
-      const ev = n.tagName==="INPUT" && n.type==="range" ? "input" : "change";
-      n.addEventListener(ev, persist);
-    }
-  });
-
-  // Init grid and a starter batch
-  state.grid = new HashGrid(64);
-  resize();
-  addBalls(state.bounds.w*0.5, state.bounds.h*0.25, state.spawn.burst + 6);
-  addBalls(state.bounds.w*0.7, state.bounds.h*0.2, state.spawn.burst + 4);
-  addBalls(state.bounds.w*0.3, state.bounds.h*0.2, state.spawn.burst + 4);
-  setPaused(false);
-
-  // Kick off loop
-  state.lastStamp = performance.now();
-  draw();
-  requestAnimationFrame(loop);
-
-  // Accessibility keys
-  window.addEventListener("keydown", e=>{
-    if(e.key===" "){ e.preventDefault(); setPaused(!state.paused); }
-    if(e.key==="r"){ clearBalls(); }
-    if(e.key==="s"){ openSheet(!el.sheet.classList.contains("open")); }
-    if(e.key==="g"){ state.world.grid = !state.world.grid; el.chkGrid.checked = state.world.grid; persist(); }
-    if(e.key==="t"){ state.world.stats = !state.world.stats; el.chkStats.checked = state.world.stats; persist(); }
-  });
-
-})();
 </script>
 </body>
 </html>
+```
